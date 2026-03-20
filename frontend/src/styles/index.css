@@ -16,6 +16,13 @@ body {
   color: #262626;
 }
 
+/* 深色模式下的 body 样式 */
+.dark body,
+body.dark {
+  background-color: #111827;
+  color: #f3f4f6;
+}
+
 /* 自定义滚动条 */
 ::-webkit-scrollbar {
   width: 8px;
