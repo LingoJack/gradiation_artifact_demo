@@ -1,0 +1,16 @@
+permissions:
+  allow_all: false
+  allow:
+  - Bash(mkdir -p:*)
+  - Edit
+  - Bash(cd /Users/jacklingo/dev_custom/playground/example/frontend:*)
+  - Write
+  - Bash(ls -la:*)
+  - Bash(sed -i:*)
+  - Bash(head -n:*)
+  - Bash(cat /tmp/home_part1.txt:*)
+  - Bash(tail -n:*)
+  - Bash(mv src/pages/Home/Home_fixed.tsx:*)
+  - Bash(rm tmp_fix.txt:*)
+  - Bash(grep -n:*)
+  deny: []
