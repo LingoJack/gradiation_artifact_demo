@@ -21,14 +21,14 @@ export const Home: React.FC = () => {
               <ul className="py-2">
                 {mockCategories.map((cat, index) => {
                   const colors = [
-                    'bg-orange-100 text-orange-600',
-                    'bg-blue-100 text-blue-600',
-                    'bg-pink-100 text-pink-600',
-                    'bg-teal-100 text-teal-600',
-                    'bg-green-100 text-green-600',
-                    'bg-purple-100 text-purple-600',
-                    'bg-red-100 text-red-600',
-                    'bg-yellow-100 text-yellow-700',
+                    'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400',
+                    'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
+                    'bg-pink-100 text-pink-600 dark:bg-pink-900/30 dark:text-pink-400',
+                    'bg-teal-100 text-teal-600 dark:bg-teal-900/30 dark:text-teal-400',
+                    'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400',
+                    'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400',
+                    'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400',
+                    'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
                   ];
                   const colorClass = colors[index % colors.length];
                   
@@ -140,12 +140,12 @@ export const Home: React.FC = () => {
                </div>
 
                {/* 公告 */}
-               <div className="bg-white rounded-xl p-4 border border-gray-100">
+               <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700">
                  <div className="flex items-center mb-2">
                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
                      <path fillRule="evenodd" d="M18 3a1 1 0 00-1.447-.894L8.763 6H5a3 3 0 000 6h.28l1.771 5.316A1 1 0 008 18h1a1 1 0 001-1v-4.382l6.553 3.276A1 1 0 0018 15V3z" clipRule="evenodd" />
                    </svg>
-                   <span className="font-bold text-sm text-gray-700">淘宝头条</span>
+                   <span className="font-bold text-sm text-gray-700 dark:text-gray-200">淘宝头条</span>
                  </div>
               </div>
             </div>
@@ -154,20 +154,20 @@ export const Home: React.FC = () => {
       </div>
 
       {/* 快捷入口 - 横向滚动设计 */}
-      <div className="bg-white border-t border-gray-100">
+      <div className="bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700">
         <div className="container py-6">
           <div className="grid grid-cols-10 gap-4">
             {[
-              { icon: 'smartphone', name: '手机', color: 'text-blue-500', bgColor: 'bg-blue-100' },
-              { icon: 'shirt', name: '男装', color: 'text-purple-500', bgColor: 'bg-purple-100' },
-              { icon: 'sparkles', name: '女装', color: 'text-pink-500', bgColor: 'bg-pink-100' },
-              { icon: 'lightning-bolt', name: '运动', color: 'text-green-500', bgColor: 'bg-green-100' },
-              { icon: 'computer-desktop', name: '电脑', color: 'text-indigo-500', bgColor: 'bg-indigo-100' },
-              { icon: 'home', name: '家居', color: 'text-orange-500', bgColor: 'bg-orange-100' },
-              { icon: 'heart', name: '生鲜', color: 'text-red-500', bgColor: 'bg-red-100' },
-              { icon: 'beaker', name: '美妆', color: 'text-rose-500', bgColor: 'bg-rose-100' },
-              { icon: 'face-smile', name: '母婴', color: 'text-yellow-500', bgColor: 'bg-yellow-100' },
-              { icon: 'book-open', name: '图书', color: 'text-teal-500', bgColor: 'bg-teal-100' },
+              { icon: 'smartphone', name: '手机', color: 'text-blue-500', bgColor: 'bg-blue-100 dark:bg-blue-900/30' },
+              { icon: 'shirt', name: '男装', color: 'text-purple-500', bgColor: 'bg-purple-100 dark:bg-purple-900/30' },
+              { icon: 'sparkles', name: '女装', color: 'text-pink-500', bgColor: 'bg-pink-100 dark:bg-pink-900/30' },
+              { icon: 'lightning-bolt', name: '运动', color: 'text-green-500', bgColor: 'bg-green-100 dark:bg-green-900/30' },
+              { icon: 'computer-desktop', name: '电脑', color: 'text-indigo-500', bgColor: 'bg-indigo-100 dark:bg-indigo-900/30' },
+              { icon: 'home', name: '家居', color: 'text-orange-500', bgColor: 'bg-orange-100 dark:bg-orange-900/30' },
+              { icon: 'heart', name: '生鲜', color: 'text-red-500', bgColor: 'bg-red-100 dark:bg-red-900/30' },
+              { icon: 'beaker', name: '美妆', color: 'text-rose-500', bgColor: 'bg-rose-100 dark:bg-rose-900/30' },
+              { icon: 'face-smile', name: '母婴', color: 'text-yellow-500', bgColor: 'bg-yellow-100 dark:bg-yellow-900/30' },
+              { icon: 'book-open', name: '图书', color: 'text-teal-500', bgColor: 'bg-teal-100 dark:bg-teal-900/30' },
             ].map((item, idx) => (
               <div key={idx} className="text-center cursor-pointer group">
                 <div className={`w-14 h-14 ${item.bgColor} rounded-2xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform shadow-sm`}>
@@ -194,8 +194,12 @@ export const Home: React.FC = () => {
       {/* 热门推荐 */}
       <div className="container mt-8">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold flex items-center">
-            <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center mr-3"><svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd" /></svg></div>
+          <h2 className="text-2xl font-bold flex items-center text-gray-900 dark:text-gray-100">
+            <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center mr-3">
+              <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clipRule="evenodd" />
+              </svg>
+            </div>
             热门推荐
           </h2>
           <Link to="/products" className="text-primary hover:underline text-sm font-medium">
@@ -212,8 +216,12 @@ export const Home: React.FC = () => {
       {/* 分类推荐 */}
       <div className="container mt-12 mb-12">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold flex items-center">
-            <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-500 rounded-lg flex items-center justify-center mr-3"><svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" /></svg></div>
+          <h2 className="text-2xl font-bold flex items-center text-gray-900 dark:text-gray-100">
+            <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-500 rounded-lg flex items-center justify-center mr-3">
+              <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+              </svg>
+            </div>
             猜你喜欢
           </h2>
           <Link to="/products" className="text-primary hover:underline text-sm font-medium">

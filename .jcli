@@ -13,4 +13,5 @@ permissions:
   - Bash(mv src/pages/Home/Home_fixed.tsx:*)
   - Bash(rm tmp_fix.txt:*)
   - Bash(grep -n:*)
+  - Bash(sed -n:*)
   deny: []

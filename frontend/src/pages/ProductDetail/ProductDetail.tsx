@@ -48,9 +48,9 @@ export const ProductDetail: React.FC = () => {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-2xl text-gray-500 mb-4">商品不存在</p>
+          <p className="text-2xl text-gray-500 dark:text-gray-400 mb-4">商品不存在</p>
           <button
             onClick={() => navigate('/')}
             className="text-orange-500 hover:text-orange-600"
@@ -110,30 +110,30 @@ export const ProductDetail: React.FC = () => {
     : product.stock;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* 面包屑导航 */}
-      <div className="bg-white border-b">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-[1200px] mx-auto px-4 py-3">
-          <div className="flex items-center text-sm text-gray-600">
+          <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
             <span className="hover:text-orange-500 cursor-pointer">首页</span>
             <ChevronRight className="w-4 h-4 mx-2" />
             <span className="hover:text-orange-500 cursor-pointer">
               {mockCategories.find(c => c.id === product.categoryId)?.name || '商品'}
             </span>
             <ChevronRight className="w-4 h-4 mx-2" />
-            <span className="text-gray-900">{product.name}</span>
+            <span className="text-gray-900 dark:text-gray-100">{product.name}</span>
           </div>
         </div>
       </div>
 
       {/* 主要内容区 */}
       <div className="max-w-[1200px] mx-auto px-4 py-6">
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
           <div className="grid grid-cols-12 gap-8">
             {/* 左侧图片区 */}
             <div className="col-span-5">
               {/* 主图 */}
-              <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4">
+              <div className="aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden mb-4">
                 <img
                   src={mainImage || product.mainImage}
                   alt={product.name}
@@ -151,10 +151,10 @@ export const ProductDetail: React.FC = () => {
                   <div
                     key={index}
                     onClick={() => setMainImage(img)}
-                    className={`aspect-square bg-gray-100 rounded overflow-hidden cursor-pointer border-2 transition-all ${
+                    className={`aspect-square bg-gray-100 dark:bg-gray-700 rounded overflow-hidden cursor-pointer border-2 transition-all ${
                       mainImage === img
                         ? 'border-orange-500'
-                        : 'border-transparent hover:border-gray-300'
+                        : 'border-transparent hover:border-gray-300 dark:hover:border-gray-600'
                     }`}
                   >
                     <img
@@ -171,17 +171,17 @@ export const ProductDetail: React.FC = () => {
               </div>
 
               {/* 分享收藏 */}
-              <div className="flex items-center justify-end gap-4 mt-4 pt-4 border-t">
+              <div className="flex items-center justify-end gap-4 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <button
                   onClick={() => setIsFavorite(!isFavorite)}
                   className={`flex items-center gap-1 text-sm ${
-                    isFavorite ? 'text-red-500' : 'text-gray-600 hover:text-red-500'
+                    isFavorite ? 'text-red-500' : 'text-gray-600 dark:text-gray-400 hover:text-red-500'
                   }`}
                 >
                   <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
                   收藏
                 </button>
-                <button className="flex items-center gap-1 text-sm text-gray-600 hover:text-blue-500">
+                <button className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-500">
                   <Share2 className="w-4 h-4" />
                   分享
                 </button>
@@ -191,19 +191,19 @@ export const ProductDetail: React.FC = () => {
             {/* 右侧信息区 */}
             <div className="col-span-7">
               {/* 标题 */}
-              <h1 className="text-xl font-medium text-gray-900 mb-3 line-clamp-2">
+              <h1 className="text-xl font-medium text-gray-900 dark:text-gray-100 mb-3 line-clamp-2">
                 {product.name}
               </h1>
 
               {/* 描述 */}
-              <p className="text-sm text-gray-600 mb-4">{product.description}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{product.description}</p>
 
               {/* 价格区域 */}
-              <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-lg p-5 mb-5">
+              <div className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-lg p-5 mb-5">
                 <div className="flex items-baseline gap-3 mb-2">
-                  <span className="text-sm text-gray-600">促销价</span>
-                  <span className="text-sm text-red-600 font-medium">¥</span>
-                  <span className="text-4xl font-bold text-red-600">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">促销价</span>
+                  <span className="text-sm text-red-600 dark:text-red-400 font-medium">¥</span>
+                  <span className="text-4xl font-bold text-red-600 dark:text-red-400">
                     {currentPrice}
                   </span>
                   {product.originalPrice && (
@@ -226,14 +226,14 @@ export const ProductDetail: React.FC = () => {
                   <span className="bg-orange-600 text-white text-xs px-2 py-1 rounded">
                     包邮
                   </span>
-                  <span className="text-xs text-gray-600">
+                  <span className="text-xs text-gray-600 dark:text-gray-400">
                     销量 {product.sales}+ 已售
                   </span>
                 </div>
               </div>
 
               {/* 服务保障 */}
-              <div className="flex items-center gap-4 mb-5 text-sm text-gray-600">
+              <div className="flex items-center gap-4 mb-5 text-sm text-gray-600 dark:text-gray-400">
                 <div className="flex items-center gap-1">
                   <Shield className="w-4 h-4 text-blue-500" />
                   <span>正品保障</span>
@@ -252,7 +252,7 @@ export const ProductDetail: React.FC = () => {
               {product.specs && product.specs.length > 0 && (
                 <div className="mb-5">
                   <div className="flex items-center gap-4 mb-3">
-                    <span className="text-sm text-gray-600 w-16">
+                    <span className="text-sm text-gray-600 dark:text-gray-400 w-16">
                       {product.specs[0].name}
                     </span>
                     <div className="flex flex-wrap gap-2">
@@ -262,8 +262,8 @@ export const ProductDetail: React.FC = () => {
                           onClick={() => setSelectedSpec(spec.id)}
                           className={`px-4 py-2 border-2 rounded-lg text-sm transition-all ${
                             selectedSpec === spec.id
-                              ? 'border-orange-500 bg-orange-50 text-orange-600'
-                              : 'border-gray-300 hover:border-orange-500'
+                              ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400'
+                              : 'border-gray-300 dark:border-gray-600 hover:border-orange-500 dark:hover:border-orange-500 text-gray-900 dark:text-gray-100'
                           }`}
                         >
                           {spec.value}
@@ -276,11 +276,11 @@ export const ProductDetail: React.FC = () => {
 
               {/* 数量选择 */}
               <div className="flex items-center gap-4 mb-5">
-                <span className="text-sm text-gray-600 w-16">数量</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400 w-16">数量</span>
                 <div className="flex items-center">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-8 h-8 border border-gray-300 rounded-l flex items-center justify-center hover:bg-gray-100"
+                    className="w-8 h-8 border border-gray-300 dark:border-gray-600 rounded-l flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100"
                   >
                     -
                   </button>
@@ -291,17 +291,17 @@ export const ProductDetail: React.FC = () => {
                       const value = parseInt(e.target.value) || 1;
                       setQuantity(Math.max(1, Math.min(currentStock, value)));
                     }}
-                    className="w-16 h-8 border-t border-b border-gray-300 text-center outline-none"
+                    className="w-16 h-8 border-t border-b border-gray-300 dark:border-gray-600 text-center outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                   />
                   <button
                     onClick={() =>
                       setQuantity(Math.min(currentStock, quantity + 1))
                     }
-                    className="w-8 h-8 border border-gray-300 rounded-r flex items-center justify-center hover:bg-gray-100"
+                    className="w-8 h-8 border border-gray-300 dark:border-gray-600 rounded-r flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100"
                   >
                     +
                   </button>
-                  <span className="ml-3 text-sm text-gray-500">
+                  <span className="ml-3 text-sm text-gray-500 dark:text-gray-400">
                     库存 {currentStock} 件
                   </span>
                 </div>
@@ -311,7 +311,7 @@ export const ProductDetail: React.FC = () => {
               <div className="flex gap-3 mb-6">
                 <button
                   onClick={handleAddToCart}
-                  className="flex-1 h-12 border-2 border-orange-500 text-orange-600 rounded-lg hover:bg-orange-50 flex items-center justify-center gap-2 font-medium transition-colors"
+                  className="flex-1 h-12 border-2 border-orange-500 text-orange-600 dark:text-orange-400 rounded-lg hover:bg-orange-50 dark:hover:bg-orange-900/20 flex items-center justify-center gap-2 font-medium transition-colors"
                 >
                   <ShoppingCart className="w-5 h-5" />
                   加入购物车
@@ -325,23 +325,23 @@ export const ProductDetail: React.FC = () => {
               </div>
 
               {showAddedToCart && (
-                <div className="bg-green-100 text-green-800 p-3 rounded-lg text-center mb-4 animate-pulse">
+                <div className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 p-3 rounded-lg text-center mb-4 animate-pulse">
                   ✓ 已添加到购物车
                 </div>
               )}
 
               {/* 店铺信息 */}
-              <div className="border-t pt-5">
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-400 rounded-lg flex items-center justify-center">
                       <Store className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <div className="font-medium text-gray-900">
+                      <div className="font-medium text-gray-900 dark:text-gray-100">
                         {product.shopName}
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
+                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-1">
                         <div className="flex items-center gap-1">
                           <Star className="w-3 h-3 text-yellow-400 fill-current" />
                           <span>4.9</span>
@@ -354,10 +354,10 @@ export const ProductDetail: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <button className="px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50">
+                    <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100">
                       进店逛逛
                     </button>
-                    <button className="px-4 py-2 border border-orange-500 text-orange-600 rounded text-sm hover:bg-orange-50">
+                    <button className="px-4 py-2 border border-orange-500 text-orange-600 dark:text-orange-400 rounded text-sm hover:bg-orange-50 dark:hover:bg-orange-900/20">
                       <MessageCircle className="w-4 h-4 inline mr-1" />
                       联系客服
                     </button>
@@ -369,42 +369,42 @@ export const ProductDetail: React.FC = () => {
         </div>
 
         {/* 商品详情区 */}
-        <div className="mt-6 bg-white rounded-lg shadow-sm p-6">
-          <div className="border-b pb-4 mb-6">
-            <h2 className="text-xl font-bold text-gray-900">商品详情</h2>
+        <div className="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+          <div className="border-b border-gray-200 dark:border-gray-700 pb-4 mb-6">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">商品详情</h2>
           </div>
 
           {/* 商品参数 */}
           <div className="mb-8">
-            <h3 className="font-medium text-gray-900 mb-4">商品参数</h3>
+            <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-4">商品参数</h3>
             <div className="grid grid-cols-4 gap-4 text-sm">
-              <div className="bg-gray-50 p-3 rounded">
-                <span className="text-gray-600">品牌：</span>
-                <span className="text-gray-900">{(product.shopName || '淘宝店铺').split('官方')[0]}</span>
+              <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded">
+                <span className="text-gray-600 dark:text-gray-400">品牌：</span>
+                <span className="text-gray-900 dark:text-gray-100">{(product.shopName || '淘宝店铺').split('官方')[0]}</span>
               </div>
-              <div className="bg-gray-50 p-3 rounded">
-                <span className="text-gray-600">产地：</span>
-                <span className="text-gray-900">中国</span>
+              <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded">
+                <span className="text-gray-600 dark:text-gray-400">产地：</span>
+                <span className="text-gray-900 dark:text-gray-100">中国</span>
               </div>
-              <div className="bg-gray-50 p-3 rounded">
-                <span className="text-gray-600">分类：</span>
-                <span className="text-gray-900">
+              <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded">
+                <span className="text-gray-600 dark:text-gray-400">分类：</span>
+                <span className="text-gray-900 dark:text-gray-100">
                   {mockCategories.find(c => c.id === product.categoryId)?.name || '其他'}
                 </span>
               </div>
-              <div className="bg-gray-50 p-3 rounded">
-                <span className="text-gray-600">上市时间：</span>
-                <span className="text-gray-900">2024年</span>
+              <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded">
+                <span className="text-gray-600 dark:text-gray-400">上市时间：</span>
+                <span className="text-gray-900 dark:text-gray-100">2024年</span>
               </div>
             </div>
           </div>
 
           {/* 商品图片展示 */}
           <div>
-            <h3 className="font-medium text-gray-900 mb-4">商品展示</h3>
+            <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-4">商品展示</h3>
             <div className="space-y-4">
               {product.images.map((img, index) => (
-                <div key={index} className="w-full bg-gray-100 rounded-lg overflow-hidden">
+                <div key={index} className="w-full bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
                   <img
                     src={img}
                     alt={`${product.name} 详情图 ${index + 1}`}
@@ -422,20 +422,20 @@ export const ProductDetail: React.FC = () => {
           {/* 用户评价 */}
           <div className="mt-8">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-medium text-gray-900">用户评价</h3>
-              <span className="text-sm text-gray-500">
+              <h3 className="font-medium text-gray-900 dark:text-gray-100">用户评价</h3>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
                 好评率 98%
               </span>
             </div>
             <div className="space-y-4">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="border-b pb-4">
+                <div key={i} className="border-b border-gray-200 dark:border-gray-700 pb-4">
                   <div className="flex items-center gap-3 mb-2">
                     <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-white text-sm">
                       用{i}
                     </div>
                     <div>
-                      <div className="text-sm font-medium">用户{10000 + i}</div>
+                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">用户{10000 + i}</div>
                       <div className="flex items-center gap-1">
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star
@@ -446,7 +446,7 @@ export const ProductDetail: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
                     {i === 1 && '质量非常好，物流也很快，非常满意！'}
                     {i === 2 && '包装很用心，商品质量也不错，下次还会再来。'}
                     {i === 3 && '性价比很高，推荐购买，客服态度也很好。'}
