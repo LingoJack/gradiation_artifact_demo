@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ProductCard } from '../../components/ProductCard/ProductCard';
 import { mockCategories, mockProducts } from '../../utils/mockData';
 import type { Product } from '../../types/product';
 import { useSpotlight } from '../../hooks/useSpotlight';
+import { useUserStore } from '../../store/useUserStore';
+import { useCouponStore, initNewUserBenefits } from '../../store/useCouponStore';
 
 // 轮播图数据
 const carouselItems = [
@@ -73,6 +75,9 @@ const newsData = [
 ];
 
 export const Home: React.FC = () => {
+  const navigate = useNavigate();
+  const { user, isAuthenticated } = useUserStore();
+  const { coupons, points, redPacket, reset: resetCoupons } = useCouponStore();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedNews, setSelectedNews] = useState<typeof newsData[0] | null>(null);
 
@@ -80,6 +85,16 @@ export const Home: React.FC = () => {
   const userCardSpotlight = useSpotlight();
   const newsSpotlight = useSpotlight();
   const modalSpotlight = useSpotlight();
+
+  // 登录时初始化用户优惠数据
+  useEffect(() => {
+    if (isAuthenticated) {
+      initNewUserBenefits();
+    }
+  }, [isAuthenticated]);
+
+  // 可用优惠券数量
+  const availableCoupons = coupons.filter((c) => c.status === 'available').length;
 
   // 自动轮播
   useEffect(() => {
@@ -249,40 +264,63 @@ export const Home: React.FC = () => {
                 style={userCardSpotlight.spotlightStyle}
                 {...userCardSpotlight.handlers}
               >
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mr-3 overflow-hidden">
-                    <img 
-                      src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop"
-                      alt="用户头像"
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = 'none';
-                        const fallback = document.createElement('span');
-                        fallback.className = 'text-white text-xl';
-                        fallback.textContent = 'U';
-                        (e.target as HTMLImageElement).parentNode?.appendChild(fallback);
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <p className="font-bold text-gray-800 dark:text-gray-200">Hi，欢迎来到淘宝</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">登录享更多优惠</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="bg-white dark:bg-gray-700 rounded-lg py-2">
-                    <p className="text-orange-500 font-bold">优惠券</p>
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">3张</p>
-                  </div>
-                  <div className="bg-white dark:bg-gray-700 rounded-lg py-2">
-                    <p className="text-orange-500 font-bold">红包</p>
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">¥20</p>
-                  </div>
-                  <div className="bg-white dark:bg-gray-700 rounded-lg py-2">
-                    <p className="text-orange-500 font-bold">积分</p>
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">1280</p>
-                  </div>
-                </div>
+                {isAuthenticated && user ? (
+                  <>
+                    <div className="flex items-center mb-4">
+                      <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mr-3 overflow-hidden">
+                        <span className="text-white text-xl font-bold">
+                          {user.username.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="font-bold text-gray-800 dark:text-gray-200">Hi，{user.username}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">欢迎回来</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 text-center">
+                      <Link to="/user" className="bg-white dark:bg-gray-700 rounded-lg py-2 hover:shadow-md transition-shadow">
+                        <p className="text-primary font-bold">优惠券</p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{availableCoupons}张</p>
+                      </Link>
+                      <Link to="/user" className="bg-white dark:bg-gray-700 rounded-lg py-2 hover:shadow-md transition-shadow">
+                        <p className="text-primary font-bold">红包</p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">¥{redPacket}</p>
+                      </Link>
+                      <Link to="/user" className="bg-white dark:bg-gray-700 rounded-lg py-2 hover:shadow-md transition-shadow">
+                        <p className="text-primary font-bold">积分</p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{points}</p>
+                      </Link>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-center mb-4">
+                      <div className="w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center mr-3">
+                        <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="font-bold text-gray-800 dark:text-gray-200">Hi，欢迎来到淘宝</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">登录享更多优惠</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => navigate('/login')}
+                        className="flex-1 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors font-medium"
+                      >
+                        登录
+                      </button>
+                      <button 
+                        onClick={() => navigate('/register')}
+                        className="flex-1 py-2 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors font-medium"
+                      >
+                        注册
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* 活动卡片 */}

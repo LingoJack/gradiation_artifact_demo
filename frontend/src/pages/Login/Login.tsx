@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../store/useUserStore';
+import { useCouponStore } from '../../store/useCouponStore';
 import { useSpotlight } from '../../hooks/useSpotlight';
 
 type LoginType = 'password' | 'sms';
