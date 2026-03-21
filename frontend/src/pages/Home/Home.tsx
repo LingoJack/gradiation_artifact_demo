@@ -388,16 +388,16 @@ export const Home: React.FC = () => {
         <div className="container py-6">
           <div className="grid grid-cols-10 gap-4">
             {[
-              { icon: 'smartphone', name: '手机', color: 'text-blue-500', bgColor: 'bg-blue-100 dark:bg-blue-900/30', categoryId: 'phones' },
-              { icon: 'shirt', name: '男装', color: 'text-purple-500', bgColor: 'bg-purple-100 dark:bg-purple-900/30', categoryId: 'mens-clothing' },
-              { icon: 'sparkles', name: '女装', color: 'text-pink-500', bgColor: 'bg-pink-100 dark:bg-pink-900/30', categoryId: 'womens-clothing' },
-              { icon: 'lightning-bolt', name: '运动', color: 'text-green-500', bgColor: 'bg-green-100 dark:bg-green-900/30', categoryId: 'sports' },
-              { icon: 'computer-desktop', name: '电脑', color: 'text-indigo-500', bgColor: 'bg-indigo-100 dark:bg-indigo-900/30', categoryId: 'computers' },
-              { icon: 'home', name: '家居', color: 'text-orange-500', bgColor: 'bg-orange-100 dark:bg-orange-900/30', categoryId: 'home' },
-              { icon: 'heart', name: '生鲜', color: 'text-red-500', bgColor: 'bg-red-100 dark:bg-red-900/30', categoryId: 'fresh-food' },
-              { icon: 'beaker', name: '美妆', color: 'text-rose-500', bgColor: 'bg-rose-100 dark:bg-rose-900/30', categoryId: 'beauty' },
-              { icon: 'face-smile', name: '母婴', color: 'text-yellow-500', bgColor: 'bg-yellow-100 dark:bg-yellow-900/30', categoryId: 'baby-products' },
-              { icon: 'book-open', name: '图书', color: 'text-teal-500', bgColor: 'bg-teal-100 dark:bg-teal-900/30', categoryId: 'books' },
+              { icon: 'smartphone', name: '手机', color: 'text-blue-500', bgColor: 'bg-blue-100 dark:bg-blue-900/30', categoryId: '2' },
+              { icon: 'shirt', name: '男装', color: 'text-purple-500', bgColor: 'bg-purple-100 dark:bg-purple-900/30', categoryId: '1' },
+              { icon: 'sparkles', name: '女装', color: 'text-pink-500', bgColor: 'bg-pink-100 dark:bg-pink-900/30', categoryId: '1' },
+              { icon: 'lightning-bolt', name: '运动', color: 'text-green-500', bgColor: 'bg-green-100 dark:bg-green-900/30', categoryId: '6' },
+              { icon: 'computer-desktop', name: '电脑', color: 'text-indigo-500', bgColor: 'bg-indigo-100 dark:bg-indigo-900/30', categoryId: '2' },
+              { icon: 'home', name: '家居', color: 'text-orange-500', bgColor: 'bg-orange-100 dark:bg-orange-900/30', categoryId: '4' },
+              { icon: 'heart', name: '生鲜', color: 'text-red-500', bgColor: 'bg-red-100 dark:bg-red-900/30', categoryId: '5' },
+              { icon: 'beaker', name: '美妆', color: 'text-rose-500', bgColor: 'bg-rose-100 dark:bg-rose-900/30', categoryId: '3' },
+              { icon: 'face-smile', name: '母婴', color: 'text-yellow-500', bgColor: 'bg-yellow-100 dark:bg-yellow-900/30', categoryId: '7' },
+              { icon: 'book-open', name: '图书', color: 'text-teal-500', bgColor: 'bg-teal-100 dark:bg-teal-900/30', categoryId: '8' },
             ].map((item, idx) => (
               <div
                 key={idx}
