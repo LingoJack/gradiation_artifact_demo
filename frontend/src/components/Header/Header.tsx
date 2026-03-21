@@ -11,6 +11,7 @@ export const Header: React.FC = () => {
   const selectedCount = items.filter((i) => i.selected).length;
   const [searchQuery, setSearchQuery] = useState('');
   const [showThemeMenu, setShowThemeMenu] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const navigate = useNavigate();
   const { theme, setTheme, resolvedTheme } = useTheme();
 
@@ -22,7 +23,19 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-gradient-to-r from-orange-500/75 to-red-500/75 backdrop-blur-2xl shadow-lg sticky top-0 z-50 border-b border-white/20">
+    <header className="bg-gradient-to-r from-orange-500/75 to-red-500/75 backdrop-blur-2xl shadow-lg sticky top-0 z-50 border-b border-white/20 relative overflow-hidden">
+      {/* 顶部流动光线 */}
+      <div 
+        className={`absolute top-0 left-0 right-0 h-0.5 transition-opacity duration-500 ${
+          isSearchFocused ? 'opacity-100' : 'opacity-0'
+        }`}
+        style={{
+          background: 'linear-gradient(90deg, transparent, #fb923c, #f97316, #ef4444, #f97316, #fb923c, transparent)',
+          backgroundSize: '200% 100%',
+          animation: isSearchFocused ? 'header-flow 1.5s linear infinite' : 'none',
+        }}
+      />
+      
       <div className="container">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -37,24 +50,72 @@ export const Header: React.FC = () => {
           {/* Search Bar */}
           <form onSubmit={handleSearch} className="flex-1 max-w-2xl mx-8">
             <div className="relative flex items-center">
-              <div className="absolute left-4 text-gray-400">
+              {/* 流动光效边框 */}
+              <div 
+                className={`absolute inset-0 rounded-full transition-opacity duration-500 ${
+                  isSearchFocused ? 'opacity-100' : 'opacity-0'
+                }`}
+                style={{
+                  background: 'linear-gradient(90deg, #f97316, #ef4444, #f97316, #fb923c, #f97316)',
+                  backgroundSize: '300% 100%',
+                  animation: isSearchFocused ? 'gradient-flow 2s linear infinite' : 'none',
+                  padding: '2px',
+                  filter: 'blur(0.5px)',
+                }}
+              >
+                <div className="w-full h-full bg-white rounded-full" />
+              </div>
+              
+              {/* 搜索图标 */}
+              <div className="absolute left-4 text-gray-400 z-10">
                 <Search className="w-5 h-5" />
               </div>
+              
+              {/* 输入框 */}
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setIsSearchFocused(true)}
+                onBlur={() => setIsSearchFocused(false)}
                 placeholder="搜索商品、店铺..."
-                className="w-full h-10 pl-12 pr-24 bg-white border-0 rounded-full focus:outline-none text-gray-700 shadow-sm transition-all duration-300 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.5),0_0_20px_rgba(139,92,246,0.3),0_0_40px_rgba(59,130,246,0.2)]"
+                className="relative w-full h-10 pl-12 pr-24 bg-white border-0 rounded-full focus:outline-none text-gray-700 shadow-sm transition-all duration-300"
+                style={{
+                  boxShadow: isSearchFocused 
+                    ? '0 0 20px rgba(249, 115, 22, 0.4), 0 0 40px rgba(249, 115, 22, 0.2)' 
+                    : '0 1px 3px rgba(0, 0, 0, 0.1)',
+                }}
               />
+              
+              {/* 搜索按钮 */}
               <button
                 type="submit"
-                className="absolute right-1 top-1 h-8 px-6 bg-gradient-to-r from-orange-500 to-red-500 rounded-full hover:from-orange-600 hover:to-red-600 transition text-white font-medium text-sm"
+                className="absolute right-1 top-1 h-8 px-6 bg-gradient-to-r from-orange-500 to-red-500 rounded-full hover:from-orange-600 hover:to-red-600 transition text-white font-medium text-sm z-10"
               >
                 搜索
               </button>
             </div>
           </form>
+
+          {/* 全局动画样式 */}
+          <style>{`
+            @keyframes gradient-flow {
+              0% {
+                background-position: 0% 50%;
+              }
+              100% {
+                background-position: 300% 50%;
+              }
+            }
+            @keyframes header-flow {
+              0% {
+                background-position: 200% 50%;
+              }
+              100% {
+                background-position: 0% 50%;
+              }
+            }
+          `}</style>
 
           {/* User Menu */}
           <div className="flex items-center space-x-5">
