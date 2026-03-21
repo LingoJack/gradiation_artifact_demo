@@ -23,25 +23,27 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-gradient-to-r from-orange-500/75 to-red-500/75 backdrop-blur-2xl shadow-lg sticky top-0 z-50 border-b border-white/20 relative overflow-hidden">
-      {/* 顶部流动光线 */}
-      <div 
-        className={`absolute top-0 left-0 right-0 h-0.5 transition-opacity duration-500 ${
-          isSearchFocused ? 'opacity-100' : 'opacity-0'
-        }`}
-        style={{
-          background: 'linear-gradient(90deg, transparent, #fb923c, #f97316, #ef4444, #f97316, #fb923c, transparent)',
-          backgroundSize: '200% 100%',
-          animation: isSearchFocused ? 'header-flow 1.5s linear infinite' : 'none',
-        }}
-      />
-      
+    <header 
+      className={`backdrop-blur-2xl shadow-lg sticky top-0 z-50 border-b transition-all duration-700 relative overflow-hidden ${
+        isSearchFocused 
+          ? 'bg-white/95 border-gray-200' 
+          : 'bg-gradient-to-r from-orange-500/75 to-red-500/75 border-white/20'
+      }`}
+    >
       <div className="container">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center group">
-            <div className="bg-white rounded-lg px-4 py-1.5 shadow-sm">
-              <span className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
+            <div className={`rounded-lg px-4 py-1.5 shadow-sm transition-all duration-700 ${
+              isSearchFocused 
+                ? 'bg-gradient-to-r from-orange-500 to-red-500' 
+                : 'bg-white'
+            }`}>
+              <span className={`text-2xl font-bold transition-all duration-700 ${
+                isSearchFocused 
+                  ? 'text-white' 
+                  : 'bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent'
+              }`}>
                 淘宝
               </span>
             </div>
@@ -52,15 +54,14 @@ export const Header: React.FC = () => {
             <div className="relative flex items-center">
               {/* 流动光效边框 */}
               <div 
-                className={`absolute inset-0 rounded-full transition-opacity duration-500 ${
-                  isSearchFocused ? 'opacity-100' : 'opacity-0'
+                className={`absolute inset-0 rounded-full transition-all duration-700 ${
+                  isSearchFocused ? 'opacity-100 scale-[1.02]' : 'opacity-0 scale-100'
                 }`}
                 style={{
-                  background: 'linear-gradient(90deg, #f97316, #ef4444, #f97316, #fb923c, #f97316)',
+                  background: 'linear-gradient(90deg, #f97316, #ef4444, #fb923c, #f97316, #ef4444, #f97316)',
                   backgroundSize: '300% 100%',
-                  animation: isSearchFocused ? 'gradient-flow 2s linear infinite' : 'none',
-                  padding: '2px',
-                  filter: 'blur(0.5px)',
+                  animation: isSearchFocused ? 'gradient-flow 1.5s linear infinite' : 'none',
+                  padding: '3px',
                 }}
               >
                 <div className="w-full h-full bg-white rounded-full" />
@@ -82,7 +83,7 @@ export const Header: React.FC = () => {
                 className="relative w-full h-10 pl-12 pr-24 bg-white border-0 rounded-full focus:outline-none text-gray-700 shadow-sm transition-all duration-300"
                 style={{
                   boxShadow: isSearchFocused 
-                    ? '0 0 20px rgba(249, 115, 22, 0.4), 0 0 40px rgba(249, 115, 22, 0.2)' 
+                    ? '0 0 30px rgba(249, 115, 22, 0.5), 0 0 60px rgba(249, 115, 22, 0.3)' 
                     : '0 1px 3px rgba(0, 0, 0, 0.1)',
                 }}
               />
@@ -107,14 +108,6 @@ export const Header: React.FC = () => {
                 background-position: 300% 50%;
               }
             }
-            @keyframes header-flow {
-              0% {
-                background-position: 200% 50%;
-              }
-              100% {
-                background-position: 0% 50%;
-              }
-            }
           `}</style>
 
           {/* User Menu */}
@@ -123,7 +116,11 @@ export const Header: React.FC = () => {
             <div className="relative">
               <button
                 onClick={() => setShowThemeMenu(!showThemeMenu)}
-                className="text-white hover:text-orange-100 transition p-1.5 rounded-lg hover:bg-white/10"
+                className={`transition p-1.5 rounded-lg ${
+                  isSearchFocused 
+                    ? 'text-gray-600 hover:text-orange-500 hover:bg-gray-100' 
+                    : 'text-white hover:text-orange-100 hover:bg-white/10'
+                }`}
                 title="切换主题"
               >
                 {resolvedTheme === 'dark' ? (
@@ -176,14 +173,26 @@ export const Header: React.FC = () => {
             
             {isAuthenticated ? (
               <>
-                <Link to="/user" className="flex items-center space-x-2 text-white hover:text-orange-100 transition">
+                <Link to="/user" className={`flex items-center space-x-2 transition ${
+                  isSearchFocused 
+                    ? 'text-gray-700 hover:text-orange-500' 
+                    : 'text-white hover:text-orange-100'
+                }`}>
                   <User className="w-5 h-5" />
                   <span className="text-sm font-medium">Hi, {user?.username}</span>
                 </Link>
-                <Link to="/orders" className="text-white hover:text-orange-100 transition text-sm font-medium">
+                <Link to="/orders" className={`transition text-sm font-medium ${
+                  isSearchFocused 
+                    ? 'text-gray-700 hover:text-orange-500' 
+                    : 'text-white hover:text-orange-100'
+                }`}>
                   我的订单
                 </Link>
-                <Link to="/cart" className="relative text-white hover:text-orange-100 transition">
+                <Link to="/cart" className={`relative transition ${
+                  isSearchFocused 
+                    ? 'text-gray-700 hover:text-orange-500' 
+                    : 'text-white hover:text-orange-100'
+                }`}>
                   <ShoppingBag className="w-5 h-5" />
                   {selectedCount > 0 && (
                     <span className="absolute -top-1.5 -right-1.5 bg-yellow-400 text-orange-900 text-xs w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold">
@@ -191,16 +200,28 @@ export const Header: React.FC = () => {
                     </span>
                   )}
                 </Link>
-                <Link to="/user" className="text-white hover:text-orange-100 transition">
+                <Link to="/user" className={`transition ${
+                  isSearchFocused 
+                    ? 'text-gray-700 hover:text-orange-500' 
+                    : 'text-white hover:text-orange-100'
+                }`}>
                   <Heart className="w-5 h-5" />
                 </Link>
               </>
             ) : (
               <>
-                <Link to="/login" className="text-white hover:text-orange-100 transition text-sm font-medium">
+                <Link to="/login" className={`transition text-sm font-medium ${
+                  isSearchFocused 
+                    ? 'text-gray-700 hover:text-orange-500' 
+                    : 'text-white hover:text-orange-100'
+                }`}>
                   登录
                 </Link>
-                <Link to="/register" className="bg-white text-orange-500 px-4 py-1.5 rounded-full text-sm font-medium hover:bg-orange-50 transition">
+                <Link to="/register" className={`px-4 py-1.5 rounded-full text-sm font-medium transition ${
+                  isSearchFocused 
+                    ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600' 
+                    : 'bg-white text-orange-500 hover:bg-orange-50'
+                }`}>
                   注册
                 </Link>
               </>
