@@ -388,18 +388,22 @@ export const Home: React.FC = () => {
         <div className="container py-6">
           <div className="grid grid-cols-10 gap-4">
             {[
-              { icon: 'smartphone', name: '手机', color: 'text-blue-500', bgColor: 'bg-blue-100 dark:bg-blue-900/30' },
-              { icon: 'shirt', name: '男装', color: 'text-purple-500', bgColor: 'bg-purple-100 dark:bg-purple-900/30' },
-              { icon: 'sparkles', name: '女装', color: 'text-pink-500', bgColor: 'bg-pink-100 dark:bg-pink-900/30' },
-              { icon: 'lightning-bolt', name: '运动', color: 'text-green-500', bgColor: 'bg-green-100 dark:bg-green-900/30' },
-              { icon: 'computer-desktop', name: '电脑', color: 'text-indigo-500', bgColor: 'bg-indigo-100 dark:bg-indigo-900/30' },
-              { icon: 'home', name: '家居', color: 'text-orange-500', bgColor: 'bg-orange-100 dark:bg-orange-900/30' },
-              { icon: 'heart', name: '生鲜', color: 'text-red-500', bgColor: 'bg-red-100 dark:bg-red-900/30' },
-              { icon: 'beaker', name: '美妆', color: 'text-rose-500', bgColor: 'bg-rose-100 dark:bg-rose-900/30' },
-              { icon: 'face-smile', name: '母婴', color: 'text-yellow-500', bgColor: 'bg-yellow-100 dark:bg-yellow-900/30' },
-              { icon: 'book-open', name: '图书', color: 'text-teal-500', bgColor: 'bg-teal-100 dark:bg-teal-900/30' },
+              { icon: 'smartphone', name: '手机', color: 'text-blue-500', bgColor: 'bg-blue-100 dark:bg-blue-900/30', categoryId: 'phones' },
+              { icon: 'shirt', name: '男装', color: 'text-purple-500', bgColor: 'bg-purple-100 dark:bg-purple-900/30', categoryId: 'mens-clothing' },
+              { icon: 'sparkles', name: '女装', color: 'text-pink-500', bgColor: 'bg-pink-100 dark:bg-pink-900/30', categoryId: 'womens-clothing' },
+              { icon: 'lightning-bolt', name: '运动', color: 'text-green-500', bgColor: 'bg-green-100 dark:bg-green-900/30', categoryId: 'sports' },
+              { icon: 'computer-desktop', name: '电脑', color: 'text-indigo-500', bgColor: 'bg-indigo-100 dark:bg-indigo-900/30', categoryId: 'computers' },
+              { icon: 'home', name: '家居', color: 'text-orange-500', bgColor: 'bg-orange-100 dark:bg-orange-900/30', categoryId: 'home' },
+              { icon: 'heart', name: '生鲜', color: 'text-red-500', bgColor: 'bg-red-100 dark:bg-red-900/30', categoryId: 'fresh-food' },
+              { icon: 'beaker', name: '美妆', color: 'text-rose-500', bgColor: 'bg-rose-100 dark:bg-rose-900/30', categoryId: 'beauty' },
+              { icon: 'face-smile', name: '母婴', color: 'text-yellow-500', bgColor: 'bg-yellow-100 dark:bg-yellow-900/30', categoryId: 'baby-products' },
+              { icon: 'book-open', name: '图书', color: 'text-teal-500', bgColor: 'bg-teal-100 dark:bg-teal-900/30', categoryId: 'books' },
             ].map((item, idx) => (
-              <div key={idx} className="text-center cursor-pointer group">
+              <div
+                key={idx}
+                onClick={() => handleCategoryClick(item.categoryId)}
+                className="text-center cursor-pointer group"
+              >
                 <div className={`w-14 h-14 ${item.bgColor} rounded-2xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform shadow-sm`}>
                   <svg className={`w-7 h-7 ${item.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     {item.icon === 'smartphone' && <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />}
