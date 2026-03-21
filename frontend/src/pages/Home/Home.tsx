@@ -40,8 +40,40 @@ const carouselItems = [
   },
 ];
 
+// 新闻数据
+const newsData = [
+  {
+    id: 1,
+    text: '双11倒计时！预售今晚开启',
+    tag: '热',
+    tagColor: 'bg-red-500',
+    content: '双十一全球狂欢节即将开启！预售活动将于今晚8点准时开始，海量商品低至5折起。今年双11不仅优惠力度空前，更有众多大牌新品首发。提前加购心仪商品，享受预售专属优惠，定金翻倍、满减叠加，让你购物更划算！',
+    time: '2024-01-15 10:30',
+    views: 12345,
+  },
+  {
+    id: 2,
+    text: 'iPhone 15 系列限时优惠',
+    tag: '新',
+    tagColor: 'bg-blue-500',
+    content: '苹果 iPhone 15 系列新品上市，限时优惠活动火热进行中！全系支持 USB-C 接口，Pro 系列搭载钛金属边框，性能更强、手感更佳。购机享12期免息分期，赠送 AirTag 限量礼盒，数量有限，先到先得！',
+    time: '2024-01-15 09:20',
+    views: 8765,
+  },
+  {
+    id: 3,
+    text: '新人专享礼包，首单立减50元',
+    tag: '荐',
+    tagColor: 'bg-orange-500',
+    content: '新用户注册即享专属礼包！首单立减50元，更有满100减20、满200减50等多重优惠券等你来领。新人专享价商品低至9.9元包邮，让你畅享购物乐趣。活动限时限量，抓紧时间注册吧！',
+    time: '2024-01-15 08:15',
+    views: 6543,
+  },
+];
+
 export const Home: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [selectedNews, setSelectedNews] = useState<typeof newsData[0] | null>(null);
 
   // 自动轮播
   useEffect(() => {
@@ -246,15 +278,11 @@ export const Home: React.FC = () => {
                    <span className="font-bold text-sm text-gray-700 dark:text-gray-200">淘宝头条</span>
                  </div>
                  <div className="space-y-2.5">
-                   {[
-                     { text: '双11倒计时！预售今晚开启', tag: '热', tagColor: 'bg-red-500' },
-                     { text: 'iPhone 15 系列限时优惠', tag: '新', tagColor: 'bg-blue-500' },
-                     { text: '新人专享礼包，首单立减50元', tag: '荐', tagColor: 'bg-orange-500' },
-                   ].map((news, idx) => (
+                   {newsData.map((news) => (
                      <div 
-                       key={idx} 
+                       key={news.id} 
                        className="flex items-center text-sm cursor-pointer hover:text-orange-500 transition-colors group"
-                       onClick={() => alert(`点击新闻: ${news.text}`)}
+                       onClick={() => setSelectedNews(news)}
                      >
                        <span className={`${news.tagColor} text-white text-xs px-1.5 py-0.5 rounded mr-2 font-bold`}>
                          {news.tag}
@@ -352,6 +380,72 @@ export const Home: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* 新闻弹窗 */}
+      {selectedNews && (
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          onClick={() => setSelectedNews(null)}
+        >
+          <div 
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* 弹窗头部 */}
+            <div className="bg-gradient-to-r from-orange-500 to-red-500 p-6">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className={`${selectedNews.tagColor} text-white text-xs px-2 py-1 rounded font-bold`}>
+                      {selectedNews.tag}
+                    </span>
+                  </div>
+                  <h3 className="text-white text-xl font-bold">{selectedNews.text}</h3>
+                </div>
+                <button 
+                  onClick={() => setSelectedNews(null)}
+                  className="text-white/80 hover:text-white transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            {/* 弹窗内容 */}
+            <div className="p-6">
+              <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{selectedNews.time}</span>
+                <svg className="w-4 h-4 ml-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span>{selectedNews.views.toLocaleString()} 阅读</span>
+              </div>
+              
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                {selectedNews.content}
+              </p>
+              
+              <div className="mt-6 flex gap-3">
+                <button 
+                  onClick={() => setSelectedNews(null)}
+                  className="flex-1 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-medium"
+                >
+                  关闭
+                </button>
+                <button className="flex-1 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium">
+                  查看详情
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
