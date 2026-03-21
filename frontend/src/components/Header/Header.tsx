@@ -52,20 +52,26 @@ export const Header: React.FC = () => {
           {/* Search Bar */}
           <form onSubmit={handleSearch} className="flex-1 max-w-2xl mx-8">
             <div className="relative flex items-center">
-              {/* 流动光效边框 */}
+              {/* 流动光效边框 - 使用伪元素实现完美贴合 */}
               <div 
-                className={`absolute inset-0 rounded-full transition-all duration-700 ${
-                  isSearchFocused ? 'opacity-100 scale-[1.02]' : 'opacity-0 scale-100'
+                className={`absolute -inset-[3px] rounded-full transition-all duration-500 ${
+                  isSearchFocused ? 'opacity-100' : 'opacity-0'
                 }`}
                 style={{
                   background: 'linear-gradient(90deg, #f97316, #ef4444, #fb923c, #f97316, #ef4444, #f97316)',
                   backgroundSize: '300% 100%',
                   animation: isSearchFocused ? 'gradient-flow 1.5s linear infinite' : 'none',
-                  padding: '3px',
+                  zIndex: -1,
                 }}
-              >
-                <div className="w-full h-full bg-white rounded-full" />
-              </div>
+              />
+              
+              {/* 白色内层 - 确保完美贴合 */}
+              {isSearchFocused && (
+                <div 
+                  className="absolute -inset-[2px] bg-white rounded-full"
+                  style={{ zIndex: -1 }}
+                />
+              )}
               
               {/* 搜索图标 */}
               <div className="absolute left-4 text-gray-400 z-10">
@@ -80,7 +86,7 @@ export const Header: React.FC = () => {
                 onFocus={() => setIsSearchFocused(true)}
                 onBlur={() => setIsSearchFocused(false)}
                 placeholder="搜索商品、店铺..."
-                className="relative w-full h-10 pl-12 pr-24 bg-white border-0 rounded-full focus:outline-none text-gray-700 shadow-sm transition-all duration-300"
+                className="relative w-full h-10 pl-12 pr-24 bg-white border-0 rounded-full focus:outline-none text-gray-700 transition-all duration-300"
                 style={{
                   boxShadow: isSearchFocused 
                     ? '0 0 30px rgba(249, 115, 22, 0.5), 0 0 60px rgba(249, 115, 22, 0.3)' 
