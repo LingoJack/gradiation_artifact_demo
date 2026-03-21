@@ -52,51 +52,80 @@ export const Header: React.FC = () => {
           {/* Search Bar */}
           <form onSubmit={handleSearch} className="flex-1 max-w-2xl mx-8">
             <div className="relative flex items-center">
-              {/* 外层光晕 - 柔和扩散 */}
-              <div 
-                className={`absolute -inset-4 rounded-full transition-all duration-500 ${
-                  isSearchFocused ? 'opacity-100' : 'opacity-0'
-                }`}
-                style={{
-                  background: 'radial-gradient(ellipse at center, rgba(249, 115, 22, 0.3) 0%, transparent 70%)',
-                  filter: 'blur(8px)',
-                  animation: isSearchFocused ? 'pulse-glow 2s ease-in-out infinite' : 'none',
-                }}
-              />
+              {/* 灵动的光效 - 多个独立光斑 */}
+              {isSearchFocused && (
+                <>
+                  {/* 光斑 1 - 左侧流动 */}
+                  <div
+                    className="absolute -left-6 top-1/2 w-24 h-24 pointer-events-none"
+                    style={{
+                      background: 'radial-gradient(circle, rgba(249, 115, 22, 0.35) 0%, transparent 70%)',
+                      filter: 'blur(12px)',
+                      animation: 'float-1 4s ease-in-out infinite',
+                    }}
+                  />
+                  
+                  {/* 光斑 2 - 右侧流动 */}
+                  <div
+                    className="absolute -right-6 top-1/2 w-20 h-20 pointer-events-none"
+                    style={{
+                      background: 'radial-gradient(circle, rgba(251, 146, 60, 0.3) 0%, transparent 65%)',
+                      filter: 'blur(10px)',
+                      animation: 'float-2 3.5s ease-in-out infinite',
+                    }}
+                  />
+                  
+                  {/* 光斑 3 - 顶部脉动 */}
+                  <div
+                    className="absolute left-1/3 -top-4 w-28 h-20 pointer-events-none"
+                    style={{
+                      background: 'radial-gradient(circle, rgba(239, 68, 68, 0.25) 0%, transparent 60%)',
+                      filter: 'blur(14px)',
+                      animation: 'float-3 5s ease-in-out infinite',
+                    }}
+                  />
+                  
+                  {/* 光斑 4 - 底部游走 */}
+                  <div
+                    className="absolute right-1/4 -bottom-4 w-24 h-16 pointer-events-none"
+                    style={{
+                      background: 'radial-gradient(circle, rgba(249, 115, 22, 0.2) 0%, transparent 55%)',
+                      filter: 'blur(16px)',
+                      animation: 'float-4 4.5s ease-in-out infinite',
+                    }}
+                  />
+                  
+                  {/* 光斑 5 - 中间穿过 */}
+                  <div
+                    className="absolute left-1/2 top-0 w-16 h-full pointer-events-none"
+                    style={{
+                      background: 'radial-gradient(circle at center, rgba(251, 146, 60, 0.15) 0%, transparent 50%)',
+                      filter: 'blur(8px)',
+                      animation: 'float-5 6s ease-in-out infinite',
+                    }}
+                  />
+                </>
+              )}
               
-              {/* 流动光效边框 - 多层渐变 */}
+              {/* 流动边框 - 柔和 */}
               <div 
-                className={`absolute -inset-[3px] rounded-full transition-all duration-500 ${
+                className={`absolute -inset-[2px] rounded-full transition-opacity duration-500 ${
                   isSearchFocused ? 'opacity-100' : 'opacity-0'
                 }`}
                 style={{
-                  background: 'linear-gradient(90deg, rgba(249, 115, 22, 0.6), rgba(239, 68, 68, 0.4), rgba(251, 146, 60, 0.6), rgba(249, 115, 22, 0.3), rgba(239, 68, 68, 0.5), rgba(249, 115, 22, 0.6))',
-                  backgroundSize: '400% 100%',
-                  animation: isSearchFocused ? 'gradient-flow 3s linear infinite' : 'none',
-                  filter: 'blur(1px)',
-                  opacity: 0.8,
-                }}
-              />
-              
-              {/* 内层高光 - 增加质感 */}
-              <div 
-                className={`absolute -inset-[2px] rounded-full transition-all duration-500 ${
-                  isSearchFocused ? 'opacity-100' : 'opacity-0'
-                }`}
-                style={{
-                  background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4))',
+                  background: 'linear-gradient(90deg, rgba(249, 115, 22, 0.2), rgba(239, 68, 68, 0.15), rgba(251, 146, 60, 0.2))',
                   backgroundSize: '200% 100%',
-                  animation: isSearchFocused ? 'shimmer 2s ease-in-out infinite' : 'none',
+                  animation: isSearchFocused ? 'gradient-flow 4s linear infinite' : 'none',
+                  filter: 'blur(0.5px)',
+                  opacity: 0.6,
                 }}
               />
               
               {/* 白色背景层 */}
-              {isSearchFocused && (
-                <div 
-                  className="absolute -inset-[1px] bg-white/95 backdrop-blur-xl rounded-full"
-                  style={{ zIndex: -1 }}
-                />
-              )}
+              <div 
+                className="absolute inset-0 bg-white/98 backdrop-blur-xl rounded-full"
+                style={{ zIndex: -1 }}
+              />
               
               {/* 搜索图标 */}
               <div className="absolute left-4 text-gray-400 z-10">
@@ -114,7 +143,7 @@ export const Header: React.FC = () => {
                 className="relative w-full h-10 pl-12 pr-24 bg-white border-0 rounded-full focus:outline-none text-gray-700 transition-all duration-300"
                 style={{
                   boxShadow: isSearchFocused 
-                    ? '0 0 40px rgba(249, 115, 22, 0.3), 0 0 80px rgba(249, 115, 22, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.5)' 
+                    ? '0 4px 24px rgba(249, 115, 22, 0.12), 0 8px 48px rgba(249, 115, 22, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.8)' 
                     : '0 1px 3px rgba(0, 0, 0, 0.1)',
                 }}
               />
@@ -132,31 +161,86 @@ export const Header: React.FC = () => {
           {/* 全局动画样式 */}
           <style>{`
             @keyframes gradient-flow {
-              0% {
-                background-position: 0% 50%;
-              }
-              100% {
-                background-position: 400% 50%;
-              }
+              0% { background-position: 0% 50%; }
+              100% { background-position: 200% 50%; }
             }
-            @keyframes shimmer {
+            
+            @keyframes float-1 {
               0%, 100% {
-                background-position: 200% 50%;
+                transform: translate(0%, -50%);
                 opacity: 0.6;
               }
+              25% {
+                transform: translate(-15%, -45%);
+                opacity: 0.8;
+              }
               50% {
-                background-position: 0% 50%;
-                opacity: 0.9;
+                transform: translate(10%, -55%);
+                opacity: 0.5;
+              }
+              75% {
+                transform: translate(-8%, -48%);
+                opacity: 0.7;
               }
             }
-            @keyframes pulse-glow {
+            
+            @keyframes float-2 {
               0%, 100% {
+                transform: translate(0%, -50%);
+                opacity: 0.7;
+              }
+              33% {
+                transform: translate(20%, -45%);
                 opacity: 0.5;
-                transform: scale(1);
+              }
+              66% {
+                transform: translate(-10%, -55%);
+                opacity: 0.8;
+              }
+            }
+            
+            @keyframes float-3 {
+              0%, 100% {
+                transform: translate(0%, 0%);
+                opacity: 0.5;
               }
               50% {
-                opacity: 0.8;
-                transform: scale(1.05);
+                transform: translate(20%, 10%);
+                opacity: 0.7;
+              }
+            }
+            
+            @keyframes float-4 {
+              0%, 100% {
+                transform: translate(0%, 0%);
+                opacity: 0.6;
+              }
+              25% {
+                transform: translate(15%, -5%);
+                opacity: 0.4;
+              }
+              50% {
+                transform: translate(-10%, -8%);
+                opacity: 0.7;
+              }
+              75% {
+                transform: translate(8%, -3%);
+                opacity: 0.5;
+              }
+            }
+            
+            @keyframes float-5 {
+              0%, 100% {
+                transform: translate(-50%, 0%);
+                opacity: 0.5;
+              }
+              33% {
+                transform: translate(-45%, -10%);
+                opacity: 0.3;
+              }
+              66% {
+                transform: translate(-55%, 8%);
+                opacity: 0.6;
               }
             }
           `}</style>
