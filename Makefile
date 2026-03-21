@@ -1,13 +1,13 @@
 SHELL := /bin/bash
 
-.PHONY: push pull current_dir
+.PHONY: push
 
 push:
 	@git add . \
 	&& (git commit -m "优化" || exit 0) \
 	&& git push origin main;
 
-pull:
+pull: 
 	@git pull origin main;
 
 current_dir: ## 显示当前目录信息

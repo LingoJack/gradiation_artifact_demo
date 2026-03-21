@@ -237,13 +237,33 @@ export const Home: React.FC = () => {
                  </div>
                </div>
 
-               {/* 公告 */}
-               <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700">
-                 <div className="flex items-center mb-2">
+               {/* 公告 - 淘宝头条 */}
+               <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 overflow-hidden">
+                 <div className="flex items-center mb-3">
                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
                      <path fillRule="evenodd" d="M18 3a1 1 0 00-1.447-.894L8.763 6H5a3 3 0 000 6h.28l1.771 5.316A1 1 0 008 18h1a1 1 0 001-1v-4.382l6.553 3.276A1 1 0 0018 15V3z" clipRule="evenodd" />
                    </svg>
                    <span className="font-bold text-sm text-gray-700 dark:text-gray-200">淘宝头条</span>
+                 </div>
+                 <div className="space-y-2.5">
+                   {[
+                     { text: '双11倒计时！预售今晚开启', tag: '热', tagColor: 'bg-red-500' },
+                     { text: 'iPhone 15 系列限时优惠', tag: '新', tagColor: 'bg-blue-500' },
+                     { text: '新人专享礼包，首单立减50元', tag: '荐', tagColor: 'bg-orange-500' },
+                   ].map((news, idx) => (
+                     <div 
+                       key={idx} 
+                       className="flex items-center text-sm cursor-pointer hover:text-orange-500 transition-colors group"
+                       onClick={() => alert(`点击新闻: ${news.text}`)}
+                     >
+                       <span className={`${news.tagColor} text-white text-xs px-1.5 py-0.5 rounded mr-2 font-bold`}>
+                         {news.tag}
+                       </span>
+                       <span className="text-gray-600 dark:text-gray-300 group-hover:text-orange-500 flex-1 truncate">
+                         {news.text}
+                       </span>
+                     </div>
+                   ))}
                  </div>
               </div>
             </div>
