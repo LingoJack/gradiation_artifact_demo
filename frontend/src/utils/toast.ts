@@ -4,13 +4,6 @@ type ToastType = 'success' | 'error' | 'info' | 'warning';
 export const showToast = (message: string, type: ToastType = 'success') => {
   const toast = document.createElement('div');
   
-  const colors = {
-    success: 'bg-green-500',
-    error: 'bg-red-500',
-    info: 'bg-blue-500',
-    warning: 'bg-amber-500',
-  };
-  
   const icons = {
     success: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>',
     error: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>',
@@ -18,8 +11,16 @@ export const showToast = (message: string, type: ToastType = 'success') => {
     warning: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>',
   };
   
-  toast.className = `fixed top-8 right-8 ${colors[type]} text-white px-6 py-3 rounded-xl shadow-lg z-50 flex items-center space-x-2 animate-slide-in-right`;
-  toast.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">${icons[type]}</svg><span>${message}</span>`;
+  toast.className = `fixed top-24 right-8 glass-dropdown text-gray-900 dark:text-white px-6 py-3 rounded-xl z-50 flex items-center space-x-3 animate-slide-in-right border border-white/40 dark:border-gray-600/30`;
+  
+  const iconColors = {
+    success: 'text-green-500',
+    error: 'text-red-500',
+    info: 'text-blue-500',
+    warning: 'text-amber-500',
+  };
+  
+  toast.innerHTML = `<svg class="w-5 h-5 ${iconColors[type]}" fill="none" stroke="currentColor" viewBox="0 0 24 24">${icons[type]}</svg><span class="font-medium">${message}</span>`;
   document.body.appendChild(toast);
   
   // 添加动画样式
