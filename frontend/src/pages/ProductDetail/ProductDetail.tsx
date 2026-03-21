@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
   ShoppingCart,
   Heart,
@@ -7,15 +7,21 @@ import {
   Shield,
   Truck,
   RotateCcw,
-  MessageCircle,
   ChevronRight,
-  Store,
   Star,
   ThumbsUp
 } from 'lucide-react';
-import { mockProducts } from '../../utils/mockData';
+import { mockProducts, getShopByName } from '../../utils/mockData';
 import { useCartStore } from '../../store/useCartStore';
 import type { Product } from '../../types/product';
+
+// 格式化数字
+const formatNumber = (num: number) => {
+  if (num >= 10000) {
+    return `${(num / 10000).toFixed(1)}万`;
+  }
+  return num.toString();
+};
 
 // 分类数据
 const mockCategories = [
@@ -333,35 +339,54 @@ export const ProductDetail: React.FC = () => {
               {/* 店铺信息 */}
               <div className="border-t border-gray-200 dark:border-gray-700 pt-5">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-400 rounded-lg flex items-center justify-center">
-                      <Store className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <div className="font-medium text-gray-900 dark:text-gray-100">
-                        {product.shopName}
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        <div className="flex items-center gap-1">
-                          <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                          <span>4.9</span>
+                  {(() => {
+                    const shop = getShopByName(product.shopName || '');
+                    return (
+                      <>
+                        <Link 
+                          to={`/shop/${shop.id}`}
+                          className="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 p-2 rounded-lg transition-colors -ml-2"
+                        >
+                          <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-400 rounded-lg flex items-center justify-center overflow-hidden">
+                            <img 
+                              src={shop.avatar} 
+                              alt={product.shopName}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                          <div>
+                            <div className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-primary">
+                              {product.shopName}
+                            </div>
+                            <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-1">
+                              <div className="flex items-center gap-1">
+                                <Star className="w-3 h-3 text-yellow-400 fill-current" />
+                                <span>{shop.rating}</span>
+                              </div>
+                              <span>|</span>
+                              <span>粉丝 {formatNumber(shop.fans)}</span>
+                            </div>
+                          </div>
+                          <ChevronRight className="w-5 h-5 text-gray-400" />
+                        </Link>
+                        <div className="flex gap-2">
+                          <Link 
+                            to={`/shop/${shop.id}`}
+                            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100"
+                          >
+                            进店逛逛
+                          </Link>
+                          <button className="px-4 py-2 border border-orange-500 text-orange-600 dark:text-orange-400 rounded text-sm hover:bg-orange-50 dark:hover:bg-orange-900/20">
+                            关注店铺
+                          </button>
                         </div>
-                        <span>|</span>
-                        <span>商品 {Math.floor(Math.random() * 500) + 100}</span>
-                        <span>|</span>
-                        <span>关注 {Math.floor(Math.random() * 10000) + 1000}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100">
-                      进店逛逛
-                    </button>
-                    <button className="px-4 py-2 border border-orange-500 text-orange-600 dark:text-orange-400 rounded text-sm hover:bg-orange-50 dark:hover:bg-orange-900/20">
-                      <MessageCircle className="w-4 h-4 inline mr-1" />
-                      联系客服
-                    </button>
-                  </div>
+                      </>
+                    );
+                  })()}
                 </div>
               </div>
             </div>

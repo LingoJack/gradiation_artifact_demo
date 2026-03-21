@@ -262,27 +262,30 @@ export const Home: React.FC = () => {
             </div>
 
             {/* 右侧推荐 - 卡片式设计 */}
-            <div className="w-72 flex-shrink-0 flex flex-col gap-3">
+            <div className="w-72 flex-shrink-0 flex flex-col gap-3 h-full">
               {/* 用户信息卡片 - 液态玻璃效果 */}
               <div 
                 ref={userCardSpotlight.ref as React.RefObject<HTMLDivElement>}
-                className="glass-user-card rounded-xl p-4 relative overflow-hidden transition-shadow duration-300"
+                className="glass-user-card rounded-xl p-4 relative overflow-hidden transition-shadow duration-300 flex-shrink-0"
                 style={userCardSpotlight.spotlightStyle}
                 {...userCardSpotlight.handlers}
               >
                 {isAuthenticated && user ? (
                   <>
-                    <div className="flex items-center mb-3">
-                      <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center mr-2 overflow-hidden">
+                    <Link to="/profile" className="flex items-center mb-3 group cursor-pointer">
+                      <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center mr-2 overflow-hidden group-hover:ring-2 group-hover:ring-primary/50 transition-all">
                         <span className="text-white text-lg font-bold">
                           {user.username.charAt(0).toUpperCase()}
                         </span>
                       </div>
-                      <div>
-                        <p className="font-bold text-gray-800 dark:text-gray-200 text-sm">Hi，{user.username}</p>
+                      <div className="flex-1">
+                        <p className="font-bold text-gray-800 dark:text-gray-200 text-sm group-hover:text-primary transition-colors">Hi，{user.username}</p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">欢迎回来</p>
                       </div>
-                    </div>
+                      <svg className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </Link>
                     {/* 优惠资产 */}
                     <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
                       <div className="flex items-center justify-between mb-2">
@@ -339,12 +342,14 @@ export const Home: React.FC = () => {
               </div>
 
               {/* 活动卡片 */}
-              <div className="flex-1 rounded-xl overflow-hidden relative cursor-pointer hover:shadow-xl transition-all duration-300 group">
-                <img 
-                  src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop" 
-                  alt="新人专享" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+              <div className="flex-1 min-h-0 rounded-xl overflow-hidden relative cursor-pointer hover:shadow-xl transition-all duration-300 group">
+                <div className="absolute inset-0">
+                  <img 
+                    src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop" 
+                    alt="新人专享" 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600/80 to-pink-600/80 backdrop-blur-sm flex items-center justify-center">
                    <div className="text-white text-center">
                      <p className="font-bold text-2xl mb-2">新人专享</p>
@@ -356,7 +361,7 @@ export const Home: React.FC = () => {
                {/* 公告 - 淘宝头条 - 液态玻璃效果 */}
                <div 
                  ref={newsSpotlight.ref as React.RefObject<HTMLDivElement>}
-                 className="glass-liquid rounded-xl p-4 overflow-hidden relative"
+                 className="glass-liquid rounded-xl p-4 overflow-hidden relative flex-shrink-0"
                  style={newsSpotlight.spotlightStyle}
                  {...newsSpotlight.handlers}
                >
