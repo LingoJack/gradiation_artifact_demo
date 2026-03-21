@@ -22,7 +22,7 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-gradient-to-r from-orange-500/90 to-red-500/90 backdrop-blur-xl shadow-lg sticky top-0 z-50 border-b border-white/10">
+    <header className="bg-gradient-to-r from-orange-500/75 to-red-500/75 backdrop-blur-2xl shadow-lg sticky top-0 z-50 border-b border-white/20">
       <div className="container">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
