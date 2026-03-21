@@ -126,6 +126,26 @@ export const Home: React.FC = () => {
                   ];
                   const colorClass = colors[index % colors.length];
                   
+                  // 根据分类索引定义不同的图标路径
+                  const iconPaths = [
+                    // 服装 - T恤图标
+                    'M6.5 6.5L8 5l4-1 4 1 1.5 1.5m-11 0l-2 4v1l2 1v5.5a2 2 0 002 2h7a2 2 0 002-2v-5.5l2-1v-1l-2-4m-11 0l3.5 2.5h5l3.5-2.5',
+                    // 数码 - 手机图标
+                    'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z',
+                    // 美妆 - 口红图标
+                    'M12 4v4m0 0v12a2 2 0 002 2h0a2 2 0 002-2V8m-4 0h4m0 0V4a2 2 0 00-2-2h0a2 2 0 00-2 2v4',
+                    // 家居 - 房子图标
+                    'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
+                    // 食品 - 苹果图标
+                    'M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 007.92 12.446A9 9 0 1112 3z',
+                    // 运动 - 足球图标
+                    'M12 2a10 10 0 100 20 10 10 0 000-20zm0 0v20m10-10H2m15.364-6.364l-7.072 14.142M6.636 5.636l7.072 14.142',
+                    // 母婴 - 婴儿车图标
+                    'M8 18a2 2 0 100 4 2 2 0 000-4zm8 0a2 2 0 100 4 2 2 0 000-4zM5 8h14l-2 9H7L5 8zm0 0l-1-4h16l-1 4',
+                    // 图书 - 书本图标
+                    'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
+                  ];
+                  
                   return (
                     <li
                       key={cat.id}
@@ -134,7 +154,7 @@ export const Home: React.FC = () => {
                       {/* 彩色图标方块 */}
                       <span className={`w-8 h-8 ${colorClass} rounded-lg flex items-center justify-center mr-3 transition-all group-hover:rounded-xl`}>
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={iconPaths[index]} />
                         </svg>
                       </span>
                       {/* 分类名称 */}
