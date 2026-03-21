@@ -77,7 +77,7 @@ const newsData = [
 export const Home: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useUserStore();
-  const { coupons, points, redPacket, reset: resetCoupons } = useCouponStore();
+  const { coupons, points, redPacket } = useCouponStore();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedNews, setSelectedNews] = useState<typeof newsData[0] | null>(null);
 
