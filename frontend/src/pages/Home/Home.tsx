@@ -1,10 +1,72 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ProductCard } from '../../components/ProductCard/ProductCard';
 import { mockCategories, mockProducts } from '../../utils/mockData';
 import type { Product } from '../../types/product';
 
+// 轮播图数据
+const carouselItems = [
+  {
+    id: 1,
+    image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1200&h=420&fit=crop',
+    title: '双11大促',
+    subtitle: '全场商品5折起 | 限时特惠',
+    buttonText: '立即抢购',
+    gradient: 'from-orange-600/80 via-red-500/70 to-transparent',
+  },
+  {
+    id: 2,
+    image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&h=420&fit=crop',
+    title: '时尚女装',
+    subtitle: '春季新品上市 | 限时8折',
+    buttonText: '立即选购',
+    gradient: 'from-pink-600/80 via-purple-500/70 to-transparent',
+  },
+  {
+    id: 3,
+    image: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=1200&h=420&fit=crop',
+    title: '数码产品',
+    subtitle: '新品首发 | 最高立减1000元',
+    buttonText: '查看详情',
+    gradient: 'from-blue-600/80 via-indigo-500/70 to-transparent',
+  },
+  {
+    id: 4,
+    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&h=420&fit=crop',
+    title: '家居生活',
+    subtitle: '品质生活 | 全场满减优惠',
+    buttonText: '立即体验',
+    gradient: 'from-teal-600/80 via-cyan-500/70 to-transparent',
+  },
+];
+
 export const Home: React.FC = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // 自动轮播
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
+    }, 4000); // 每4秒切换一次
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // 手动切换轮播
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  // 上一张
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
+  };
+
+  // 下一张
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
+  };
+
   return (
     <div>
       {/* 轮播图区域 - 重新设计 */}
@@ -59,28 +121,64 @@ export const Home: React.FC = () => {
 
             {/* 中间轮播图 - 大图设计 */}
             <div className="flex-1 rounded-xl overflow-hidden shadow-lg relative group">
-              <img 
-                src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1200&h=420&fit=crop" 
-                alt="双11大促" 
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-orange-600/80 via-red-500/70 to-transparent">
-                <div className="relative h-full flex items-center px-12">
-                  <div className="text-white">
-                    <h2 className="text-6xl font-bold mb-3 drop-shadow-lg">双11大促</h2>
-                    <p className="text-xl mb-6 drop-shadow opacity-95">全场商品5折起 | 限时特惠</p>
-                    <button className="bg-white text-orange-600 px-8 py-3 rounded-full font-bold text-lg hover:bg-opacity-90 transition shadow-xl">
-                      立即抢购
-                    </button>
+              {/* 轮播图片容器 */}
+              <div className="relative w-full h-full">
+                {carouselItems.map((item, index) => (
+                  <div
+                    key={item.id}
+                    className={`absolute inset-0 transition-opacity duration-500 ${
+                      index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                    }`}
+                  >
+                    <img 
+                      src={item.image} 
+                      alt={item.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-r ${item.gradient}`}>
+                      <div className="relative h-full flex items-center px-12">
+                        <div className="text-white">
+                          <h2 className="text-6xl font-bold mb-3 drop-shadow-lg">{item.title}</h2>
+                          <p className="text-xl mb-6 drop-shadow opacity-95">{item.subtitle}</p>
+                          <button className="bg-white text-orange-600 px-8 py-3 rounded-full font-bold text-lg hover:bg-opacity-90 transition shadow-xl">
+                            {item.buttonText}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
+
+              {/* 左右箭头 */}
+              <button
+                onClick={prevSlide}
+                className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-black/30 hover:bg-black/50 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button
+                onClick={nextSlide}
+                className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-black/30 hover:bg-black/50 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+
               {/* 轮播指示器 */}
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                <div className="w-8 h-1.5 bg-white rounded-full"></div>
-                <div className="w-1.5 h-1.5 bg-white/50 rounded-full"></div>
-                <div className="w-1.5 h-1.5 bg-white/50 rounded-full"></div>
-                <div className="w-1.5 h-1.5 bg-white/50 rounded-full"></div>
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
+                {carouselItems.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToSlide(index)}
+                    className={`h-1.5 rounded-full transition-all ${
+                      index === currentSlide ? 'w-8 bg-white' : 'w-1.5 bg-white/50 hover:bg-white/70'
+                    }`}
+                  />
+                ))}
               </div>
             </div>
 
