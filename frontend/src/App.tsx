@@ -10,6 +10,10 @@ import { Cart } from './pages/Cart/Cart';
 import { Checkout } from './pages/Checkout/Checkout';
 import { OrderList } from './pages/Order/Order';
 import { UserCenter } from './pages/UserCenter/UserCenter';
+import { Addresses } from './pages/Addresses/Addresses';
+import { Favorites } from './pages/Favorites/Favorites';
+import { Profile } from './pages/Profile/Profile';
+import { Settings } from './pages/Settings/Settings';
 import { useUserStore } from './store/useUserStore';
 import { useTheme } from './hooks/useTheme';
 import './styles/index.css';
@@ -62,6 +66,38 @@ function App() {
             element={
               <PrivateRoute>
                 <UserCenter />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="addresses"
+            element={
+              <PrivateRoute>
+                <Addresses />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="favorites"
+            element={
+              <PrivateRoute>
+                <Favorites />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="settings"
+            element={
+              <PrivateRoute>
+                <Settings />
               </PrivateRoute>
             }
           />
