@@ -1,22 +1,14 @@
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { MapPin, Star, Users, ShoppingBag, ChevronRight, Store } from 'lucide-react';
-import { mockProducts, getShopByName, getShopIdByName } from '../../utils/mockData';
+import { mockProducts, getShopById } from '../../utils/mockData';
 import { ProductCard } from '../../components/ProductCard/ProductCard';
 
 export const Shop: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
-  // 根据 URL 中的 id 找到对应的店铺名称
   const shop = useMemo(() => {
-    // 遍历所有商品，找到 shopId 匹配的店铺
-    for (const product of mockProducts) {
-      if (getShopIdByName(product.shopName || '') === id) {
-        return getShopByName(product.shopName || '');
-      }
-    }
-    // 默认返回第一个商品的店铺
-    return getShopByName(mockProducts[0]?.shopName || '');
+    return getShopById(id || '') || getShopById('shop-1001')!;
   }, [id]);
 
   const shopProducts = useMemo(() => {
