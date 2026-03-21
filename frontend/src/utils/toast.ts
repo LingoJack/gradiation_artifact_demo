@@ -1,7 +1,25 @@
 // Toast 提示工具
 type ToastType = 'success' | 'error' | 'info' | 'warning';
 
+// 防抖控制
+let currentToast: HTMLDivElement | null = null;
+let toastTimer: ReturnType<typeof setTimeout> | null = null;
+
 export const showToast = (message: string, type: ToastType = 'success') => {
+  // 如果已有 Toast，先移除
+  if (currentToast) {
+    currentToast.style.opacity = '0';
+    currentToast.style.transform = 'translateX(100%)';
+    setTimeout(() => currentToast?.remove(), 150);
+    currentToast = null;
+  }
+  
+  // 清除之前的定时器
+  if (toastTimer) {
+    clearTimeout(toastTimer);
+    toastTimer = null;
+  }
+  
   const toast = document.createElement('div');
   
   const icons = {
@@ -23,30 +41,39 @@ export const showToast = (message: string, type: ToastType = 'success') => {
   toast.innerHTML = `<svg class="w-5 h-5 ${iconColors[type]}" fill="none" stroke="currentColor" viewBox="0 0 24 24">${icons[type]}</svg><span class="font-medium">${message}</span>`;
   document.body.appendChild(toast);
   
+  // 记录当前 Toast
+  currentToast = toast;
+  
   // 添加动画样式
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes slide-in-right {
-      from {
-        opacity: 0;
-        transform: translateX(100%);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-  `;
   if (!document.querySelector('#toast-animation-style')) {
+    const style = document.createElement('style');
     style.id = 'toast-animation-style';
+    style.textContent = `
+      @keyframes slide-in-right {
+        from {
+          opacity: 0;
+          transform: translateX(100%);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+    `;
     document.head.appendChild(style);
   }
   
-  setTimeout(() => {
+  // 设置自动消失定时器
+  toastTimer = setTimeout(() => {
     toast.style.opacity = '0';
     toast.style.transform = 'translateX(100%)';
     toast.style.transition = 'all 0.3s ease-in-out';
-    setTimeout(() => toast.remove(), 300);
+    setTimeout(() => {
+      toast.remove();
+      if (currentToast === toast) {
+        currentToast = null;
+      }
+    }, 300);
   }, 3000);
 };
 
