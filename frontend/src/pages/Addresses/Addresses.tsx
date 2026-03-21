@@ -37,11 +37,71 @@ const mockAddresses: Address[] = [
   },
 ];
 
+// 独立的卡片组件，每个实例有自己的 spotlight
+const AddressCard: React.FC<{
+  address: Address;
+  onSetDefault: (id: string) => void;
+  onEdit: (address: Address) => void;
+  onDelete: (id: string) => void;
+}> = ({ address, onSetDefault, onEdit, onDelete }) => {
+  const cardSpotlight = useSpotlight();
+
+  return (
+    <div
+      ref={cardSpotlight.ref as React.RefObject<HTMLDivElement>}
+      className="glass-liquid rounded-xl p-6 relative overflow-hidden"
+      style={cardSpotlight.spotlightStyle}
+      {...cardSpotlight.handlers}
+    >
+      <div className="flex items-start justify-between">
+        <div className="flex-1">
+          <div className="flex items-center space-x-4 mb-2">
+            <span className="font-bold dark:text-white">{address.receiver}</span>
+            <span className="text-gray-600 dark:text-gray-400">{address.phone}</span>
+            {address.isDefault && (
+              <span className="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded">
+                默认
+              </span>
+            )}
+          </div>
+          <p className="text-gray-600 dark:text-gray-400">
+            {address.province} {address.city} {address.district} {address.detail}
+          </p>
+        </div>
+        <div className="flex items-center space-x-4">
+          {!address.isDefault && (
+            <button
+              onClick={() => onSetDefault(address.id)}
+              className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary"
+            >
+              <Check className="w-4 h-4" />
+              <span className="text-sm">设为默认</span>
+            </button>
+          )}
+          <button
+            onClick={() => onEdit(address)}
+            className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary"
+          >
+            <Edit2 className="w-4 h-4" />
+            <span className="text-sm">编辑</span>
+          </button>
+          <button
+            onClick={() => onDelete(address.id)}
+            className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-error"
+          >
+            <Trash2 className="w-4 h-4" />
+            <span className="text-sm">删除</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const Addresses: React.FC = () => {
   const [addresses, setAddresses] = useState<Address[]>(mockAddresses);
   const [showModal, setShowModal] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
-  const cardSpotlight = useSpotlight();
   const modalSpotlight = useSpotlight();
 
   const handleSetDefault = (id: string) => {
@@ -96,55 +156,13 @@ export const Addresses: React.FC = () => {
           </div>
         ) : (
           addresses.map((address) => (
-            <div
+            <AddressCard
               key={address.id}
-              ref={cardSpotlight.ref as React.RefObject<HTMLDivElement>}
-              className="glass-liquid rounded-xl p-6 relative overflow-hidden"
-              style={cardSpotlight.spotlightStyle}
-              {...cardSpotlight.handlers}
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center space-x-4 mb-2">
-                    <span className="font-bold dark:text-white">{address.receiver}</span>
-                    <span className="text-gray-600 dark:text-gray-400">{address.phone}</span>
-                    {address.isDefault && (
-                      <span className="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded">
-                        默认
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    {address.province} {address.city} {address.district} {address.detail}
-                  </p>
-                </div>
-                <div className="flex items-center space-x-4">
-                  {!address.isDefault && (
-                    <button
-                      onClick={() => handleSetDefault(address.id)}
-                      className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary"
-                    >
-                      <Check className="w-4 h-4" />
-                      <span className="text-sm">设为默认</span>
-                    </button>
-                  )}
-                  <button
-                    onClick={() => handleEdit(address)}
-                    className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary"
-                  >
-                    <Edit2 className="w-4 h-4" />
-                    <span className="text-sm">编辑</span>
-                  </button>
-                  <button
-                    onClick={() => handleDelete(address.id)}
-                    className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-error"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                    <span className="text-sm">删除</span>
-                  </button>
-                </div>
-              </div>
-            </div>
+              address={address}
+              onSetDefault={handleSetDefault}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
           ))
         )}
       </div>
