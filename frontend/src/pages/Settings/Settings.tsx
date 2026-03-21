@@ -183,55 +183,12 @@ export const Settings: React.FC = () => {
 
       <div className="space-y-6">
         {settingGroups.map((group) => (
-          <div
+          <SettingGroupCard
             key={group.title}
-            ref={cardSpotlight.ref as React.RefObject<HTMLDivElement>}
-            className="glass-liquid rounded-xl overflow-hidden relative"
-            style={cardSpotlight.spotlightStyle}
-            {...cardSpotlight.handlers}
-          >
-            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-              <h2 className="font-bold dark:text-white">{group.title}</h2>
-            </div>
-            <div className="divide-y divide-gray-200 dark:divide-gray-700">
-              {group.items.map((item) => (
-                <div
-                  key={item.id}
-                  onClick={() => handleAction(item)}
-                  className="flex items-center justify-between px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition"
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className="text-gray-400 dark:text-gray-500">{item.icon}</div>
-                    <div>
-                      <p className="font-medium dark:text-white">{item.title}</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">{item.description}</p>
-                    </div>
-                  </div>
-                  <div>
-                    {item.action === 'toggle' && (
-                      <button
-                        className={`relative w-12 h-6 rounded-full transition-colors ${
-                          item.value ? 'bg-primary' : 'bg-gray-300 dark:bg-gray-600'
-                        }`}
-                      >
-                        <span
-                          className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${
-                            item.value ? 'left-7' : 'left-1'
-                          }`}
-                        />
-                      </button>
-                    )}
-                    {item.action === 'select' && (
-                      <span className="text-gray-500 dark:text-gray-400">{item.value}</span>
-                    )}
-                    {item.action === 'link' && (
-                      <ChevronRight className="w-5 h-5 text-gray-400 dark:text-gray-500" />
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+            title={group.title}
+            items={group.items}
+            onAction={handleAction}
+          />
         ))}
       </div>
 
