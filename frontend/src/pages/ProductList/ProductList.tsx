@@ -20,29 +20,51 @@ const categoryIcons: Record<string, React.ReactNode> = {
 export const ProductList: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get('category') || '');
+  const [searchQuery, setSearchQuery] = useState<string>(searchParams.get('search') || '');
   const [sortBy, setSortBy] = useState<'default' | 'price-asc' | 'price-desc' | 'sales'>('default');
 
   // 监听 URL 参数变化
   useEffect(() => {
     const category = searchParams.get('category');
+    const search = searchParams.get('search');
     if (category) {
       setSelectedCategory(category);
+    } else {
+      setSelectedCategory('');
+    }
+    if (search) {
+      setSearchQuery(search);
+    } else {
+      setSearchQuery('');
     }
   }, [searchParams]);
 
   // 切换分类时更新 URL
   const handleCategoryChange = (categoryId: string) => {
     setSelectedCategory(categoryId);
-    if (categoryId) {
-      setSearchParams({ category: categoryId });
-    } else {
-      setSearchParams({});
-    }
+    const params: Record<string, string> = {};
+    if (categoryId) params.category = categoryId;
+    if (searchQuery) params.search = searchQuery;
+    setSearchParams(params);
   };
 
-  const filteredProducts = selectedCategory
-    ? mockProducts.filter((p) => p.categoryId === selectedCategory)
-    : mockProducts;
+  // 筛选商品：先按分类，再按搜索关键词
+  let filteredProducts = mockProducts;
+  
+  // 按分类筛选
+  if (selectedCategory) {
+    filteredProducts = filteredProducts.filter((p) => p.categoryId === selectedCategory);
+  }
+  
+  // 按搜索关键词筛选
+  if (searchQuery) {
+    const query = searchQuery.toLowerCase();
+    filteredProducts = filteredProducts.filter((p) => 
+      p.name.toLowerCase().includes(query) ||
+      p.description.toLowerCase().includes(query) ||
+      p.shopName.toLowerCase().includes(query)
+    );
+  }
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
@@ -137,11 +159,11 @@ export const ProductList: React.FC = () => {
         </div>
       </div>
 
-      {/* 分类标题 */}
-      {selectedCategory && (
+      {/* 搜索/分类标题 */}
+      {(searchQuery || selectedCategory) && (
         <div className="mb-4">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-            {mockCategories.find(c => c.id === selectedCategory)?.name || '商品列表'}
+            {searchQuery ? `搜索"${searchQuery}"` : mockCategories.find(c => c.id === selectedCategory)?.name || '商品列表'}
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             共找到 {sortedProducts.length} 件商品
@@ -150,11 +172,19 @@ export const ProductList: React.FC = () => {
       )}
 
       {/* 商品列表 */}
-      <div className="grid grid-cols-4 gap-6">
-        {sortedProducts.map((product) => (
-          <ProductCard key={product.id} product={product as Product} />
-        ))}
-      </div>
+      {sortedProducts.length > 0 ? (
+        <div className="grid grid-cols-4 gap-6">
+          {sortedProducts.map((product) => (
+            <ProductCard key={product.id} product={product as Product} />
+          ))}
+        </div>
+      ) : (
+        <div className="glass-card rounded-xl p-12 text-center">
+          <p className="text-gray-500 dark:text-gray-400 text-lg">
+            {searchQuery ? `未找到与"${searchQuery}"相关的商品` : '暂无商品'}
+          </p>
+        </div>
+      )}
     </div>
   );
 };
