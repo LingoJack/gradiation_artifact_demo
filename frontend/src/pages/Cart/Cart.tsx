@@ -72,7 +72,11 @@ export const Cart: React.FC = () => {
                 <img
                   src={item.product.mainImage}
                   alt={item.product.name}
-                  className="w-20 h-20 object-cover rounded"
+                  className="w-20 h-20 object-cover rounded bg-gray-100 dark:bg-gray-700"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23f3f4f6" width="80" height="80"/%3E%3Ctext fill="%239ca3af" x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-size="10"%3E暂无图片%3C/text%3E%3C/svg%3E';
+                  }}
                 />
                 <div>
                   <Link
