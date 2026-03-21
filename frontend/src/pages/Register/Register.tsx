@@ -85,6 +85,10 @@ export const Register: React.FC = () => {
       },
       'mock-token'
     );
+    
+    // 新用户注册，初始化优惠数据
+    resetCoupons();
+    
     navigate('/');
   };
 
