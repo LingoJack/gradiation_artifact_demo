@@ -263,10 +263,14 @@ export const Home: React.FC = () => {
                 {isAuthenticated && user ? (
                   <>
                     <Link to="/profile" className="flex items-center mb-3 group cursor-pointer">
-                      <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center mr-2 overflow-hidden group-hover:ring-2 group-hover:ring-primary/50 transition-all">
-                        <span className="text-white text-lg font-bold">
-                          {user.username.charAt(0).toUpperCase()}
-                        </span>
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center mr-2 overflow-hidden group-hover:ring-2 group-hover:ring-primary/50 transition-all bg-primary">
+                        {user.avatar ? (
+                          <img src={user.avatar} alt={user.username} className="w-full h-full object-cover" />
+                        ) : (
+                          <span className="text-white text-lg font-bold">
+                            {user.username.charAt(0).toUpperCase()}
+                          </span>
+                        )}
                       </div>
                       <div className="flex-1">
                         <p className="font-bold text-gray-800 dark:text-gray-200 text-sm group-hover:text-primary transition-colors">Hi，{user.username}</p>

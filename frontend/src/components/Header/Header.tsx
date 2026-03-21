@@ -45,7 +45,7 @@ export const Header: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="搜索商品、店铺..."
-                className="w-full h-10 pl-12 pr-24 bg-white border-0 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-300 text-gray-700 shadow-sm"
+                className="w-full h-10 pl-12 pr-24 bg-white border-0 rounded-full focus:outline-none text-gray-700 shadow-sm transition-all duration-300 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.5),0_0_20px_rgba(139,92,246,0.3),0_0_40px_rgba(59,130,246,0.2)]"
               />
               <button
                 type="submit"
