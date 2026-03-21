@@ -260,61 +260,70 @@ export const Home: React.FC = () => {
               {/* 用户信息卡片 - 液态玻璃效果 */}
               <div 
                 ref={userCardSpotlight.ref as React.RefObject<HTMLDivElement>}
-                className="glass-user-card rounded-xl p-5 relative overflow-hidden transition-shadow duration-300"
+                className="glass-user-card rounded-xl p-4 relative overflow-hidden transition-shadow duration-300"
                 style={userCardSpotlight.spotlightStyle}
                 {...userCardSpotlight.handlers}
               >
                 {isAuthenticated && user ? (
                   <>
-                    <div className="flex items-center mb-4">
-                      <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mr-3 overflow-hidden">
-                        <span className="text-white text-xl font-bold">
+                    <div className="flex items-center mb-3">
+                      <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center mr-2 overflow-hidden">
+                        <span className="text-white text-lg font-bold">
                           {user.username.charAt(0).toUpperCase()}
                         </span>
                       </div>
                       <div>
-                        <p className="font-bold text-gray-800 dark:text-gray-200">Hi，{user.username}</p>
+                        <p className="font-bold text-gray-800 dark:text-gray-200 text-sm">Hi，{user.username}</p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">欢迎回来</p>
                       </div>
                     </div>
-                    <div className="grid grid-cols-3 gap-2 text-center">
-                      <Link to="/coupons" className="bg-white dark:bg-gray-700 rounded-lg py-2 hover:shadow-md transition-shadow">
-                        <p className="text-primary font-bold">优惠券</p>
-                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{availableCoupons}张</p>
-                      </Link>
-                      <Link to="/coupons" className="bg-white dark:bg-gray-700 rounded-lg py-2 hover:shadow-md transition-shadow">
-                        <p className="text-primary font-bold">红包</p>
-                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">¥{redPacket}</p>
-                      </Link>
-                      <Link to="/coupons" className="bg-white dark:bg-gray-700 rounded-lg py-2 hover:shadow-md transition-shadow">
-                        <p className="text-primary font-bold">积分</p>
-                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{points}</p>
-                      </Link>
+                    {/* 优惠资产 */}
+                    <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">我的优惠</span>
+                        <Link to="/coupons" className="text-xs text-primary hover:underline">
+                          查看 &gt;
+                        </Link>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2">
+                        <Link to="/coupons" className="text-center group">
+                          <p className="text-lg font-bold text-primary group-hover:scale-105 transition-transform">{availableCoupons}</p>
+                          <p className="text-xs text-gray-400">优惠券</p>
+                        </Link>
+                        <Link to="/coupons" className="text-center group">
+                          <p className="text-lg font-bold text-red-500 group-hover:scale-105 transition-transform">¥{redPacket}</p>
+                          <p className="text-xs text-gray-400">红包</p>
+                        </Link>
+                        <Link to="/coupons" className="text-center group">
+                          <p className="text-lg font-bold text-amber-500 group-hover:scale-105 transition-transform">{points}</p>
+                          <p className="text-xs text-gray-400">积分</p>
+                        </Link>
+                      </div>
                     </div>
                   </>
                 ) : (
                   <>
-                    <div className="flex items-center mb-4">
-                      <div className="w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center mr-3">
-                        <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="flex items-center mb-3">
+                      <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center mr-2">
+                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                       </div>
                       <div>
-                        <p className="font-bold text-gray-800 dark:text-gray-200">Hi，欢迎来到淘宝</p>
+                        <p className="font-bold text-gray-800 dark:text-gray-200 text-sm">Hi，欢迎来到淘宝</p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">登录享更多优惠</p>
                       </div>
                     </div>
                     <div className="flex gap-2">
                       <button 
                         onClick={() => navigate('/login')}
-                        className="flex-1 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors font-medium"
+                        className="flex-1 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors font-medium text-sm"
                       >
                         登录
                       </button>
                       <button 
                         onClick={() => navigate('/register')}
-                        className="flex-1 py-2 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors font-medium"
+                        className="flex-1 py-2 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors font-medium text-sm"
                       >
                         注册
                       </button>
