@@ -24,7 +24,7 @@ export const Header: React.FC = () => {
 
   return (
     <header 
-      className={`backdrop-blur-2xl shadow-lg sticky top-0 z-50 border-b transition-all duration-700 relative overflow-hidden ${
+      className={`backdrop-blur-2xl shadow-lg sticky top-0 z-50 border-b transition-all duration-700 relative ${
         isSearchFocused 
           ? 'bg-white/95 border-gray-200' 
           : 'bg-gradient-to-r from-orange-500/75 to-red-500/75 border-white/20'
