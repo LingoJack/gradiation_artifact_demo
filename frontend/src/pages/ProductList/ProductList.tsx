@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Shirt, Smartphone, Sparkles, Home, Apple, Dumbbell, Baby, BookOpen } from 'lucide-react';
 import { ProductCard } from '../../components/ProductCard/ProductCard';
 import { mockProducts, mockCategories } from '../../utils/mockData';
@@ -17,8 +18,27 @@ const categoryIcons: Record<string, React.ReactNode> = {
 };
 
 export const ProductList: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get('category') || '');
   const [sortBy, setSortBy] = useState<'default' | 'price-asc' | 'price-desc' | 'sales'>('default');
+
+  // 监听 URL 参数变化
+  useEffect(() => {
+    const category = searchParams.get('category');
+    if (category) {
+      setSelectedCategory(category);
+    }
+  }, [searchParams]);
+
+  // 切换分类时更新 URL
+  const handleCategoryChange = (categoryId: string) => {
+    setSelectedCategory(categoryId);
+    if (categoryId) {
+      setSearchParams({ category: categoryId });
+    } else {
+      setSearchParams({});
+    }
+  };
 
   const filteredProducts = selectedCategory
     ? mockProducts.filter((p) => p.categoryId === selectedCategory)
@@ -44,7 +64,7 @@ export const ProductList: React.FC = () => {
         <div className="flex items-center space-x-4">
           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">分类：</span>
           <button
-            onClick={() => setSelectedCategory('')}
+            onClick={() => handleCategoryChange('')}
             className={`px-4 py-1 rounded-lg transition-all ${
               !selectedCategory
                 ? 'bg-primary text-white shadow-md'
@@ -56,7 +76,7 @@ export const ProductList: React.FC = () => {
           {mockCategories.map((cat) => (
             <button
               key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
+              onClick={() => handleCategoryChange(cat.id)}
               className={`px-4 py-1.5 rounded-lg transition-all flex items-center space-x-1.5 ${
                 selectedCategory === cat.id
                   ? 'bg-primary text-white shadow-md'
@@ -116,6 +136,18 @@ export const ProductList: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* 分类标题 */}
+      {selectedCategory && (
+        <div className="mb-4">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+            {mockCategories.find(c => c.id === selectedCategory)?.name || '商品列表'}
+          </h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            共找到 {sortedProducts.length} 件商品
+          </p>
+        </div>
+      )}
 
       {/* 商品列表 */}
       <div className="grid grid-cols-4 gap-6">

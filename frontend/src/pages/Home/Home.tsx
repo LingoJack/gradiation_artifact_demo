@@ -80,6 +80,7 @@ export const Home: React.FC = () => {
   const { coupons, points, redPacket } = useCouponStore();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedNews, setSelectedNews] = useState<typeof newsData[0] | null>(null);
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
 
   // 液态玻璃鼠标光效 hooks
   const userCardSpotlight = useSpotlight();
@@ -95,6 +96,11 @@ export const Home: React.FC = () => {
 
   // 可用优惠券数量
   const availableCoupons = coupons.filter((c) => c.status === 'available').length;
+
+  // 点击分类跳转
+  const handleCategoryClick = (categoryId: string) => {
+    navigate(`/products?category=${categoryId}`);
+  };
 
   // 自动轮播
   useEffect(() => {
@@ -170,6 +176,7 @@ export const Home: React.FC = () => {
                   return (
                     <li
                       key={cat.id}
+                      onClick={() => handleCategoryClick(cat.id)}
                       className="flex items-center px-3 py-2.5 hover:bg-white dark:hover:bg-gray-700 cursor-pointer transition-all group relative"
                     >
                       {/* 彩色图标方块 */}
