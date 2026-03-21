@@ -278,15 +278,15 @@ export const Home: React.FC = () => {
                       </div>
                     </div>
                     <div className="grid grid-cols-3 gap-2 text-center">
-                      <Link to="/user" className="bg-white dark:bg-gray-700 rounded-lg py-2 hover:shadow-md transition-shadow">
+                      <Link to="/coupons" className="bg-white dark:bg-gray-700 rounded-lg py-2 hover:shadow-md transition-shadow">
                         <p className="text-primary font-bold">优惠券</p>
                         <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{availableCoupons}张</p>
                       </Link>
-                      <Link to="/user" className="bg-white dark:bg-gray-700 rounded-lg py-2 hover:shadow-md transition-shadow">
+                      <Link to="/coupons" className="bg-white dark:bg-gray-700 rounded-lg py-2 hover:shadow-md transition-shadow">
                         <p className="text-primary font-bold">红包</p>
                         <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">¥{redPacket}</p>
                       </Link>
-                      <Link to="/user" className="bg-white dark:bg-gray-700 rounded-lg py-2 hover:shadow-md transition-shadow">
+                      <Link to="/coupons" className="bg-white dark:bg-gray-700 rounded-lg py-2 hover:shadow-md transition-shadow">
                         <p className="text-primary font-bold">积分</p>
                         <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{points}</p>
                       </Link>

@@ -1,16 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { User, MapPin, Heart, Package, Settings, LogOut } from 'lucide-react';
+import { User, MapPin, Heart, Package, Settings, LogOut, Ticket } from 'lucide-react';
 import { useUserStore } from '../../store/useUserStore';
+import { useCouponStore } from '../../store/useCouponStore';
 import { useSpotlight } from '../../hooks/useSpotlight';
 
 export const UserCenter: React.FC = () => {
   const { user, logout } = useUserStore();
+  const { coupons, points, redPacket } = useCouponStore();
   const menuSpotlight = useSpotlight();
   const mainSpotlight = useSpotlight();
 
+  const availableCoupons = coupons.filter((c) => c.status === 'available').length;
+
   const menuItems = [
     { icon: Package, label: '我的订单', path: '/orders' },
+    { icon: Ticket, label: '我的优惠', path: '/coupons' },
     { icon: Heart, label: '我的收藏', path: '/favorites' },
     { icon: MapPin, label: '收货地址', path: '/addresses' },
     { icon: User, label: '个人信息', path: '/profile' },
@@ -44,6 +49,22 @@ export const UserCenter: React.FC = () => {
                 <h2 className="font-bold dark:text-white">{user?.username || '用户'}</h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400">{user?.email}</p>
               </div>
+            </div>
+
+            {/* 资产概览 */}
+            <div className="grid grid-cols-3 gap-2 mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
+              <Link to="/coupons" className="text-center">
+                <p className="text-primary font-bold">{availableCoupons}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">优惠券</p>
+              </Link>
+              <Link to="/coupons" className="text-center">
+                <p className="text-red-500 font-bold">¥{redPacket}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">红包</p>
+              </Link>
+              <Link to="/coupons" className="text-center">
+                <p className="text-amber-500 font-bold">{points}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">积分</p>
+              </Link>
             </div>
 
             {/* 菜单列表 */}
@@ -108,6 +129,13 @@ export const UserCenter: React.FC = () => {
                   <p className="text-sm">我的订单</p>
                 </Link>
                 <Link
+                  to="/coupons"
+                  className="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-6 text-center hover:shadow-md transition dark:text-white"
+                >
+                  <Ticket className="w-8 h-8 text-amber-500 mx-auto mb-2" />
+                  <p className="text-sm">我的优惠</p>
+                </Link>
+                <Link
                   to="/favorites"
                   className="bg-red-50 dark:bg-red-900/20 rounded-lg p-6 text-center hover:shadow-md transition dark:text-white"
                 >
@@ -120,13 +148,6 @@ export const UserCenter: React.FC = () => {
                 >
                   <MapPin className="w-8 h-8 text-info mx-auto mb-2" />
                   <p className="text-sm">收货地址</p>
-                </Link>
-                <Link
-                  to="/settings"
-                  className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-6 text-center hover:shadow-md transition dark:text-white"
-                >
-                  <Settings className="w-8 h-8 text-gray-600 dark:text-gray-400 mx-auto mb-2" />
-                  <p className="text-sm">账户设置</p>
                 </Link>
               </div>
             </div>

@@ -14,6 +14,7 @@ import { Addresses } from './pages/Addresses/Addresses';
 import { Favorites } from './pages/Favorites/Favorites';
 import { Profile } from './pages/Profile/Profile';
 import { Settings } from './pages/Settings/Settings';
+import { Coupons } from './pages/Coupons/Coupons';
 import { useUserStore } from './store/useUserStore';
 import { useTheme } from './hooks/useTheme';
 import './styles/index.css';
@@ -98,6 +99,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Settings />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="coupons"
+            element={
+              <PrivateRoute>
+                <Coupons />
               </PrivateRoute>
             }
           />
