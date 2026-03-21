@@ -19,7 +19,7 @@ export const Cart: React.FC = () => {
 
   return (
     <div className="container py-8">
-      <h1 className="text-2xl font-bold mb-6">购物车</h1>
+      <h1 className="text-2xl font-bold mb-6 dark:text-white">购物车</h1>
 
       {items.length === 0 ? (
         <div 
@@ -28,7 +28,7 @@ export const Cart: React.FC = () => {
           style={emptySpotlight.spotlightStyle}
           {...emptySpotlight.handlers}
         >
-          <p className="text-gray-500 mb-4">购物车是空的</p>
+          <p className="text-gray-500 dark:text-gray-400 mb-4">购物车是空的</p>
           <Link to="/products" className="text-primary hover:underline">
             去逛逛
           </Link>
@@ -41,7 +41,7 @@ export const Cart: React.FC = () => {
           {...cartSpotlight.handlers}
         >
           {/* 表头 */}
-          <div className="grid grid-cols-12 gap-4 p-4 border-b bg-gray-50 font-medium text-sm">
+          <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 font-medium text-sm dark:text-gray-300">
             <div className="col-span-1">
               <input
                 type="checkbox"
@@ -59,7 +59,7 @@ export const Cart: React.FC = () => {
 
           {/* 商品列表 */}
           {items.map((item) => (
-            <div key={item.id} className="grid grid-cols-12 gap-4 p-4 border-b items-center">
+            <div key={item.id} className="grid grid-cols-12 gap-4 p-4 border-b border-gray-200 dark:border-gray-700 items-center">
               <div className="col-span-1">
                 <input
                   type="checkbox"
@@ -77,28 +77,28 @@ export const Cart: React.FC = () => {
                 <div>
                   <Link
                     to={`/products/${item.productId}`}
-                    className="text-sm hover:text-primary line-clamp-2"
+                    className="text-sm hover:text-primary line-clamp-2 dark:text-gray-200"
                   >
                     {item.product.name}
                   </Link>
                   {item.spec && (
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                       {item.spec.name}: {item.spec.value}
                     </p>
                   )}
                 </div>
               </div>
-              <div className="col-span-2 text-center">¥{item.product.price}</div>
+              <div className="col-span-2 text-center dark:text-gray-300">¥{item.product.price}</div>
               <div className="col-span-2 flex items-center justify-center space-x-2">
                 <button
                   onClick={() =>
                     updateQuantity(item.id, Math.max(1, item.quantity - 1))
                   }
-                  className="w-6 h-6 border rounded flex items-center justify-center hover:bg-gray-100"
+                  className="w-6 h-6 border border-gray-300 dark:border-gray-600 rounded flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300"
                 >
                   -
                 </button>
-                <span className="w-8 text-center">{item.quantity}</span>
+                <span className="w-8 text-center dark:text-gray-300">{item.quantity}</span>
                 <button
                   onClick={() =>
                     updateQuantity(
@@ -106,7 +106,7 @@ export const Cart: React.FC = () => {
                       Math.min(item.product.stock, item.quantity + 1)
                     )
                   }
-                  className="w-6 h-6 border rounded flex items-center justify-center hover:bg-gray-100"
+                  className="w-6 h-6 border border-gray-300 dark:border-gray-600 rounded flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300"
                 >
                   +
                 </button>
@@ -134,17 +134,17 @@ export const Cart: React.FC = () => {
                 onChange={toggleSelectAll}
                 className="w-4 h-4"
               />
-              <span className="text-sm">全选</span>
+              <span className="text-sm dark:text-gray-300">全选</span>
             </div>
             <div className="flex items-center space-x-6">
-              <div className="text-sm">
+              <div className="text-sm dark:text-gray-300">
                 已选择{' '}
                 <span className="font-bold text-primary">
                   {items.filter((i) => i.selected).length}
                 </span>{' '}
                 件商品
               </div>
-              <div className="text-sm">
+              <div className="text-sm dark:text-gray-300">
                 合计：
                 <span className="text-2xl font-bold text-primary">
                   ¥{total.toFixed(2)}
@@ -153,7 +153,7 @@ export const Cart: React.FC = () => {
               <button
                 onClick={handleCheckout}
                 disabled={items.filter((i) => i.selected).length === 0}
-                className="px-12 py-3 bg-primary text-white rounded-lg hover:bg-primary-hover disabled:bg-gray-300 disabled:cursor-not-allowed"
+                className="px-12 py-3 bg-primary text-white rounded-lg hover:bg-primary-hover disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed"
               >
                 去结算
               </button>

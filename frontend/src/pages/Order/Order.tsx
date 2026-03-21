@@ -18,7 +18,7 @@ const mockOrders = [
         orderId: '1',
         productId: '1',
         productName: '时尚休闲连帽卫衣 男士秋季新款',
-        productImage: 'https://via.placeholder.com/100x100?text=卫衣',
+        productImage: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=200&h=200&fit=crop',
         specName: '黑色',
         price: 129,
         quantity: 2,
@@ -41,7 +41,7 @@ const mockOrders = [
         orderId: '2',
         productId: '2',
         productName: 'Apple iPhone 15 Pro Max 256GB',
-        productImage: 'https://via.placeholder.com/100x100?text=iPhone',
+        productImage: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=200&h=200&fit=crop',
         specName: '深空黑',
         price: 9999,
         quantity: 1,
@@ -71,19 +71,19 @@ export const OrderList: React.FC = () => {
 
   return (
     <div className="container py-8">
-      <h1 className="text-2xl font-bold mb-6">我的订单</h1>
+      <h1 className="text-2xl font-bold mb-6 dark:text-white">我的订单</h1>
 
       {/* Tabs */}
-      <div className="bg-white rounded-lg mb-6">
-        <div className="flex border-b">
+      <div className="glass-card rounded-lg mb-6">
+        <div className="flex border-b border-gray-200 dark:border-gray-700">
           {tabs.map((tab) => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`px-6 py-4 font-medium ${
+              className={`px-6 py-4 font-medium transition-colors ${
                 activeTab === tab.key
                   ? 'text-primary border-b-2 border-primary'
-                  : 'text-gray-600 hover:text-gray-900'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
               }`}
             >
               {tab.label}
@@ -96,14 +96,14 @@ export const OrderList: React.FC = () => {
       <div className="space-y-4">
         {filteredOrders.length === 0 ? (
           <div className="glass-card rounded-xl p-12 text-center">
-            <p className="text-gray-500">暂无订单</p>
+            <p className="text-gray-500 dark:text-gray-400">暂无订单</p>
           </div>
         ) : (
           filteredOrders.map((order) => (
             <div key={order.id} className="glass-card rounded-xl overflow-hidden">
               {/* 订单头部 */}
-              <div className="bg-gray-50 px-6 py-3 flex items-center justify-between text-sm">
-                <div className="flex items-center space-x-6">
+              <div className="bg-gray-50 dark:bg-gray-800/50 px-6 py-3 flex items-center justify-between text-sm">
+                <div className="flex items-center space-x-6 text-gray-600 dark:text-gray-400">
                   <span>订单号：{order.orderNo}</span>
                   <span>{order.createdAt}</span>
                 </div>
@@ -119,12 +119,16 @@ export const OrderList: React.FC = () => {
                     <img
                       src={item.productImage}
                       alt={item.productName}
-                      className="w-20 h-20 object-cover rounded"
+                      className="w-20 h-20 object-cover rounded bg-gray-100 dark:bg-gray-700"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23f3f4f6" width="80" height="80"/%3E%3Ctext fill="%239ca3af" x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-size="10"%3E暂无图片%3C/text%3E%3C/svg%3E';
+                      }}
                     />
                     <div className="flex-1">
-                      <p className="text-sm">{item.productName}</p>
+                      <p className="text-sm dark:text-white">{item.productName}</p>
                       {item.specName && (
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                           规格：{item.specName}
                         </p>
                       )}
@@ -132,7 +136,7 @@ export const OrderList: React.FC = () => {
                         <span className="text-primary font-bold">
                           ¥{item.price}
                         </span>
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
                           x{item.quantity}
                         </span>
                       </div>
@@ -140,8 +144,8 @@ export const OrderList: React.FC = () => {
                   </div>
                 ))}
 
-                <div className="flex items-center justify-between mt-4 pt-4 border-t">
-                  <div className="text-sm">
+                <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
                     共 {order.items.length} 件商品 合计：
                     <span className="text-lg font-bold text-primary">
                       ¥{order.payAmount}
@@ -150,7 +154,7 @@ export const OrderList: React.FC = () => {
                   <div className="flex space-x-2">
                     {order.status === 'pending' && (
                       <>
-                        <button className="px-4 py-2 border rounded hover:bg-gray-50">
+                        <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-white transition-colors">
                           取消订单
                         </button>
                         <button className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover">
@@ -164,7 +168,7 @@ export const OrderList: React.FC = () => {
                       </button>
                     )}
                     {order.status === 'completed' && (
-                      <button className="px-4 py-2 border rounded hover:bg-gray-50">
+                      <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-white transition-colors">
                         评价
                       </button>
                     )}

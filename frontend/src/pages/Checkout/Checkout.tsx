@@ -30,19 +30,19 @@ export const Checkout: React.FC = () => {
 
   return (
     <div className="container py-8">
-      <h1 className="text-2xl font-bold mb-6">确认订单</h1>
+      <h1 className="text-2xl font-bold mb-6 dark:text-white">确认订单</h1>
 
       <div className="grid grid-cols-3 gap-8">
         <div className="col-span-2 space-y-6">
           {/* 收货地址 */}
           <div className="glass-card rounded-xl p-6">
-            <h2 className="text-lg font-bold mb-4">收货地址</h2>
+            <h2 className="text-lg font-bold mb-4 dark:text-white">收货地址</h2>
             <div className="space-y-2 text-sm">
               <div className="flex items-center space-x-2">
-                <span className="font-medium">{address.receiver}</span>
-                <span>{address.phone}</span>
+                <span className="font-medium dark:text-white">{address.receiver}</span>
+                <span className="dark:text-gray-300">{address.phone}</span>
               </div>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 {address.province} {address.city} {address.district}{' '}
                 {address.detail}
               </p>
@@ -51,7 +51,7 @@ export const Checkout: React.FC = () => {
 
           {/* 商品清单 */}
           <div className="glass-card rounded-xl p-6">
-            <h2 className="text-lg font-bold mb-4">商品清单</h2>
+            <h2 className="text-lg font-bold mb-4 dark:text-white">商品清单</h2>
             <div className="space-y-4">
               {selectedItems.map((item) => (
                 <div key={item.id} className="flex space-x-4">
@@ -61,9 +61,9 @@ export const Checkout: React.FC = () => {
                     className="w-20 h-20 object-cover rounded"
                   />
                   <div className="flex-1">
-                    <p className="text-sm">{item.product.name}</p>
+                    <p className="text-sm dark:text-white">{item.product.name}</p>
                     {item.spec && (
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                         {item.spec.name}: {item.spec.value}
                       </p>
                     )}
@@ -71,7 +71,7 @@ export const Checkout: React.FC = () => {
                       <span className="text-primary font-bold">
                         ¥{item.product.price}
                       </span>
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
                         x{item.quantity}
                       </span>
                     </div>
@@ -84,8 +84,8 @@ export const Checkout: React.FC = () => {
 
         {/* 右侧结算信息 */}
         <div className="glass-card rounded-xl p-6 h-fit sticky top-24">
-          <h2 className="text-lg font-bold mb-4">订单信息</h2>
-          <div className="space-y-3 text-sm">
+          <h2 className="text-lg font-bold mb-4 dark:text-white">订单信息</h2>
+          <div className="space-y-3 text-sm dark:text-gray-300">
             <div className="flex justify-between">
               <span>商品总额：</span>
               <span>¥{total.toFixed(2)}</span>
@@ -98,7 +98,7 @@ export const Checkout: React.FC = () => {
               <span>优惠：</span>
               <span className="text-error">-¥0.00</span>
             </div>
-            <div className="border-t pt-3 flex justify-between font-bold text-base">
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-3 flex justify-between font-bold text-base">
               <span>实付：</span>
               <span className="text-primary text-xl">¥{total.toFixed(2)}</span>
             </div>
