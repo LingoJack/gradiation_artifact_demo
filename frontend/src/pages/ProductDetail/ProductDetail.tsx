@@ -200,23 +200,33 @@ export const ProductDetail: React.FC = () => {
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{product.description}</p>
 
               {/* 价格区域 - 液态玻璃效果 */}
-              <div className="relative overflow-hidden rounded-xl p-5 mb-5"
+              <div className="relative rounded-xl p-5 mb-5 overflow-hidden"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(254, 215, 170, 0.4) 0%, rgba(254, 202, 202, 0.4) 100%)',
-                  backdropFilter: 'blur(20px)',
-                  WebkitBackdropFilter: 'blur(20px)',
+                  background: 'linear-gradient(135deg, rgba(254, 243, 199, 0.6) 0%, rgba(254, 202, 202, 0.5) 100%)',
+                  backdropFilter: 'blur(24px) saturate(180%)',
+                  WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+                  boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.6), 0 4px 16px rgba(0, 0, 0, 0.05)',
                 }}
               >
                 {/* 流动边框 */}
-                <div className="absolute inset-0 rounded-xl p-[1px]"
+                <div 
+                  className="absolute inset-0 rounded-xl pointer-events-none"
                   style={{
-                    background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.5) 0%, rgba(239, 68, 68, 0.3) 50%, rgba(251, 146, 60, 0.5) 100%)',
-                    backgroundSize: '200% 200%',
+                    padding: '1px',
+                    background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.6) 0%, rgba(239, 68, 68, 0.4) 33%, rgba(251, 191, 36, 0.5) 66%, rgba(251, 146, 60, 0.6) 100%)',
+                    backgroundSize: '300% 300%',
                     animation: 'borderFlow 4s ease infinite',
                     WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
                     WebkitMaskComposite: 'xor',
                     maskComposite: 'exclude',
-                    pointerEvents: 'none',
+                  }}
+                />
+                {/* 顶部光晕 */}
+                <div 
+                  className="absolute top-0 left-0 right-0 h-1/2 pointer-events-none"
+                  style={{
+                    background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent)',
+                    borderRadius: 'inherit',
                   }}
                 />
                 <div className="relative z-10">

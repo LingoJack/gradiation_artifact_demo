@@ -21,7 +21,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <Link to={`/products/${product.id}`} className="group block">
       <div 
-        className="glass-card rounded-xl overflow-hidden hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 relative"
+        className="glass-card rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 relative"
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
