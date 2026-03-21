@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
+import { Shirt, Smartphone, Sparkles, Home, Apple, Dumbbell, Baby, BookOpen } from 'lucide-react';
 import { ProductCard } from '../../components/ProductCard/ProductCard';
 import { mockProducts, mockCategories } from '../../utils/mockData';
 import type { Product } from '../../types/product';
+
+// 分类图标映射
+const categoryIcons: Record<string, React.ReactNode> = {
+  '服装': <Shirt className="w-4 h-4" />,
+  '数码': <Smartphone className="w-4 h-4" />,
+  '美妆': <Sparkles className="w-4 h-4" />,
+  '家居': <Home className="w-4 h-4" />,
+  '食品': <Apple className="w-4 h-4" />,
+  '运动': <Dumbbell className="w-4 h-4" />,
+  '母婴': <Baby className="w-4 h-4" />,
+  '图书': <BookOpen className="w-4 h-4" />,
+};
 
 export const ProductList: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('');
@@ -44,13 +57,14 @@ export const ProductList: React.FC = () => {
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
-              className={`px-4 py-1 rounded-lg transition-all ${
+              className={`px-4 py-1.5 rounded-lg transition-all flex items-center space-x-1.5 ${
                 selectedCategory === cat.id
                   ? 'bg-primary text-white shadow-md'
-                  : 'bg-white/50 dark:bg-gray-700/50 hover:bg-white/80 dark:hover:bg-gray-700/80'
+                  : 'bg-white/50 dark:bg-gray-700/50 hover:bg-white/80 dark:hover:bg-gray-700/80 text-gray-700 dark:text-gray-300'
               }`}
             >
-              {cat.icon} {cat.name}
+              {categoryIcons[cat.name]}
+              <span>{cat.name}</span>
             </button>
           ))}
         </div>
