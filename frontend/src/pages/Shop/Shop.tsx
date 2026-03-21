@@ -1,23 +1,28 @@
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { MapPin, Star, Users, ShoppingBag, ChevronRight, Store } from 'lucide-react';
-import { mockShops, mockProducts, getShopByName } from '../../utils/mockData';
+import { mockProducts, getShopByName, getShopIdByName } from '../../utils/mockData';
 import { ProductCard } from '../../components/ProductCard/ProductCard';
 
 export const Shop: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
+  // 根据 URL 中的 id 找到对应的店铺名称
   const shop = useMemo(() => {
-    return mockShops.find((s) => s.id === id) || mockShops[0];
+    // 遍历所有商品，找到 shopId 匹配的店铺
+    for (const product of mockProducts) {
+      if (getShopIdByName(product.shopName || '') === id) {
+        return getShopByName(product.shopName || '');
+      }
+    }
+    // 默认返回第一个商品的店铺
+    return getShopByName(mockProducts[0]?.shopName || '');
   }, [id]);
 
   const shopProducts = useMemo(() => {
-    // 根据店铺名称筛选商品
-    return mockProducts.filter((p) => {
-      const productShop = getShopByName(p.shopName || '');
-      return productShop.id === shop.id;
-    });
-  }, [shop.id]);
+    // 只显示店铺名称完全匹配的商品
+    return mockProducts.filter((p) => p.shopName === shop.name);
+  }, [shop.name]);
 
   const formatNumber = (num: number) => {
     if (num >= 10000) {

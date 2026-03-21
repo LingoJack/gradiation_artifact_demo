@@ -1,3 +1,5 @@
+import type { Shop } from '../types/shop';
+
 // Mock 数据 - 用于原型开发
 
 export const mockCategories = [
@@ -111,42 +113,193 @@ export const mockShops = [
   },
 ];
 
-// 根据商品获取店铺
-export const getShopByName = (shopName: string) => {
-  const shopMap: Record<string, string> = {
-    '优衣库官方旗舰店': 'shop-1',
-    'Apple官方旗舰店': 'shop-2',
-    '兰蔻官方旗舰店': 'shop-3',
-    '宜家家居旗舰店': 'shop-4',
-    'Nike官方旗舰店': 'shop-5',
-    '三只松鼠旗舰店': 'shop-6',
-    'Dior官方旗舰店': 'shop-7',
-    'Sony官方旗舰店': 'shop-8',
-    'ZARA官方旗舰店': 'shop-1',
-    'Levi\'s官方旗舰店': 'shop-1',
-    '波司登官方旗舰店': 'shop-1',
-    'SK-II官方旗舰店': 'shop-3',
-    '雅诗兰黛官方旗舰店': 'shop-3',
-    '睡眠博士旗舰店': 'shop-4',
-    '林氏木业旗舰店': 'shop-4',
-    '科沃斯官方旗舰店': 'shop-4',
-    '天天果园旗舰店': 'shop-6',
-    '西湖龙井旗舰店': 'shop-6',
-    '澳洲牛肉专卖店': 'shop-6',
-    'Adidas官方旗舰店': 'shop-5',
-    'Lululemon官方旗舰店': 'shop-5',
-    'Keep官方旗舰店': 'shop-5',
-    '巴拉巴拉官方旗舰店': 'shop-1',
-    '帮宝适官方旗舰店': 'shop-1',
-    '爱他美官方旗舰店': 'shop-1',
-    '好孩子官方旗舰店': 'shop-1',
-    '当当图书旗舰店': 'shop-6',
-    '人民邮电出版社旗舰店': 'shop-6',
-    '中信出版社旗舰店': 'shop-6',
-    '人民文学出版社旗舰店': 'shop-6',
+// 根据店铺名称生成唯一 shopId
+export const getShopIdByName = (shopName: string): string => {
+  // 使用简单的 hash 函数生成唯一 ID
+  let hash = 0;
+  for (let i = 0; i < shopName.length; i++) {
+    const char = shopName.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return `shop-${Math.abs(hash)}`;
+};
+
+// 店铺名称到详细信息的映射
+const shopDetails: Record<string, Partial<Shop>> = {
+  '优衣库官方旗舰店': {
+    description: '优衣库官方旗舰店，提供高品质休闲服饰',
+    location: '上海',
+    rating: 4.9,
+  },
+  'Apple官方旗舰店': {
+    description: 'Apple官方授权，正品保障',
+    location: '北京',
+    rating: 4.8,
+  },
+  '兰蔻官方旗舰店': {
+    description: '兰蔻官方旗舰店，高端护肤美妆',
+    location: '上海',
+    rating: 4.9,
+  },
+  'ZARA官方旗舰店': {
+    description: 'ZARA官方旗舰店，快时尚领军品牌',
+    location: '上海',
+    rating: 4.7,
+  },
+  'Levi\'s官方旗舰店': {
+    description: 'Levi\'s官方旗舰店，经典牛仔品牌',
+    location: '上海',
+    rating: 4.8,
+  },
+  '波司登官方旗舰店': {
+    description: '波司登官方旗舰店，专业羽绒服',
+    location: '江苏',
+    rating: 4.8,
+  },
+  'SK-II官方旗舰店': {
+    description: 'SK-II官方旗舰店，高端护肤',
+    location: '上海',
+    rating: 4.9,
+  },
+  'Dior官方旗舰店': {
+    description: 'Dior迪奥，法国奢侈品牌',
+    location: '上海',
+    rating: 4.9,
+  },
+  '雅诗兰黛官方旗舰店': {
+    description: '雅诗兰黛官方旗舰店，高端护肤',
+    location: '上海',
+    rating: 4.8,
+  },
+  '宜家家居旗舰店': {
+    description: '宜家家居，打造温馨家',
+    location: '上海',
+    rating: 4.7,
+  },
+  '睡眠博士旗舰店': {
+    description: '睡眠博士，专业睡眠产品',
+    location: '杭州',
+    rating: 4.7,
+  },
+  '林氏木业旗舰店': {
+    description: '林氏木业，品质家具',
+    location: '佛山',
+    rating: 4.6,
+  },
+  '科沃斯官方旗舰店': {
+    description: '科沃斯，智能清洁专家',
+    location: '苏州',
+    rating: 4.8,
+  },
+  '天天果园旗舰店': {
+    description: '天天果园，新鲜水果直达',
+    location: '上海',
+    rating: 4.6,
+  },
+  '三只松鼠旗舰店': {
+    description: '三只松鼠，好吃坚果',
+    location: '安徽',
+    rating: 4.6,
+  },
+  '西湖龙井旗舰店': {
+    description: '西湖龙井，正宗茶叶',
+    location: '杭州',
+    rating: 4.8,
+  },
+  '澳洲牛肉专卖店': {
+    description: '澳洲进口牛肉，品质保证',
+    location: '上海',
+    rating: 4.7,
+  },
+  'Nike官方旗舰店': {
+    description: 'Nike官方，Just Do It',
+    location: '上海',
+    rating: 4.8,
+  },
+  'Adidas官方旗舰店': {
+    description: 'Adidas官方旗舰店，运动装备',
+    location: '上海',
+    rating: 4.8,
+  },
+  'Lululemon官方旗舰店': {
+    description: 'Lululemon，瑜伽运动专家',
+    location: '上海',
+    rating: 4.9,
+  },
+  'Keep官方旗舰店': {
+    description: 'Keep，自律给我自由',
+    location: '北京',
+    rating: 4.7,
+  },
+  '巴拉巴拉官方旗舰店': {
+    description: '巴拉巴拉，童装品牌',
+    location: '上海',
+    rating: 4.7,
+  },
+  '帮宝适官方旗舰店': {
+    description: '帮宝适，呵护宝宝',
+    location: '上海',
+    rating: 4.8,
+  },
+  '爱他美官方旗舰店': {
+    description: '爱他美，专业婴幼儿营养',
+    location: '上海',
+    rating: 4.8,
+  },
+  '好孩子官方旗舰店': {
+    description: '好孩子，母婴专家',
+    location: '江苏',
+    rating: 4.8,
+  },
+  'Sony官方旗舰店': {
+    description: 'Sony索尼，科技创造美好',
+    location: '上海',
+    rating: 4.8,
+  },
+  '当当图书旗舰店': {
+    description: '当当图书，正版图书',
+    location: '北京',
+    rating: 4.7,
+  },
+  '人民邮电出版社旗舰店': {
+    description: '人民邮电出版社，专业科技图书',
+    location: '北京',
+    rating: 4.8,
+  },
+  '中信出版社旗舰店': {
+    description: '中信出版社，精品图书',
+    location: '北京',
+    rating: 4.8,
+  },
+  '人民文学出版社旗舰店': {
+    description: '人民文学出版社，文学经典',
+    location: '北京',
+    rating: 4.9,
+  },
+};
+
+// 根据商品获取店铺信息
+export const getShopByName = (shopName: string): Shop => {
+  const id = getShopIdByName(shopName);
+  const details = shopDetails[shopName] || {
+    description: `${shopName}，正品保障`,
+    location: '上海',
+    rating: 4.5,
   };
-  const shopId = shopMap[shopName] || 'shop-1';
-  return mockShops.find(s => s.id === shopId) || mockShops[0];
+  
+  return {
+    id,
+    name: shopName,
+    description: details.description || '',
+    avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(shopName.charAt(0))}&background=random&size=100`,
+    coverImage: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=400&fit=crop',
+    rating: details.rating || 4.5,
+    sales: Math.floor(Math.random() * 1000000) + 100000,
+    fans: Math.floor(Math.random() * 500000) + 50000,
+    createdAt: '2020-01-01',
+    location: details.location || '上海',
+  };
 };
 
 export const mockProducts = [
