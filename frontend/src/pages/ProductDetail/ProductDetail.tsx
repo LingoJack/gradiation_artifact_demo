@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import { mockProducts, getShopByName, getProductReviews } from '../../utils/mockData';
 import { useCartStore } from '../../store/useCartStore';
+import { useFavoriteStore } from '../../store/useFavoriteStore';
+import { showToast, copyToClipboard } from '../../utils/toast';
 import type { Product } from '../../types/product';
 
 // 格式化数字
@@ -39,13 +41,14 @@ export const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { addItem } = useCartStore();
+  const { isFavorite, addFavorite, removeFavorite } = useFavoriteStore();
   const [selectedSpec, setSelectedSpec] = useState<string>('');
   const [quantity, setQuantity] = useState(1);
   const [showAddedToCart, setShowAddedToCart] = useState(false);
   const [mainImage, setMainImage] = useState<string>('');
-  const [isFavorite, setIsFavorite] = useState(false);
 
   const product = mockProducts.find((p) => p.id === id) as Product | undefined;
+  const productIsFavorite = product ? isFavorite(product.id) : false;
 
   React.useEffect(() => {
     if (product && !mainImage) {
@@ -180,15 +183,36 @@ export const ProductDetail: React.FC = () => {
               {/* 分享收藏 */}
               <div className="flex items-center justify-end gap-4 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <button
-                  onClick={() => setIsFavorite(!isFavorite)}
+                  onClick={() => {
+                    if (product) {
+                      if (productIsFavorite) {
+                        removeFavorite(product.id);
+                        showToast('已取消收藏', 'info');
+                      } else {
+                        addFavorite(product.id);
+                        showToast('收藏成功！', 'success');
+                      }
+                    }
+                  }}
                   className={`flex items-center gap-1 text-sm ${
-                    isFavorite ? 'text-red-500' : 'text-gray-600 dark:text-gray-400 hover:text-red-500'
+                    productIsFavorite ? 'text-red-500' : 'text-gray-600 dark:text-gray-400 hover:text-red-500'
                   }`}
                 >
-                  <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
+                  <Heart className={`w-4 h-4 ${productIsFavorite ? 'fill-current' : ''}`} />
                   收藏
                 </button>
-                <button className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-500">
+                <button 
+                  onClick={async () => {
+                    const url = window.location.href;
+                    const success = await copyToClipboard(url);
+                    if (success) {
+                      showToast('链接已复制到剪贴板！', 'success');
+                    } else {
+                      showToast('复制失败，请手动复制', 'error');
+                    }
+                  }}
+                  className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-500"
+                >
                   <Share2 className="w-4 h-4" />
                   分享
                 </button>

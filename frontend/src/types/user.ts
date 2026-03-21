@@ -4,6 +4,10 @@ export interface User {
   email: string;
   phone: string;
   avatar?: string;
+  nickname?: string;
+  gender?: 'male' | 'female' | 'other';
+  birthday?: string;
+  bio?: string;
   createdAt: string;
 }
 

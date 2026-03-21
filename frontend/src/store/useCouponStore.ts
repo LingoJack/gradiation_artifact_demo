@@ -4,128 +4,125 @@ import { persist } from 'zustand/middleware';
 export interface Coupon {
   id: string;
   name: string;
-  type: 'fixed' | 'percent'; // 固定金额 or 百分比
-  value: number; // 减免金额 or 折扣百分比
-  minAmount: number; // 最低消费门槛
-  startTime: string;
+  discount: number; // 折扣金额
+  minSpend: number; // 最低消费
+  scope: string; // 适用范围 'all' | category name
   endTime: string;
-  status: 'available' | 'used' | 'expired';
+}
+
+export interface UserCoupon {
+  id: string;
+  couponId: string;
+  userId: string;
+  status: 'unused' | 'used' | 'expired';
+  claimedAt: string;
+  usedAt?: string;
 }
 
 interface CouponState {
-  coupons: Coupon[];
-  points: number;
-  redPacket: number;
-  
-  // Actions
-  addCoupon: (coupon: Coupon) => void;
-  useCoupon: (id: string) => void;
-  addPoints: (amount: number) => void;
-  usePoints: (amount: number) => void;
-  addRedPacket: (amount: number) => void;
-  useRedPacket: (amount: number) => void;
-  getAvailableCoupons: () => Coupon[];
-  reset: () => void;
+  availableCoupons: Coupon[];
+  userCoupons: UserCoupon[];
+  claimCoupon: (couponId: string) => boolean;
+  useCoupon: (userCouponId: string) => void;
 }
 
-// Mock 优惠券数据（新用户注册时赠送）
-const defaultCoupons: Coupon[] = [
+// Mock 优惠券数据
+const mockCoupons: Coupon[] = [
   {
     id: '1',
-    name: '新人专享券',
-    type: 'fixed',
-    value: 50,
-    minAmount: 100,
-    startTime: '2024-01-01',
+    name: '新人专享优惠券',
+    discount: 50,
+    minSpend: 199,
+    scope: 'all',
     endTime: '2024-12-31',
-    status: 'available',
   },
   {
     id: '2',
-    name: '满200减30',
-    type: 'fixed',
-    value: 30,
-    minAmount: 200,
-    startTime: '2024-01-01',
-    endTime: '2024-06-30',
-    status: 'available',
+    name: '服装品类优惠券',
+    discount: 30,
+    minSpend: 299,
+    scope: '服装',
+    endTime: '2024-12-31',
   },
   {
     id: '3',
-    name: '全场9折券',
-    type: 'percent',
-    value: 10,
-    minAmount: 50,
-    startTime: '2024-01-01',
+    name: '数码产品优惠券',
+    discount: 100,
+    minSpend: 999,
+    scope: '数码',
     endTime: '2024-12-31',
-    status: 'available',
+  },
+  {
+    id: '4',
+    name: '美妆护肤优惠券',
+    discount: 20,
+    minSpend: 199,
+    scope: '美妆',
+    endTime: '2024-12-31',
+  },
+  {
+    id: '5',
+    name: '限时秒杀优惠券',
+    discount: 200,
+    minSpend: 2000,
+    scope: 'all',
+    endTime: '2024-01-31',
+  },
+  {
+    id: '6',
+    name: '满减优惠券',
+    discount: 15,
+    minSpend: 100,
+    scope: 'all',
+    endTime: '2024-12-31',
   },
 ];
-
-const defaultPoints = 100; // 新用户初始积分
-const defaultRedPacket = 10; // 新用户初始红包
 
 export const useCouponStore = create<CouponState>()(
   persist(
     (set, get) => ({
-      coupons: [],
-      points: 0,
-      redPacket: 0,
+      availableCoupons: mockCoupons,
+      userCoupons: [],
 
-      addCoupon: (coupon) =>
+      claimCoupon: (couponId) => {
+        const { userCoupons } = get();
+        
+        // 检查是否已领取
+        if (userCoupons.some((uc) => uc.couponId === couponId)) {
+          return false;
+        }
+
+        const now = new Date();
+        const claimedAt = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+        const newUserCoupon: UserCoupon = {
+          id: `uc-${Date.now()}`,
+          couponId,
+          userId: 'current-user',
+          status: 'unused',
+          claimedAt,
+        };
+
         set((state) => ({
-          coupons: [...state.coupons, coupon],
-        })),
+          userCoupons: [...state.userCoupons, newUserCoupon],
+        }));
 
-      useCoupon: (id) =>
-        set((state) => ({
-          coupons: state.coupons.map((c) =>
-            c.id === id ? { ...c, status: 'used' as const } : c
-          ),
-        })),
-
-      addPoints: (amount) =>
-        set((state) => ({
-          points: state.points + amount,
-        })),
-
-      usePoints: (amount) =>
-        set((state) => ({
-          points: Math.max(0, state.points - amount),
-        })),
-
-      addRedPacket: (amount) =>
-        set((state) => ({
-          redPacket: state.redPacket + amount,
-        })),
-
-      useRedPacket: (amount) =>
-        set((state) => ({
-          redPacket: Math.max(0, state.redPacket - amount),
-        })),
-
-      getAvailableCoupons: () => {
-        const { coupons } = get();
-        return coupons.filter((c) => c.status === 'available');
+        return true;
       },
 
-      reset: () =>
-        set({
-          coupons: defaultCoupons,
-          points: defaultPoints,
-          redPacket: defaultRedPacket,
-        }),
+      useCoupon: (userCouponId) => {
+        const now = new Date();
+        const usedAt = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+        set((state) => ({
+          userCoupons: state.userCoupons.map((uc) =>
+            uc.id === userCouponId ? { ...uc, status: 'used' as const, usedAt } : uc
+          ),
+        }));
+      },
     }),
     {
       name: 'coupon-storage',
     }
   )
 );
-
-// 初始化新用户优惠数据的方法
-export const initNewUserBenefits = () => {
-  const store = useCouponStore.getState();
-  if (store.coupons.length === 0) {
-    store.reset();
-  }
-};

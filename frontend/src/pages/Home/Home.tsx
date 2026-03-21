@@ -5,7 +5,6 @@ import { mockCategories, mockProducts } from '../../utils/mockData';
 import type { Product } from '../../types/product';
 import { useSpotlight } from '../../hooks/useSpotlight';
 import { useUserStore } from '../../store/useUserStore';
-import { useCouponStore, initNewUserBenefits } from '../../store/useCouponStore';
 
 // 轮播图数据
 const carouselItems = [
@@ -77,7 +76,6 @@ const newsData = [
 export const Home: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useUserStore();
-  const { coupons, points, redPacket } = useCouponStore();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedNews, setSelectedNews] = useState<typeof newsData[0] | null>(null);
 
@@ -85,16 +83,6 @@ export const Home: React.FC = () => {
   const userCardSpotlight = useSpotlight();
   const newsSpotlight = useSpotlight();
   const modalSpotlight = useSpotlight();
-
-  // 登录时初始化用户优惠数据
-  useEffect(() => {
-    if (isAuthenticated) {
-      initNewUserBenefits();
-    }
-  }, [isAuthenticated]);
-
-  // 可用优惠券数量
-  const availableCoupons = coupons.filter((c) => c.status === 'available').length;
 
   // 点击分类跳转
   const handleCategoryClick = (categoryId: string) => {
@@ -219,7 +207,9 @@ export const Home: React.FC = () => {
                         <div className="text-white">
                           <h2 className="text-6xl font-bold mb-3 drop-shadow-lg">{item.title}</h2>
                           <p className="text-xl mb-6 drop-shadow opacity-95">{item.subtitle}</p>
-                          <button className="bg-white text-orange-600 px-8 py-3 rounded-full font-bold text-lg hover:bg-opacity-90 transition shadow-xl">
+                          <button 
+                            onClick={() => navigate('/products')}
+                            className="bg-white text-orange-600 px-8 py-3 rounded-full font-bold text-lg hover:bg-opacity-90 transition shadow-xl">
                             {item.buttonText}
                           </button>
                         </div>
@@ -296,15 +286,15 @@ export const Home: React.FC = () => {
                       </div>
                       <div className="grid grid-cols-3 gap-2">
                         <Link to="/coupons" className="text-center group">
-                          <p className="text-lg font-bold text-primary group-hover:scale-105 transition-transform">{availableCoupons}</p>
+                          <p className="text-lg font-bold text-primary group-hover:scale-105 transition-transform">3</p>
                           <p className="text-xs text-gray-400">优惠券</p>
                         </Link>
                         <Link to="/coupons" className="text-center group">
-                          <p className="text-lg font-bold text-red-500 group-hover:scale-105 transition-transform">¥{redPacket}</p>
+                          <p className="text-lg font-bold text-red-500 group-hover:scale-105 transition-transform">¥50</p>
                           <p className="text-xs text-gray-400">红包</p>
                         </Link>
                         <Link to="/coupons" className="text-center group">
-                          <p className="text-lg font-bold text-amber-500 group-hover:scale-105 transition-transform">{points}</p>
+                          <p className="text-lg font-bold text-amber-500 group-hover:scale-105 transition-transform">520</p>
                           <p className="text-xs text-gray-400">积分</p>
                         </Link>
                       </div>

@@ -1,59 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ORDER_STATUS_TEXT, type OrderStatus } from '../../types/order';
-
-// Mock 订单数据
-const mockOrders = [
-  {
-    id: '1',
-    orderNo: '202401200001',
-    totalAmount: 258,
-    payAmount: 258,
-    status: 'pending' as OrderStatus,
-    receiverName: '张三',
-    receiverPhone: '13800138000',
-    receiverAddress: '北京市朝阳区某某街道',
-    items: [
-      {
-        id: 'i1',
-        orderId: '1',
-        productId: '1',
-        productName: '时尚休闲连帽卫衣 男士秋季新款',
-        productImage: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=200&h=200&fit=crop',
-        specName: '黑色',
-        price: 129,
-        quantity: 2,
-      },
-    ],
-    createdAt: '2024-01-20 10:30:00',
-  },
-  {
-    id: '2',
-    orderNo: '202401190002',
-    totalAmount: 9999,
-    payAmount: 9999,
-    status: 'shipped' as OrderStatus,
-    receiverName: '张三',
-    receiverPhone: '13800138000',
-    receiverAddress: '北京市朝阳区某某街道',
-    items: [
-      {
-        id: 'i2',
-        orderId: '2',
-        productId: '2',
-        productName: 'Apple iPhone 15 Pro Max 256GB',
-        productImage: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=200&h=200&fit=crop',
-        specName: '深空黑',
-        price: 9999,
-        quantity: 1,
-      },
-    ],
-    createdAt: '2024-01-19 15:20:00',
-    paidAt: '2024-01-19 15:21:00',
-    shippedAt: '2024-01-20 09:00:00',
-  },
-];
+import { useOrderStore } from '../../store/useOrderStore';
+import { showToast } from '../../utils/toast';
 
 export const OrderList: React.FC = () => {
+  const navigate = useNavigate();
+  const { orders, cancelOrder, confirmReceive, payOrder } = useOrderStore();
   const [activeTab, setActiveTab] = useState<OrderStatus | 'all'>('all');
 
   const tabs: Array<{ key: OrderStatus | 'all'; label: string }> = [
@@ -66,8 +19,31 @@ export const OrderList: React.FC = () => {
 
   const filteredOrders =
     activeTab === 'all'
-      ? mockOrders
-      : mockOrders.filter((o) => o.status === activeTab);
+      ? orders
+      : orders.filter((o) => o.status === activeTab);
+
+  // 取消订单
+  const handleCancelOrder = (orderId: string) => {
+    cancelOrder(orderId);
+    showToast('订单已取消', 'success');
+  };
+
+  // 立即支付
+  const handlePayOrder = (orderId: string) => {
+    payOrder(orderId);
+    showToast('支付成功！', 'success');
+  };
+
+  // 确认收货
+  const handleConfirmReceive = (orderId: string) => {
+    confirmReceive(orderId);
+    showToast('已确认收货！', 'success');
+  };
+
+  // 评价订单
+  const handleReview = (orderId: string) => {
+    navigate(`/orders/${orderId}/review`);
+  };
 
   return (
     <div className="container py-8">
@@ -119,14 +95,15 @@ export const OrderList: React.FC = () => {
                     <img
                       src={item.productImage}
                       alt={item.productName}
-                      className="w-20 h-20 object-cover rounded bg-gray-100 dark:bg-gray-700"
+                      className="w-20 h-20 object-cover rounded bg-gray-100 dark:bg-gray-700 cursor-pointer hover:opacity-80 transition-opacity"
+                      onClick={() => navigate(`/products/${item.productId}`)}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23f3f4f6" width="80" height="80"/%3E%3Ctext fill="%239ca3af" x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-size="10"%3E暂无图片%3C/text%3E%3C/svg%3E';
                       }}
                     />
                     <div className="flex-1">
-                      <p className="text-sm dark:text-white">{item.productName}</p>
+                      <p className="text-sm dark:text-white cursor-pointer hover:text-primary" onClick={() => navigate(`/products/${item.productId}`)}>{item.productName}</p>
                       {item.specName && (
                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                           规格：{item.specName}
@@ -154,21 +131,33 @@ export const OrderList: React.FC = () => {
                   <div className="flex space-x-2">
                     {order.status === 'pending' && (
                       <>
-                        <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-white transition-colors">
+                        <button 
+                          onClick={() => handleCancelOrder(order.id)}
+                          className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-white transition-colors"
+                        >
                           取消订单
                         </button>
-                        <button className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover">
+                        <button 
+                          onClick={() => handlePayOrder(order.id)}
+                          className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover"
+                        >
                           立即支付
                         </button>
                       </>
                     )}
                     {order.status === 'shipped' && (
-                      <button className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover">
+                      <button 
+                        onClick={() => handleConfirmReceive(order.id)}
+                        className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover"
+                      >
                         确认收货
                       </button>
                     )}
                     {order.status === 'completed' && (
-                      <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-white transition-colors">
+                      <button 
+                        onClick={() => handleReview(order.id)}
+                        className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-white transition-colors"
+                      >
                         评价
                       </button>
                     )}

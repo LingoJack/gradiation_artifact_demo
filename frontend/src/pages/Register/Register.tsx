@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../store/useUserStore';
-import { useCouponStore } from '../../store/useCouponStore';
 
 type RegisterType = 'phone' | 'email';
 
 export const Register: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useUserStore();
-  const { reset: resetCoupons } = useCouponStore();
   
   const [registerType, setRegisterType] = useState<RegisterType>('phone');
   const [username, setUsername] = useState('');
@@ -85,9 +83,6 @@ export const Register: React.FC = () => {
       },
       'mock-token'
     );
-    
-    // 新用户注册，初始化优惠数据
-    resetCoupons();
     
     navigate('/');
   };

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../store/useUserStore';
-import { useCouponStore } from '../../store/useCouponStore';
 import { useSpotlight } from '../../hooks/useSpotlight';
 
 type LoginType = 'password' | 'sms';
@@ -9,7 +8,6 @@ type LoginType = 'password' | 'sms';
 export const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useUserStore();
-  const { reset: resetCoupons, coupons } = useCouponStore();
   const cardSpotlight = useSpotlight();
   
   const [loginType, setLoginType] = useState<LoginType>('password');
@@ -64,11 +62,6 @@ export const Login: React.FC = () => {
       },
       'mock-token'
     );
-    
-    // 如果用户没有优惠券，初始化新用户优惠
-    if (coupons.length === 0) {
-      resetCoupons();
-    }
     
     navigate('/');
   };

@@ -9,6 +9,7 @@ interface UserState {
   login: (user: User, token: string) => void;
   logout: () => void;
   updateUser: (user: User) => void;
+  updateProfile: (profile: Partial<User>) => void;
 }
 
 export const useUserStore = create<UserState>()(
@@ -20,6 +21,9 @@ export const useUserStore = create<UserState>()(
       login: (user, token) => set({ user, token, isAuthenticated: true }),
       logout: () => set({ user: null, token: null, isAuthenticated: false }),
       updateUser: (user) => set({ user }),
+      updateProfile: (profile) => set((state) => ({
+        user: state.user ? { ...state.user, ...profile } : null,
+      })),
     }),
     {
       name: 'user-storage',

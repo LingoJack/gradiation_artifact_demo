@@ -2,16 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { User, MapPin, Heart, Package, Settings, LogOut, Ticket } from 'lucide-react';
 import { useUserStore } from '../../store/useUserStore';
-import { useCouponStore } from '../../store/useCouponStore';
 import { useSpotlight } from '../../hooks/useSpotlight';
 
 export const UserCenter: React.FC = () => {
   const { user, logout } = useUserStore();
-  const { coupons, points, redPacket } = useCouponStore();
   const menuSpotlight = useSpotlight();
   const mainSpotlight = useSpotlight();
-
-  const availableCoupons = coupons.filter((c) => c.status === 'available').length;
 
   const menuItems = [
     { icon: Package, label: '我的订单', path: '/orders' },
@@ -64,7 +60,7 @@ export const UserCenter: React.FC = () => {
                 <div className="relative flex items-center justify-between">
                   <div>
                     <p className="text-white/80 text-xs mb-1">我的优惠资产</p>
-                    <p className="text-2xl font-bold">¥{(availableCoupons * 30 + redPacket).toFixed(0)}<span className="text-sm font-normal ml-1">可用</span></p>
+                    <p className="text-2xl font-bold">¥140<span className="text-sm font-normal ml-1">可用</span></p>
                   </div>
                   <Link 
                     to="/coupons"
@@ -83,7 +79,7 @@ export const UserCenter: React.FC = () => {
                       <svg className="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-2h2v2zm0-4H9V5h2v4z"/>
                       </svg>
-                      <span className="text-lg font-bold">{availableCoupons}</span>
+                      <span className="text-lg font-bold">3</span>
                     </div>
                     <p className="text-xs text-white/70">优惠券</p>
                   </div>
@@ -92,7 +88,7 @@ export const UserCenter: React.FC = () => {
                       <svg className="w-4 h-4 text-red-200" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd"/>
                       </svg>
-                      <span className="text-lg font-bold">¥{redPacket}</span>
+                      <span className="text-lg font-bold">¥50</span>
                     </div>
                     <p className="text-xs text-white/70">红包</p>
                   </div>
@@ -101,7 +97,7 @@ export const UserCenter: React.FC = () => {
                       <svg className="w-4 h-4 text-yellow-200" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.736 6.979C9.208 6.193 9.696 6 10 6c.304 0 .792.193 1.264.979a1 1 0 001.715-1.029C12.279 4.784 11.232 4 10 4s-2.279.784-2.979 1.95c-.285.475-.507 1-.67 1.55H6a1 1 0 000 2h.013a9.358 9.358 0 000 1H6a1 1 0 100 2h.351c.163.55.385 1.075.67 1.55C7.721 15.216 8.768 16 10 16s2.279-.784 2.979-1.95a1 1 0 10-1.715-1.029c-.472.786-.96.979-1.264.979-.304 0-.792-.193-1.264-.979a4.265 4.265 0 01-.264-.521H10a1 1 0 100-2H8.017a7.36 7.36 0 010-1H10a1 1 0 100-2H8.472a4.265 4.265 0 01.264-.521z"/>
                       </svg>
-                      <span className="text-lg font-bold">{points}</span>
+                      <span className="text-lg font-bold">520</span>
                     </div>
                     <p className="text-xs text-white/70">积分</p>
                   </div>
