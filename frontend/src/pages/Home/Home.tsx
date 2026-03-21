@@ -80,7 +80,6 @@ export const Home: React.FC = () => {
   const { coupons, points, redPacket } = useCouponStore();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedNews, setSelectedNews] = useState<typeof newsData[0] | null>(null);
-  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
 
   // 液态玻璃鼠标光效 hooks
   const userCardSpotlight = useSpotlight();
