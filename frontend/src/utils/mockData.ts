@@ -1118,3 +1118,411 @@ export const mockBanners = [
     link: '/products',
   },
 ];
+
+// 商品评价 mock 数据（按商品 ID 分组）
+export const mockReviews: Record<string, Array<{
+  id: number;
+  avatar: string;
+  username: string;
+  badge: string | null;
+  rating: number;
+  time: string;
+  content: string;
+  specs: string;
+  images: string[];
+  likes: number;
+  reply: string | null;
+}>> = {
+  // '1' - 时尚休闲连帽卫衣 (优衣库)
+  '1': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',
+      username: '美***儿',
+      badge: '金牌会员',
+      rating: 5,
+      time: '2天前',
+      content: '卫衣质量很好，面料柔软舒适，连帽设计很实用。黑色很百搭，已经推荐给朋友了！',
+      specs: '黑色 | L',
+      images: [],
+      likes: 35,
+      reply: '感谢您的支持！优衣库会继续为您提供优质产品！',
+    },
+    {
+      id: 2,
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop',
+      username: '明***轩',
+      badge: null,
+      rating: 4,
+      time: '5天前',
+      content: '穿着很舒服，就是尺码稍微偏大一点，建议大家选小一号。',
+      specs: '灰色 | M',
+      images: [],
+      likes: 18,
+      reply: '感谢您的反馈，我们会改进尺码描述！',
+    },
+  ],
+  // '2' - iPhone 15 Pro Max
+  '2': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+      username: '小***花',
+      badge: '金牌会员',
+      rating: 5,
+      time: '3天前',
+      content: '手机非常好用，拍照效果太棒了！钛金属边框手感一流，电池续航也比上一代强很多。',
+      specs: '原色钛金属 | 256GB',
+      images: [
+        'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=200&h=200&fit=crop',
+      ],
+      likes: 42,
+      reply: '感谢您的支持与认可！Apple官方旗舰店期待您的再次光临！',
+    },
+    {
+      id: 2,
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+      username: '阳***风',
+      badge: '银牌会员',
+      rating: 5,
+      time: '1周前',
+      content: '物流很快，包装完好，正品无误。灵动岛功能很实用，整体体验很好！',
+      specs: '深空黑 | 256GB',
+      images: [],
+      likes: 28,
+      reply: null,
+    },
+  ],
+  // '3' - 兰蔻小黑瓶精华
+  '3': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop',
+      username: '雪***婷',
+      badge: '钻石会员',
+      rating: 5,
+      time: '1天前',
+      content: '精华液很好吸收，用了一段时间皮肤明显变好了，毛孔也细腻了。已经回购第三次了！',
+      specs: '100ml',
+      images: [
+        'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200&h=200&fit=crop',
+      ],
+      likes: 86,
+      reply: '感谢您的喜爱！兰蔻会继续为您带来美丽体验！',
+    },
+    {
+      id: 2,
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop',
+      username: '琳***琳',
+      badge: '金牌会员',
+      rating: 5,
+      time: '3天前',
+      content: '味道很香，吸收很快，早晚都用，皮肤状态稳定了很多！',
+      specs: '100ml',
+      images: [],
+      likes: 52,
+      reply: null,
+    },
+  ],
+  // '4' - ZARA 女士T恤
+  '4': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop',
+      username: '时***客',
+      badge: '银牌会员',
+      rating: 5,
+      time: '4天前',
+      content: 'T恤面料很舒服，纯棉的很透气。款式简约大方，搭配牛仔裤或者裙子都好看！',
+      specs: '白色 | M',
+      images: [],
+      likes: 67,
+      reply: '感谢您的好评！ZARA期待您的再次光临！',
+    },
+    {
+      id: 2,
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+      username: '简***约',
+      badge: null,
+      rating: 4,
+      time: '1周前',
+      content: '质量不错，就是白色有点透，需要穿打底。',
+      specs: '黑色 | S',
+      images: [],
+      likes: 23,
+      reply: null,
+    },
+  ],
+  // '5' - 北欧简约落地灯
+  '5': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
+      username: '家***装',
+      badge: '金牌会员',
+      rating: 5,
+      time: '2天前',
+      content: '落地灯很漂亮，放在客厅很有氛围感。安装简单，光线柔和，看书很舒服。',
+      specs: '白色',
+      images: [],
+      likes: 45,
+      reply: '感谢您的支持！宜家家居期待再次为您服务！',
+    },
+  ],
+  // '6' - 进口车厘子
+  '6': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',
+      username: '水***果',
+      badge: '钻石会员',
+      rating: 5,
+      time: '1天前',
+      content: '车厘子很新鲜，个头大，甜度够！包装很好，没有坏果。冷链配送很快！',
+      specs: '3斤装',
+      images: [],
+      likes: 58,
+      reply: '感谢您的支持！天天果园为您提供新鲜水果！',
+    },
+  ],
+  // '7' - Nike Air Max 270
+  '7': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
+      username: '跑***者',
+      badge: '金牌会员',
+      rating: 5,
+      time: '2天前',
+      content: '穿着很舒服，跑步脚感很好，气垫缓震效果明显。颜值也很高！',
+      specs: '黑白配色 | 42',
+      images: [],
+      likes: 94,
+      reply: '感谢您的支持！Nike与您一起奔跑！',
+    },
+  ],
+  // '9' - Levi's 牛仔裤
+  '9': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop',
+      username: '牛***仔',
+      badge: '银牌会员',
+      rating: 5,
+      time: '3天前',
+      content: '牛仔裤版型很好，修身但不紧身。面料有弹力，穿着很舒服。经典款式永不过时！',
+      specs: 'L',
+      images: [],
+      likes: 67,
+      reply: '感谢您的支持！Levi\'s期待您的再次光临！',
+    },
+  ],
+  // '10' - 波司登羽绒服
+  '10': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop',
+      username: '暖***暖',
+      badge: '金牌会员',
+      rating: 5,
+      time: '5天前',
+      content: '羽绒服很暖和，90%白鸭绒真的很轻很保暖。中长款刚好盖住大腿，冬天穿正好！',
+      specs: '黑色 | M',
+      images: [],
+      likes: 89,
+      reply: '感谢您的支持！波司登为您温暖整个冬天！',
+    },
+  ],
+  // '11' - MacBook Air
+  '11': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+      username: '程***序',
+      badge: '钻石会员',
+      rating: 5,
+      time: '1周前',
+      content: 'M3芯片性能很强，续航更是惊人！轻薄便携，出差办公神器。屏幕显示效果很棒！',
+      specs: '16G+512G',
+      images: [],
+      likes: 128,
+      reply: '感谢您对Apple产品的认可！',
+    },
+  ],
+  // '12' - Sony 耳机
+  '12': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+      username: '音***控',
+      badge: '钻石会员',
+      rating: 5,
+      time: '1周前',
+      content: '音质非常棒，降噪效果一流！戴着很舒服，长时间佩戴也不累。续航也很给力！',
+      specs: '黑色',
+      images: [],
+      likes: 76,
+      reply: '感谢您对Sony产品的认可！',
+    },
+  ],
+  // '13' - iPad Pro
+  '13': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+      username: '设***师',
+      badge: '金牌会员',
+      rating: 5,
+      time: '3天前',
+      content: 'iPad Pro太强了！M2芯片运行设计软件很流畅，屏幕显示效果惊艳。配Apple Pencil简直是创作神器！',
+      specs: '256G',
+      images: [],
+      likes: 96,
+      reply: '感谢您的支持！Apple期待您的再次光临！',
+    },
+  ],
+  // '14' - SK-II 神仙水
+  '14': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop',
+      username: '皮***好',
+      badge: '钻石会员',
+      rating: 5,
+      time: '2天前',
+      content: '神仙水真的名不虚传！用了一瓶皮肤明显改善了，毛孔细腻了很多，皮肤也有光泽了。',
+      specs: '230ml',
+      images: [],
+      likes: 112,
+      reply: '感谢您的喜爱！SK-II为您带来更美肌肤！',
+    },
+  ],
+  // '15' - Dior 口红
+  '15': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop',
+      username: '美***达人',
+      badge: '金牌会员',
+      rating: 5,
+      time: '5天前',
+      content: '999是经典正红！颜色超级好看，显白又气质！滋润不拔干，持久度也很好。',
+      specs: '999正红',
+      images: [],
+      likes: 128,
+      reply: '感谢您的喜爱！Dior为您带来更多美丽！',
+    },
+  ],
+  // '16' - 雅诗兰黛小棕瓶
+  '16': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop',
+      username: '抗***老',
+      badge: '金牌会员',
+      rating: 5,
+      time: '4天前',
+      content: '小棕瓶用了很多年了，修复效果很好。晚上用完第二天皮肤很嫩，淡纹效果也看得见。',
+      specs: '50ml',
+      images: [],
+      likes: 98,
+      reply: '感谢您的支持！雅诗兰黛为您守护年轻肌肤！',
+    },
+  ],
+  // '17' - 乳胶枕头
+  '17': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop',
+      username: '睡***香',
+      badge: null,
+      rating: 5,
+      time: '1周前',
+      content: '乳胶枕很舒服，支撑性很好，脖子不酸了。透气性也不错，睡觉不出汗了。',
+      specs: '标准款',
+      images: [],
+      likes: 56,
+      reply: '感谢您的支持！睡眠博士祝您好睡眠！',
+    },
+  ],
+  // '18' - 布艺沙发
+  '18': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
+      username: '家***居',
+      badge: '金牌会员',
+      rating: 5,
+      time: '2周前',
+      content: '沙发很舒服，布艺面料很柔软。北欧风格很好看，放在客厅很搭。物流也很给力！',
+      specs: '三人座',
+      images: [],
+      likes: 45,
+      reply: '感谢您的支持！林氏木业期待再次为您服务！',
+    },
+  ],
+  // '19' - 扫地机器人
+  '19': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop',
+      username: '懒***人',
+      badge: '金牌会员',
+      rating: 5,
+      time: '4天前',
+      content: '解放双手神器！建图很快，打扫得很干净，还会自己回充。强烈推荐！',
+      specs: 'Pro版',
+      images: [],
+      likes: 89,
+      reply: '感谢您的推荐！科沃斯让清洁更轻松！',
+    },
+  ],
+  // '20' - 三只松鼠坚果
+  '20': [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',
+      username: '吃***货',
+      badge: '钻石会员',
+      rating: 5,
+      time: '1天前',
+      content: '坚果很新鲜，味道香甜，包装也很精美。买来送礼特别合适！',
+      specs: '综合坚果 | 1kg装',
+      images: [],
+      likes: 45,
+      reply: '感谢您的支持！三只松鼠期待再次为您服务！',
+    },
+    {
+      id: 2,
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop',
+      username: '小***胖',
+      badge: null,
+      rating: 5,
+      time: '3天前',
+      content: '孩子特别喜欢吃，每天都要吃一小包，营养又健康！',
+      specs: '每日坚果 | 30袋装',
+      images: [],
+      likes: 38,
+      reply: null,
+    },
+  ],
+};
+
+// 获取商品评价
+export const getProductReviews = (productId: string) => {
+  return mockReviews[productId] || [
+    {
+      id: 1,
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+      username: '用户***' + productId,
+      badge: null,
+      rating: 5,
+      time: '1周前',
+      content: '商品质量很好，物流很快，客服态度也不错，整体满意。',
+      specs: '',
+      images: [],
+      likes: 12,
+      reply: null,
+    },
+  ];
+};

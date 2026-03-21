@@ -11,7 +11,7 @@ import {
   Star,
   ThumbsUp
 } from 'lucide-react';
-import { mockProducts, getShopByName } from '../../utils/mockData';
+import { mockProducts, getShopByName, getProductReviews } from '../../utils/mockData';
 import { useCartStore } from '../../store/useCartStore';
 import type { Product } from '../../types/product';
 
@@ -450,7 +450,7 @@ export const ProductDetail: React.FC = () => {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">用户评价</h3>
-                <span className="text-sm text-gray-500 dark:text-gray-400">(128)</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">({getProductReviews(product?.id || '').length})</span>
               </div>
               
               {/* 好评率卡片 */}
@@ -480,52 +480,7 @@ export const ProductDetail: React.FC = () => {
 
             {/* 评价列表 */}
             <div className="space-y-4">
-              {[
-                {
-                  id: 1,
-                  avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
-                  username: '小***花',
-                  badge: '金牌会员',
-                  rating: 5,
-                  time: '3天前',
-                  content: '质量非常好，物流也很快，非常满意！包装很精美，产品做工精细，颜色和图片一致，没有色差。客服态度也很好，有问必答。已经推荐给朋友了，下次还会再购买！',
-                  specs: '深空黑 | 256GB',
-                  images: [
-                    'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=200&h=200&fit=crop',
-                    'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=200&h=200&fit=crop'
-                  ],
-                  likes: 42,
-                  reply: '感谢您的支持与认可！我们会继续努力提供更好的产品和服务，期待您的再次光临！'
-                },
-                {
-                  id: 2,
-                  avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
-                  username: '阳***风',
-                  badge: '银牌会员',
-                  rating: 5,
-                  time: '1周前',
-                  content: '包装很用心，商品质量也不错，下次还会再来。配送速度很快，隔天就到了。产品性价比很高，在同价位中算是不错的选择。',
-                  specs: '原色钛金属 | 512GB',
-                  images: [],
-                  likes: 28,
-                  reply: null
-                },
-                {
-                  id: 3,
-                  avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
-                  username: '大***天',
-                  badge: null,
-                  rating: 5,
-                  time: '2周前',
-                  content: '性价比很高，推荐购买，客服态度也很好。产品质量符合预期，功能齐全。',
-                  specs: '白色 | 128GB',
-                  images: [
-                    'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=200&h=200&fit=crop'
-                  ],
-                  likes: 15,
-                  reply: null
-                }
-              ].map((review) => (
+              {getProductReviews(product?.id || '').map((review) => (
                 <div
                   key={review.id}
                   className="glass-card rounded-xl p-6 hover:shadow-xl transition-all duration-300"

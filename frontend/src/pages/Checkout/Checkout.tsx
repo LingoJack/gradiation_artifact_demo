@@ -60,8 +60,9 @@ export const Checkout: React.FC = () => {
   const selectedAddress = addresses.find((a) => a.id === selectedAddressId);
 
   const handleSubmit = () => {
-    // Mock 创建订单
-    alert('订单创建成功！订单号：' + Date.now());
+    // Mock 创建订单 - 模拟后端返回的订单号
+    const mockOrderId = `ORD${new Date().toISOString().slice(0,10).replace(/-/g, '')}${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
+    alert(`订单创建成功！订单号：${mockOrderId}`);
     clearCart();
     navigate('/orders');
   };

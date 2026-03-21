@@ -54,8 +54,10 @@ export const Favorites: React.FC = () => {
   };
 
   const handleAddToCart = (item: FavoriteItem) => {
+    // 模拟后端返回的购物车项 ID
+    const cartItemId = `cart-${item.productId}-${Date.now().toString(36)}`;
     addItem({
-      id: `cart-${Date.now()}`,
+      id: cartItemId,
       userId: 'user-1',
       productId: item.productId,
       product: {

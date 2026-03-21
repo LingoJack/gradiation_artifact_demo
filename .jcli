@@ -19,4 +19,6 @@ permissions:
   - Bash(cat -A:*)
   - Bash(cd "/Users/jacklingo/dev_custom/playground/example/frontend/src/pages/Home":*)
   - Bash(find frontend:*)
+  - Bash(wc -l:*)
+  - Bash(cd /Users/jacklingo/dev_custom/playground/example/frontend/src/utils:*)
   deny: []
