@@ -95,12 +95,12 @@ export const OrderList: React.FC = () => {
       {/* 订单列表 */}
       <div className="space-y-4">
         {filteredOrders.length === 0 ? (
-          <div className="bg-white rounded-lg p-12 text-center">
+          <div className="glass-card rounded-xl p-12 text-center">
             <p className="text-gray-500">暂无订单</p>
           </div>
         ) : (
           filteredOrders.map((order) => (
-            <div key={order.id} className="bg-white rounded-lg overflow-hidden">
+            <div key={order.id} className="glass-card rounded-xl overflow-hidden">
               {/* 订单头部 */}
               <div className="bg-gray-50 px-6 py-3 flex items-center justify-between text-sm">
                 <div className="flex items-center space-x-6">

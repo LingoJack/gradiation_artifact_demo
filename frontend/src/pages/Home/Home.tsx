@@ -105,9 +105,9 @@ export const Home: React.FC = () => {
       <div className="bg-white dark:bg-gray-900">
         <div className="container py-5">
           <div className="flex gap-3" style={{ height: '420px' }}>
-            {/* 左侧分类 - 浅色清爽设计 */}
-            <div className="w-52 bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden flex-shrink-0 border border-gray-200 dark:border-gray-700">
-              <div className="p-3 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+            {/* 左侧分类 - 毛玻璃设计 */}
+            <div className="w-52 glass-card rounded-xl overflow-hidden flex-shrink-0">
+              <div className="p-3 border-b border-white/20 dark:border-gray-600/30 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
                 <h3 className="text-gray-800 dark:text-gray-200 font-bold text-sm">
                   全部商品分类
                 </h3>
@@ -237,7 +237,7 @@ export const Home: React.FC = () => {
             {/* 右侧推荐 - 卡片式设计 */}
             <div className="w-72 flex-shrink-0 flex flex-col gap-3">
               {/* 用户信息卡片 */}
-              <div className="bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-800 dark:to-gray-800 rounded-xl p-5 border border-orange-100 dark:border-gray-700">
+              <div className="glass-card rounded-xl p-5">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mr-3 overflow-hidden">
                     <img 
@@ -275,13 +275,13 @@ export const Home: React.FC = () => {
               </div>
 
               {/* 活动卡片 */}
-              <div className="flex-1 rounded-xl overflow-hidden relative cursor-pointer hover:shadow-xl transition-shadow group">
+              <div className="flex-1 rounded-xl overflow-hidden relative cursor-pointer hover:shadow-xl transition-all duration-300 group">
                 <img 
                   src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop" 
                   alt="新人专享" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                 <div className="absolute inset-0 bg-gradient-to-br from-purple-600/85 to-pink-600/85 flex items-center justify-center">
+                 <div className="absolute inset-0 bg-gradient-to-br from-purple-600/80 to-pink-600/80 backdrop-blur-sm flex items-center justify-center">
                    <div className="text-white text-center">
                      <p className="font-bold text-2xl mb-2">新人专享</p>
                      <p className="text-base opacity-90">首单立减50元</p>
@@ -290,7 +290,7 @@ export const Home: React.FC = () => {
                </div>
 
                {/* 公告 - 淘宝头条 */}
-               <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 overflow-hidden">
+               <div className="glass-card rounded-xl p-4 overflow-hidden">
                  <div className="flex items-center mb-3">
                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
                      <path fillRule="evenodd" d="M18 3a1 1 0 00-1.447-.894L8.763 6H5a3 3 0 000 6h.28l1.771 5.316A1 1 0 008 18h1a1 1 0 001-1v-4.382l6.553 3.276A1 1 0 0018 15V3z" clipRule="evenodd" />
@@ -404,15 +404,15 @@ export const Home: React.FC = () => {
       {/* 新闻弹窗 */}
       {selectedNews && (
         <div 
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50"
           onClick={() => setSelectedNews(null)}
         >
           <div 
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden"
+            className="glass-modal rounded-2xl max-w-lg w-full mx-4 overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* 弹窗头部 */}
-            <div className="bg-gradient-to-r from-orange-500 to-red-500 p-6">
+            <div className="bg-gradient-to-r from-orange-500/90 to-red-500/90 backdrop-blur-md p-6">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">

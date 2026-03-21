@@ -19,14 +19,14 @@ export const Cart: React.FC = () => {
       <h1 className="text-2xl font-bold mb-6">购物车</h1>
 
       {items.length === 0 ? (
-        <div className="bg-white rounded-lg p-12 text-center">
+        <div className="glass-card rounded-2xl p-12 text-center">
           <p className="text-gray-500 mb-4">购物车是空的</p>
           <Link to="/products" className="text-primary hover:underline">
             去逛逛
           </Link>
         </div>
       ) : (
-        <div className="bg-white rounded-lg">
+        <div className="glass-card rounded-2xl overflow-hidden">
           {/* 表头 */}
           <div className="grid grid-cols-12 gap-4 p-4 border-b bg-gray-50 font-medium text-sm">
             <div className="col-span-1">

@@ -113,7 +113,7 @@ export const ProductDetail: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* 面包屑导航 */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <div className="glass-nav">
         <div className="max-w-[1200px] mx-auto px-4 py-3">
           <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
             <span className="hover:text-orange-500 cursor-pointer">首页</span>
@@ -129,7 +129,7 @@ export const ProductDetail: React.FC = () => {
 
       {/* 主要内容区 */}
       <div className="max-w-[1200px] mx-auto px-4 py-6">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+        <div className="glass-card rounded-2xl p-6">
           <div className="grid grid-cols-12 gap-8">
             {/* 左侧图片区 */}
             <div className="col-span-5">
@@ -370,8 +370,8 @@ export const ProductDetail: React.FC = () => {
         </div>
 
         {/* 商品详情区 */}
-        <div className="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-          <div className="border-b border-gray-200 dark:border-gray-700 pb-4 mb-6">
+        <div className="mt-6 glass-card rounded-2xl p-6">
+          <div className="border-b border-gray-200/50 dark:border-gray-700/50 pb-4 mb-6">
             <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">商品详情</h2>
           </div>
 
@@ -504,7 +504,7 @@ export const ProductDetail: React.FC = () => {
               ].map((review) => (
                 <div
                   key={review.id}
-                  className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow"
+                  className="glass-card rounded-xl p-6 hover:shadow-xl transition-all duration-300"
                 >
                   {/* 用户信息 */}
                   <div className="flex items-start justify-between mb-4">

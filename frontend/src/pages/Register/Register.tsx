@@ -26,8 +26,14 @@ export const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-900 dark:to-gray-800 px-4 relative overflow-hidden">
+      {/* 背景装饰 */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-orange-200/30 dark:bg-orange-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-red-200/30 dark:bg-red-500/10 rounded-full blur-3xl"></div>
+      </div>
+      
+      <div className="glass-modal p-8 rounded-2xl w-full max-w-md relative z-10">
         <h2 className="text-2xl font-bold text-center mb-8">注册</h2>
         <form onSubmit={handleRegister}>
           <div className="mb-4">

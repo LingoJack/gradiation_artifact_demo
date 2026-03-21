@@ -9,7 +9,7 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <Link to={`/products/${product.id}`} className="group block">
-      <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-700 hover:shadow-lg hover:border-orange-200 dark:hover:border-orange-500 transition-all duration-300">
+      <div className="glass-card rounded-xl overflow-hidden hover:shadow-2xl hover:scale-[1.02] transition-all duration-300">
         {/* 商品图片 */}
         <div className="aspect-square overflow-hidden relative bg-gray-50 dark:bg-gray-900">
           <img 

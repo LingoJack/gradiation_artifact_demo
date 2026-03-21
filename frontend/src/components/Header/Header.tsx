@@ -22,7 +22,7 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-gradient-to-r from-orange-500 to-red-500 shadow-md sticky top-0 z-50">
+    <header className="bg-gradient-to-r from-orange-500/90 to-red-500/90 backdrop-blur-xl shadow-lg sticky top-0 z-50 border-b border-white/10">
       <div className="container">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -72,7 +72,7 @@ export const Header: React.FC = () => {
                 )}
               </button>
               {showThemeMenu && (
-                <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 min-w-[140px] z-50">
+                <div className="absolute right-0 top-full mt-2 glass-dropdown rounded-xl py-1 min-w-[140px] z-50">
                   <button
                     onClick={() => {
                       setTheme('light');
