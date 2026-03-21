@@ -404,7 +404,10 @@ export const ProductDetail: React.FC = () => {
                           >
                             进店逛逛
                           </Link>
-                          <button className="px-4 py-2 border border-orange-500 text-orange-600 dark:text-orange-400 rounded text-sm hover:bg-orange-50 dark:hover:bg-orange-900/20">
+                          <button 
+                            onClick={() => showToast('关注成功！', 'success')}
+                            className="px-4 py-2 border border-orange-500 text-orange-600 dark:text-orange-400 rounded text-sm hover:bg-orange-50 dark:hover:bg-orange-900/20"
+                          >
                             关注店铺
                           </button>
                         </div>
@@ -586,20 +589,32 @@ export const ProductDetail: React.FC = () => {
                   {/* 操作按钮 */}
                   <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
                     <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors">
+                      <button 
+                        onClick={() => showToast('点赞成功！', 'success')}
+                        className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
+                      >
                         <ThumbsUp className="w-4 h-4" />
                         <span>{review.likes}</span>
                       </button>
-                      <button className="text-sm text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors">
+                      <button 
+                        onClick={() => showToast('回复功能开发中', 'info')}
+                        className="text-sm text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
+                      >
                         回复
                       </button>
                     </div>
                     <div className="flex items-center gap-3">
-                      <button className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors">
+                      <button 
+                        onClick={() => showToast('点赞成功！', 'success')}
+                        className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
+                      >
                         <ThumbsUp className="w-4 h-4" />
                         <span>{review.likes}</span>
                       </button>
-                      <button className="text-sm text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors">
+                      <button 
+                        onClick={() => showToast('回复功能开发中', 'info')}
+                        className="text-sm text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
+                      >
                         回复
                       </button>
                     </div>

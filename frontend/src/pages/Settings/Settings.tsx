@@ -49,6 +49,10 @@ const SettingGroupCard: React.FC<SettingGroupProps> = ({ title, items, onAction 
             <div>
               {item.action === 'toggle' && (
                 <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onAction(item);
+                  }}
                   className={`relative w-12 h-6 rounded-full transition-colors ${
                     item.value ? 'bg-primary' : 'bg-gray-300 dark:bg-gray-600'
                   }`}

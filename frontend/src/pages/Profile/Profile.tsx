@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Camera, User, Mail, Phone, Calendar, Edit3, Check, Crown, Star } from 'lucide-react';
 import { useUserStore } from '../../store/useUserStore';
 import { useSpotlight } from '../../hooks/useSpotlight';
+import { CustomSelect } from '../../components/CustomSelect/CustomSelect';
 
 // 预设头像列表
 const avatarOptions = [
@@ -263,21 +264,29 @@ export const Profile: React.FC = () => {
                       <User className="w-4 h-4 text-gray-400" />
                       <span>性别</span>
                     </label>
-                    <select
-                      name="gender"
-                      value={formData.gender}
-                      onChange={handleChange}
-                      disabled={!isEditing}
-                      className={`w-full px-4 py-3 rounded-xl border-2 transition-all appearance-none ${
-                        isEditing
-                          ? 'border-gray-200 dark:border-gray-600 focus:border-primary focus:ring-4 focus:ring-primary/10 bg-white dark:bg-gray-800'
-                          : 'border-transparent bg-gray-50 dark:bg-gray-800/50'
-                      } dark:text-white`}
-                    >
-                      <option value="male">男</option>
-                      <option value="female">女</option>
-                      <option value="other">保密</option>
-                    </select>
+                    <div className="relative">
+                      <select
+                        name="gender"
+                        value={formData.gender}
+                        onChange={handleChange}
+                        disabled={!isEditing}
+                        className={`w-full px-4 py-3 pr-10 rounded-xl border-2 transition-all appearance-none cursor-pointer ${
+                          isEditing
+                            ? 'border-gray-200 dark:border-gray-600 focus:border-primary focus:ring-4 focus:ring-primary/10 bg-white dark:bg-gray-800'
+                            : 'border-transparent bg-gray-50 dark:bg-gray-800/50 cursor-not-allowed opacity-60'
+                        } dark:text-white`}
+                      >
+                        <option value="male">男</option>
+                        <option value="female">女</option>
+                        <option value="other">保密</option>
+                      </select>
+                      {/* 自定义下拉箭头 */}
+                      <div className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-transform ${isEditing ? 'text-gray-400' : 'text-gray-300 dark:text-gray-600'}`}>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </div>
                   </div>
 
                   {/* 生日 */}
