@@ -35,7 +35,7 @@ export const Checkout: React.FC = () => {
       <div className="grid grid-cols-3 gap-8">
         <div className="col-span-2 space-y-6">
           {/* 收货地址 */}
-          <div className="bg-white rounded-lg p-6">
+          <div className="glass-card rounded-xl p-6">
             <h2 className="text-lg font-bold mb-4">收货地址</h2>
             <div className="space-y-2 text-sm">
               <div className="flex items-center space-x-2">
@@ -50,7 +50,7 @@ export const Checkout: React.FC = () => {
           </div>
 
           {/* 商品清单 */}
-          <div className="bg-white rounded-lg p-6">
+          <div className="glass-card rounded-xl p-6">
             <h2 className="text-lg font-bold mb-4">商品清单</h2>
             <div className="space-y-4">
               {selectedItems.map((item) => (
@@ -83,7 +83,7 @@ export const Checkout: React.FC = () => {
         </div>
 
         {/* 右侧结算信息 */}
-        <div className="bg-white rounded-lg p-6 h-fit sticky top-24">
+        <div className="glass-card rounded-xl p-6 h-fit sticky top-24">
           <h2 className="text-lg font-bold mb-4">订单信息</h2>
           <div className="space-y-3 text-sm">
             <div className="flex justify-between">
