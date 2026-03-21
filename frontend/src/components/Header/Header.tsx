@@ -52,23 +52,48 @@ export const Header: React.FC = () => {
           {/* Search Bar */}
           <form onSubmit={handleSearch} className="flex-1 max-w-2xl mx-8">
             <div className="relative flex items-center">
-              {/* 流动光效边框 - 使用伪元素实现完美贴合 */}
+              {/* 外层光晕 - 柔和扩散 */}
+              <div 
+                className={`absolute -inset-4 rounded-full transition-all duration-500 ${
+                  isSearchFocused ? 'opacity-100' : 'opacity-0'
+                }`}
+                style={{
+                  background: 'radial-gradient(ellipse at center, rgba(249, 115, 22, 0.3) 0%, transparent 70%)',
+                  filter: 'blur(8px)',
+                  animation: isSearchFocused ? 'pulse-glow 2s ease-in-out infinite' : 'none',
+                }}
+              />
+              
+              {/* 流动光效边框 - 多层渐变 */}
               <div 
                 className={`absolute -inset-[3px] rounded-full transition-all duration-500 ${
                   isSearchFocused ? 'opacity-100' : 'opacity-0'
                 }`}
                 style={{
-                  background: 'linear-gradient(90deg, #f97316, #ef4444, #fb923c, #f97316, #ef4444, #f97316)',
-                  backgroundSize: '300% 100%',
-                  animation: isSearchFocused ? 'gradient-flow 1.5s linear infinite' : 'none',
-                  zIndex: -1,
+                  background: 'linear-gradient(90deg, rgba(249, 115, 22, 0.6), rgba(239, 68, 68, 0.4), rgba(251, 146, 60, 0.6), rgba(249, 115, 22, 0.3), rgba(239, 68, 68, 0.5), rgba(249, 115, 22, 0.6))',
+                  backgroundSize: '400% 100%',
+                  animation: isSearchFocused ? 'gradient-flow 3s linear infinite' : 'none',
+                  filter: 'blur(1px)',
+                  opacity: 0.8,
                 }}
               />
               
-              {/* 白色内层 - 确保完美贴合 */}
+              {/* 内层高光 - 增加质感 */}
+              <div 
+                className={`absolute -inset-[2px] rounded-full transition-all duration-500 ${
+                  isSearchFocused ? 'opacity-100' : 'opacity-0'
+                }`}
+                style={{
+                  background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4))',
+                  backgroundSize: '200% 100%',
+                  animation: isSearchFocused ? 'shimmer 2s ease-in-out infinite' : 'none',
+                }}
+              />
+              
+              {/* 白色背景层 */}
               {isSearchFocused && (
                 <div 
-                  className="absolute -inset-[2px] bg-white rounded-full"
+                  className="absolute -inset-[1px] bg-white/95 backdrop-blur-xl rounded-full"
                   style={{ zIndex: -1 }}
                 />
               )}
@@ -89,7 +114,7 @@ export const Header: React.FC = () => {
                 className="relative w-full h-10 pl-12 pr-24 bg-white border-0 rounded-full focus:outline-none text-gray-700 transition-all duration-300"
                 style={{
                   boxShadow: isSearchFocused 
-                    ? '0 0 30px rgba(249, 115, 22, 0.5), 0 0 60px rgba(249, 115, 22, 0.3)' 
+                    ? '0 0 40px rgba(249, 115, 22, 0.3), 0 0 80px rgba(249, 115, 22, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.5)' 
                     : '0 1px 3px rgba(0, 0, 0, 0.1)',
                 }}
               />
@@ -111,7 +136,27 @@ export const Header: React.FC = () => {
                 background-position: 0% 50%;
               }
               100% {
-                background-position: 300% 50%;
+                background-position: 400% 50%;
+              }
+            }
+            @keyframes shimmer {
+              0%, 100% {
+                background-position: 200% 50%;
+                opacity: 0.6;
+              }
+              50% {
+                background-position: 0% 50%;
+                opacity: 0.9;
+              }
+            }
+            @keyframes pulse-glow {
+              0%, 100% {
+                opacity: 0.5;
+                transform: scale(1);
+              }
+              50% {
+                opacity: 0.8;
+                transform: scale(1.05);
               }
             }
           `}</style>
