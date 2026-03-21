@@ -199,37 +199,8 @@ export const ProductDetail: React.FC = () => {
               {/* 描述 */}
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{product.description}</p>
 
-              {/* 价格区域 - 液态玻璃效果 */}
-              <div className="relative rounded-xl p-5 mb-5 overflow-hidden"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(254, 243, 199, 0.6) 0%, rgba(254, 202, 202, 0.5) 100%)',
-                  backdropFilter: 'blur(24px) saturate(180%)',
-                  WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-                  boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.6), 0 4px 16px rgba(0, 0, 0, 0.05)',
-                }}
-              >
-                {/* 流动边框 */}
-                <div 
-                  className="absolute inset-0 rounded-xl pointer-events-none"
-                  style={{
-                    padding: '1px',
-                    background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.6) 0%, rgba(239, 68, 68, 0.4) 33%, rgba(251, 191, 36, 0.5) 66%, rgba(251, 146, 60, 0.6) 100%)',
-                    backgroundSize: '300% 300%',
-                    animation: 'borderFlow 4s ease infinite',
-                    WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                    WebkitMaskComposite: 'xor',
-                    maskComposite: 'exclude',
-                  }}
-                />
-                {/* 顶部光晕 */}
-                <div 
-                  className="absolute top-0 left-0 right-0 h-1/2 pointer-events-none"
-                  style={{
-                    background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent)',
-                    borderRadius: 'inherit',
-                  }}
-                />
-                <div className="relative z-10">
+              {/* 价格区域 */}
+              <div className="price-glass rounded-xl p-5 mb-5">
                 <div className="flex items-baseline gap-3 mb-2">
                   <span className="text-sm text-gray-600 dark:text-gray-400">促销价</span>
                   <span className="text-sm text-red-600 dark:text-red-400 font-medium">¥</span>
@@ -247,19 +218,17 @@ export const ProductDetail: React.FC = () => {
                     </span>
                   )}
                 </div>
-
-                  {/* 促销标签 */}
-                  <div className="flex items-center gap-2 mt-3">
-                    <span className="bg-red-600 text-white text-xs px-2 py-1 rounded">
-                      限时特惠
-                    </span>
-                    <span className="bg-orange-600 text-white text-xs px-2 py-1 rounded">
-                      包邮
-                    </span>
-                    <span className="text-xs text-gray-600 dark:text-gray-400">
-                      销量 {product.sales}+ 已售
-                    </span>
-                  </div>
+                {/* 促销标签 */}
+                <div className="flex items-center gap-2 mt-3">
+                  <span className="bg-red-600 text-white text-xs px-2 py-1 rounded">
+                    限时特惠
+                  </span>
+                  <span className="bg-orange-600 text-white text-xs px-2 py-1 rounded">
+                    包邮
+                  </span>
+                  <span className="text-xs text-gray-600 dark:text-gray-400">
+                    销量 {product.sales}+ 已售
+                  </span>
                 </div>
               </div>
 
