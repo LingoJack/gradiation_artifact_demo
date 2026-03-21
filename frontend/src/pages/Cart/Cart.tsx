@@ -2,11 +2,14 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Trash2 } from 'lucide-react';
 import { useCartStore } from '../../store/useCartStore';
+import { useSpotlight } from '../../hooks/useSpotlight';
 
 export const Cart: React.FC = () => {
   const navigate = useNavigate();
   const { items, total, removeItem, updateQuantity, toggleSelect, toggleSelectAll } =
     useCartStore();
+  const cartSpotlight = useSpotlight();
+  const emptySpotlight = useSpotlight();
 
   const allSelected = items.length > 0 && items.every((i) => i.selected);
 
@@ -19,14 +22,24 @@ export const Cart: React.FC = () => {
       <h1 className="text-2xl font-bold mb-6">购物车</h1>
 
       {items.length === 0 ? (
-        <div className="glass-card rounded-2xl p-12 text-center">
+        <div 
+          ref={emptySpotlight.ref as React.RefObject<HTMLDivElement>}
+          className="glass-liquid rounded-2xl p-12 text-center overflow-hidden relative"
+          style={emptySpotlight.spotlightStyle}
+          {...emptySpotlight.handlers}
+        >
           <p className="text-gray-500 mb-4">购物车是空的</p>
           <Link to="/products" className="text-primary hover:underline">
             去逛逛
           </Link>
         </div>
       ) : (
-        <div className="glass-card rounded-2xl overflow-hidden">
+        <div 
+          ref={cartSpotlight.ref as React.RefObject<HTMLDivElement>}
+          className="glass-cart rounded-2xl overflow-hidden relative"
+          style={cartSpotlight.spotlightStyle}
+          {...cartSpotlight.handlers}
+        >
           {/* 表头 */}
           <div className="grid grid-cols-12 gap-4 p-4 border-b bg-gray-50 font-medium text-sm">
             <div className="col-span-1">

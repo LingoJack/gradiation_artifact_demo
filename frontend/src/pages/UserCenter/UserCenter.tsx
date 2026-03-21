@@ -2,9 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { User, MapPin, Heart, Package, Settings, LogOut } from 'lucide-react';
 import { useUserStore } from '../../store/useUserStore';
+import { useSpotlight } from '../../hooks/useSpotlight';
 
 export const UserCenter: React.FC = () => {
   const { user, logout } = useUserStore();
+  const menuSpotlight = useSpotlight();
+  const mainSpotlight = useSpotlight();
 
   const menuItems = [
     { icon: Package, label: '我的订单', path: '/orders' },
@@ -26,7 +29,12 @@ export const UserCenter: React.FC = () => {
       <div className="grid grid-cols-4 gap-8">
         {/* 左侧菜单 */}
         <div className="col-span-1">
-          <div className="glass-card rounded-xl p-6">
+          <div 
+            ref={menuSpotlight.ref as React.RefObject<HTMLDivElement>}
+            className="glass-user-card rounded-xl p-6 overflow-hidden relative"
+            style={menuSpotlight.spotlightStyle}
+            {...menuSpotlight.handlers}
+          >
             {/* 用户信息 */}
             <div className="flex items-center space-x-4 mb-6 pb-6 border-b">
               <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl">
@@ -63,7 +71,12 @@ export const UserCenter: React.FC = () => {
 
         {/* 右侧内容 */}
         <div className="col-span-3">
-          <div className="glass-card rounded-xl p-6">
+          <div 
+            ref={mainSpotlight.ref as React.RefObject<HTMLDivElement>}
+            className="glass-liquid rounded-xl p-6 overflow-hidden relative"
+            style={mainSpotlight.spotlightStyle}
+            {...mainSpotlight.handlers}
+          >
             <h2 className="text-xl font-bold mb-6">个人信息</h2>
             <div className="space-y-4">
               <div className="flex items-center space-x-4">

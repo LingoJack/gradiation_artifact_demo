@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../store/useUserStore';
+import { useSpotlight } from '../../hooks/useSpotlight';
 
 type LoginType = 'password' | 'sms';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useUserStore();
+  const cardSpotlight = useSpotlight();
   
   const [loginType, setLoginType] = useState<LoginType>('password');
   const [username, setUsername] = useState('');
@@ -71,7 +73,12 @@ export const Login: React.FC = () => {
         <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-red-200/30 dark:bg-red-500/10 rounded-full blur-3xl" />
       </div>
       
-      <div className="glass-modal p-8 rounded-2xl w-full max-w-md relative z-10">
+      <div 
+        ref={cardSpotlight.ref as React.RefObject<HTMLDivElement>}
+        className="glass-liquid p-8 rounded-2xl w-full max-w-md relative z-10 overflow-hidden"
+        style={cardSpotlight.spotlightStyle}
+        {...cardSpotlight.handlers}
+      >
         {/* Logo */}
         <div className="text-center mb-6">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-orange-500 to-red-500 mb-4">

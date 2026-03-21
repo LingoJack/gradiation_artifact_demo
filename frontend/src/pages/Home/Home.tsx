@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ProductCard } from '../../components/ProductCard/ProductCard';
 import { mockCategories, mockProducts } from '../../utils/mockData';
 import type { Product } from '../../types/product';
+import { useSpotlight } from '../../hooks/useSpotlight';
 
 // 轮播图数据
 const carouselItems = [
@@ -74,6 +75,11 @@ const newsData = [
 export const Home: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedNews, setSelectedNews] = useState<typeof newsData[0] | null>(null);
+
+  // 液态玻璃鼠标光效 hooks
+  const userCardSpotlight = useSpotlight();
+  const newsSpotlight = useSpotlight();
+  const modalSpotlight = useSpotlight();
 
   // 自动轮播
   useEffect(() => {
@@ -236,8 +242,13 @@ export const Home: React.FC = () => {
 
             {/* 右侧推荐 - 卡片式设计 */}
             <div className="w-72 flex-shrink-0 flex flex-col gap-3">
-              {/* 用户信息卡片 */}
-              <div className="glass-card rounded-xl p-5">
+              {/* 用户信息卡片 - 液态玻璃效果 */}
+              <div 
+                ref={userCardSpotlight.ref as React.RefObject<HTMLDivElement>}
+                className="glass-user-card rounded-xl p-5 relative overflow-hidden transition-shadow duration-300"
+                style={userCardSpotlight.spotlightStyle}
+                {...userCardSpotlight.handlers}
+              >
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mr-3 overflow-hidden">
                     <img 
@@ -289,8 +300,13 @@ export const Home: React.FC = () => {
                  </div>
                </div>
 
-               {/* 公告 - 淘宝头条 */}
-               <div className="glass-card rounded-xl p-4 overflow-hidden">
+               {/* 公告 - 淘宝头条 - 液态玻璃效果 */}
+               <div 
+                 ref={newsSpotlight.ref as React.RefObject<HTMLDivElement>}
+                 className="glass-liquid rounded-xl p-4 overflow-hidden relative"
+                 style={newsSpotlight.spotlightStyle}
+                 {...newsSpotlight.handlers}
+               >
                  <div className="flex items-center mb-3">
                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
                      <path fillRule="evenodd" d="M18 3a1 1 0 00-1.447-.894L8.763 6H5a3 3 0 000 6h.28l1.771 5.316A1 1 0 008 18h1a1 1 0 001-1v-4.382l6.553 3.276A1 1 0 0018 15V3z" clipRule="evenodd" />
@@ -401,15 +417,18 @@ export const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* 新闻弹窗 */}
+      {/* 新闻弹窗 - 液态玻璃效果 */}
       {selectedNews && (
         <div 
           className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50"
           onClick={() => setSelectedNews(null)}
         >
           <div 
-            className="glass-modal rounded-2xl max-w-lg w-full mx-4 overflow-hidden"
+            ref={modalSpotlight.ref as React.RefObject<HTMLDivElement>}
+            className="glass-modal rounded-2xl max-w-lg w-full mx-4 overflow-hidden relative"
+            style={modalSpotlight.spotlightStyle}
             onClick={(e) => e.stopPropagation()}
+            {...modalSpotlight.handlers}
           >
             {/* 弹窗头部 */}
             <div className="bg-gradient-to-r from-orange-500/90 to-red-500/90 backdrop-blur-md p-6">
