@@ -18,13 +18,33 @@ export const showToast = (message: string, type: ToastType = 'success') => {
     warning: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>',
   };
   
-  toast.className = `fixed bottom-8 left-1/2 transform -translate-x-1/2 ${colors[type]} text-white px-6 py-3 rounded-full shadow-lg z-50 flex items-center space-x-2 animate-fade-in`;
+  toast.className = `fixed top-8 right-8 ${colors[type]} text-white px-6 py-3 rounded-xl shadow-lg z-50 flex items-center space-x-2 animate-slide-in-right`;
   toast.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">${icons[type]}</svg><span>${message}</span>`;
   document.body.appendChild(toast);
   
+  // 添加动画样式
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slide-in-right {
+      from {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+  `;
+  if (!document.querySelector('#toast-animation-style')) {
+    style.id = 'toast-animation-style';
+    document.head.appendChild(style);
+  }
+  
   setTimeout(() => {
     toast.style.opacity = '0';
-    toast.style.transition = 'opacity 0.3s';
+    toast.style.transform = 'translateX(100%)';
+    toast.style.transition = 'all 0.3s ease-in-out';
     setTimeout(() => toast.remove(), 300);
   }, 3000);
 };
