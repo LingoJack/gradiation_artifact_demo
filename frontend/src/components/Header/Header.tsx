@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingBag, User, Search, Heart } from 'lucide-react';
+import { ShoppingBag, User, Search, Heart, Sun, Moon, Monitor } from 'lucide-react';
 import { useUserStore } from '../../store/useUserStore';
 import { useCartStore } from '../../store/useCartStore';
+import { useTheme } from '../../hooks/useTheme';
 
 export const Header: React.FC = () => {
   const { isAuthenticated, user } = useUserStore();
   const { items } = useCartStore();
   const selectedCount = items.filter((i) => i.selected).length;
   const [searchQuery, setSearchQuery] = useState('');
+  const [showThemeMenu, setShowThemeMenu] = useState(false);
   const navigate = useNavigate();
+  const { theme, setTheme, resolvedTheme } = useTheme();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,6 +58,61 @@ export const Header: React.FC = () => {
 
           {/* User Menu */}
           <div className="flex items-center space-x-5">
+            {/* Theme Toggle */}
+            <div className="relative">
+              <button
+                onClick={() => setShowThemeMenu(!showThemeMenu)}
+                className="text-white hover:text-orange-100 transition p-1.5 rounded-lg hover:bg-white/10"
+                title="切换主题"
+              >
+                {resolvedTheme === 'dark' ? (
+                  <Moon className="w-5 h-5" />
+                ) : (
+                  <Sun className="w-5 h-5" />
+                )}
+              </button>
+              {showThemeMenu && (
+                <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 min-w-[140px] z-50">
+                  <button
+                    onClick={() => {
+                      setTheme('light');
+                      setShowThemeMenu(false);
+                    }}
+                    className={`w-full px-4 py-2 text-left text-sm flex items-center space-x-2 hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                      theme === 'light' ? 'text-orange-500 font-medium' : 'text-gray-700 dark:text-gray-300'
+                    }`}
+                  >
+                    <Sun className="w-4 h-4" />
+                    <span>亮色模式</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setTheme('dark');
+                      setShowThemeMenu(false);
+                    }}
+                    className={`w-full px-4 py-2 text-left text-sm flex items-center space-x-2 hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                      theme === 'dark' ? 'text-orange-500 font-medium' : 'text-gray-700 dark:text-gray-300'
+                    }`}
+                  >
+                    <Moon className="w-4 h-4" />
+                    <span>暗色模式</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setTheme('system');
+                      setShowThemeMenu(false);
+                    }}
+                    className={`w-full px-4 py-2 text-left text-sm flex items-center space-x-2 hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                      theme === 'system' ? 'text-orange-500 font-medium' : 'text-gray-700 dark:text-gray-300'
+                    }`}
+                  >
+                    <Monitor className="w-4 h-4" />
+                    <span>跟随系统</span>
+                  </button>
+                </div>
+              )}
+            </div>
+            
             {isAuthenticated ? (
               <>
                 <Link to="/user" className="flex items-center space-x-2 text-white hover:text-orange-100 transition">

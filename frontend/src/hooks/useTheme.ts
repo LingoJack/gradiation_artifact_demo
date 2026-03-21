@@ -50,5 +50,5 @@ export function useTheme() {
     localStorage.setItem('theme', newTheme);
   };
 
-  return { theme, isDark, setTheme };
+  return { theme, isDark, setTheme, resolvedTheme: isDark ? 'dark' : 'light' };
 }

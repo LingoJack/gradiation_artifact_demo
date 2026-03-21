@@ -10,7 +10,8 @@ import {
   MessageCircle,
   ChevronRight,
   Store,
-  Star
+  Star,
+  ThumbsUp
 } from 'lucide-react';
 import { mockProducts } from '../../utils/mockData';
 import { useCartStore } from '../../store/useCartStore';
@@ -421,36 +422,196 @@ export const ProductDetail: React.FC = () => {
 
           {/* 用户评价 */}
           <div className="mt-8">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-medium text-gray-900 dark:text-gray-100">用户评价</h3>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                好评率 98%
-              </span>
+            {/* 评价头部 */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">用户评价</h3>
+                <span className="text-sm text-gray-500 dark:text-gray-400">(128)</span>
+              </div>
+              
+              {/* 好评率卡片 */}
+              <div className="flex items-center gap-4 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 px-6 py-3 rounded-xl border border-orange-200 dark:border-orange-800">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">98%</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">好评率</div>
+                </div>
+              </div>
             </div>
+
+            {/* 标签筛选 */}
+            <div className="flex items-center gap-3 mb-6">
+              {['全部评价', '有图评价', '好评', '中评', '差评'].map((tag, index) => (
+                <button
+                  key={tag}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    index === 0
+                      ? 'bg-orange-500 text-white'
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                  }`}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+
+            {/* 评价列表 */}
             <div className="space-y-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="border-b border-gray-200 dark:border-gray-700 pb-4">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-white text-sm">
-                      用{i}
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">用户{10000 + i}</div>
-                      <div className="flex items-center gap-1">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star
-                            key={star}
-                            className="w-3 h-3 text-yellow-400 fill-current"
-                          />
-                        ))}
+              {[
+                {
+                  id: 1,
+                  avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+                  username: '小***花',
+                  badge: '金牌会员',
+                  rating: 5,
+                  time: '3天前',
+                  content: '质量非常好，物流也很快，非常满意！包装很精美，产品做工精细，颜色和图片一致，没有色差。客服态度也很好，有问必答。已经推荐给朋友了，下次还会再购买！',
+                  specs: '深空黑 | 256GB',
+                  images: [
+                    'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=200&h=200&fit=crop',
+                    'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=200&h=200&fit=crop'
+                  ],
+                  likes: 42,
+                  reply: '感谢您的支持与认可！我们会继续努力提供更好的产品和服务，期待您的再次光临！'
+                },
+                {
+                  id: 2,
+                  avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+                  username: '阳***风',
+                  badge: '银牌会员',
+                  rating: 5,
+                  time: '1周前',
+                  content: '包装很用心，商品质量也不错，下次还会再来。配送速度很快，隔天就到了。产品性价比很高，在同价位中算是不错的选择。',
+                  specs: '原色钛金属 | 512GB',
+                  images: [],
+                  likes: 28,
+                  reply: null
+                },
+                {
+                  id: 3,
+                  avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
+                  username: '大***天',
+                  badge: null,
+                  rating: 5,
+                  time: '2周前',
+                  content: '性价比很高，推荐购买，客服态度也很好。产品质量符合预期，功能齐全。',
+                  specs: '白色 | 128GB',
+                  images: [
+                    'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=200&h=200&fit=crop'
+                  ],
+                  likes: 15,
+                  reply: null
+                }
+              ].map((review) => (
+                <div
+                  key={review.id}
+                  className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow"
+                >
+                  {/* 用户信息 */}
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={review.avatar}
+                        alt="用户头像"
+                        className="w-10 h-10 rounded-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `https://ui-avatars.com/api/?name=${review.username}&background=f97316&color=fff`;
+                        }}
+                      />
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-gray-900 dark:text-gray-100">{review.username}</span>
+                          {review.badge && (
+                            <span className="px-2 py-0.5 bg-gradient-to-r from-orange-400 to-red-400 text-white text-xs rounded-full">
+                              {review.badge}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 mt-1">
+                          <div className="flex items-center gap-0.5">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                className={`w-3.5 h-3.5 ${
+                                  star <= review.rating
+                                    ? 'text-orange-400 fill-current'
+                                    : 'text-gray-300 dark:text-gray-600'
+                                }`}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-xs text-gray-400">{review.time}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {i === 1 && '质量非常好，物流也很快，非常满意！'}
-                    {i === 2 && '包装很用心，商品质量也不错，下次还会再来。'}
-                    {i === 3 && '性价比很高，推荐购买，客服态度也很好。'}
-                  </p>
+
+                  {/* 评价内容 */}
+                  <div className="mb-4">
+                    <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-2">
+                      {review.content}
+                    </p>
+                    {review.specs && (
+                      <div className="inline-block px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs text-gray-600 dark:text-gray-400">
+                        规格：{review.specs}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* 评价图片 */}
+                  {review.images.length > 0 && (
+                    <div className="grid grid-cols-3 gap-2 mb-4">
+                      {review.images.map((img, idx) => (
+                        <div
+                          key={idx}
+                          className="aspect-square rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700"
+                        >
+                          <img
+                            src={img}
+                            alt={`评价图片 ${idx + 1}`}
+                            className="w-full h-full object-cover hover:scale-105 transition-transform cursor-pointer"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                            }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* 操作按钮 */}
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+                    <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors">
+                        <ThumbsUp className="w-4 h-4" />
+                        <span>{review.likes}</span>
+                      </button>
+                      <button className="text-sm text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors">
+                        回复
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors">
+                        <ThumbsUp className="w-4 h-4" />
+                        <span>{review.likes}</span>
+                      </button>
+                      <button className="text-sm text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors">
+                        回复
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 商家回复 */}
+                  {review.reply && (
+                    <div className="mt-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-sm font-medium text-orange-600 dark:text-orange-400">商家回复：</span>
+                        <span className="text-xs text-gray-400">2天前</span>
+                      </div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{review.reply}</p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
