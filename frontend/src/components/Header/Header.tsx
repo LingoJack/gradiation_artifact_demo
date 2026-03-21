@@ -248,9 +248,12 @@ export const Header: React.FC = () => {
           {/* User Menu */}
           <div className="flex items-center space-x-5">
             {/* Theme Toggle */}
-            <div className="relative">
+            <div 
+              className="relative"
+              onMouseEnter={() => setShowThemeMenu(true)}
+              onMouseLeave={() => setShowThemeMenu(false)}
+            >
               <button
-                onClick={() => setShowThemeMenu(!showThemeMenu)}
                 className={`transition p-1.5 rounded-lg ${
                   isSearchFocused 
                     ? 'text-gray-600 hover:text-orange-500 hover:bg-gray-100' 
@@ -265,7 +268,7 @@ export const Header: React.FC = () => {
                 )}
               </button>
               {showThemeMenu && (
-                <div className="absolute right-0 top-full mt-2 glass-dropdown rounded-xl py-1 min-w-[140px] z-50">
+                <div className="absolute right-0 top-full mt-2 glass-dropdown rounded-xl py-1 min-w-[140px] z-50 animate-in fade-in slide-in-from-top-1 duration-200">
                   <button
                     onClick={() => {
                       setTheme('light');
