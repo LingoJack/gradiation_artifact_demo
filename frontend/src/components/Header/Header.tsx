@@ -268,43 +268,45 @@ export const Header: React.FC = () => {
                 )}
               </button>
               {showThemeMenu && (
-                <div className="absolute right-0 top-full mt-2 glass-dropdown rounded-xl py-1 min-w-[140px] z-50 animate-in fade-in slide-in-from-top-1 duration-200">
-                  <button
-                    onClick={() => {
-                      setTheme('light');
-                      setShowThemeMenu(false);
-                    }}
-                    className={`w-full px-4 py-2 text-left text-sm flex items-center space-x-2 hover:bg-gray-100 dark:hover:bg-gray-700 ${
-                      theme === 'light' ? 'text-orange-500 font-medium' : 'text-gray-700 dark:text-gray-300'
-                    }`}
-                  >
-                    <Sun className="w-4 h-4" />
-                    <span>亮色模式</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setTheme('dark');
-                      setShowThemeMenu(false);
-                    }}
-                    className={`w-full px-4 py-2 text-left text-sm flex items-center space-x-2 hover:bg-gray-100 dark:hover:bg-gray-700 ${
-                      theme === 'dark' ? 'text-orange-500 font-medium' : 'text-gray-700 dark:text-gray-300'
-                    }`}
-                  >
-                    <Moon className="w-4 h-4" />
-                    <span>暗色模式</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setTheme('system');
-                      setShowThemeMenu(false);
-                    }}
-                    className={`w-full px-4 py-2 text-left text-sm flex items-center space-x-2 hover:bg-gray-100 dark:hover:bg-gray-700 ${
-                      theme === 'system' ? 'text-orange-500 font-medium' : 'text-gray-700 dark:text-gray-300'
-                    }`}
-                  >
-                    <Monitor className="w-4 h-4" />
-                    <span>跟随系统</span>
-                  </button>
+                <div className="absolute right-0 top-full pt-2 z-50 animate-in fade-in slide-in-from-top-1 duration-200">
+                  <div className="glass-dropdown rounded-xl py-1 min-w-[140px]">
+                    <button
+                      onClick={() => {
+                        setTheme('light');
+                        setShowThemeMenu(false);
+                      }}
+                      className={`w-full px-4 py-2 text-left text-sm flex items-center space-x-2 hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                        theme === 'light' ? 'text-orange-500 font-medium' : 'text-gray-700 dark:text-gray-300'
+                      }`}
+                    >
+                      <Sun className="w-4 h-4" />
+                      <span>亮色模式</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setTheme('dark');
+                        setShowThemeMenu(false);
+                      }}
+                      className={`w-full px-4 py-2 text-left text-sm flex items-center space-x-2 hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                        theme === 'dark' ? 'text-orange-500 font-medium' : 'text-gray-700 dark:text-gray-300'
+                      }`}
+                    >
+                      <Moon className="w-4 h-4" />
+                      <span>暗色模式</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setTheme('system');
+                        setShowThemeMenu(false);
+                      }}
+                      className={`w-full px-4 py-2 text-left text-sm flex items-center space-x-2 hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                        theme === 'system' ? 'text-orange-500 font-medium' : 'text-gray-700 dark:text-gray-300'
+                      }`}
+                    >
+                      <Monitor className="w-4 h-4" />
+                      <span>跟随系统</span>
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
