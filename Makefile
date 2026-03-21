@@ -1,15 +1,14 @@
 SHELL := /bin/bash
 
-.PHONY: push
+.PHONY: push pull current_dir
 
 push:
-    @git add . \
-    && (git commit -m "优化" || exit 0) \
-    && git push origin main;
+	@git add . \
+	&& (git commit -m "优化" || exit 0) \
+	&& git push origin main;
 
-
-pull: 
-    @git pull origin main;
+pull:
+	@git pull origin main;
 
 current_dir: ## 显示当前目录信息
 	@echo "🔍 当前目录信息:"
