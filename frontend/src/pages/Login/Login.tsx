@@ -25,11 +25,49 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-900 dark:to-gray-800 px-4 relative overflow-hidden">
-      {/* 背景装饰 */}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-red-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 px-4 relative overflow-hidden">
+      {/* 动态背景装饰 - 液态玻璃风格 */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-orange-200/30 dark:bg-orange-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-red-200/30 dark:bg-red-500/10 rounded-full blur-3xl"></div>
+        {/* 主要光晕 - 左上 */}
+        <div 
+          className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full opacity-60"
+          style={{
+            background: 'radial-gradient(circle, rgba(251, 146, 60, 0.3) 0%, rgba(251, 146, 60, 0.1) 40%, transparent 70%)',
+            animation: 'float 8s ease-in-out infinite',
+          }}
+        />
+        {/* 主要光晕 - 右下 */}
+        <div 
+          className="absolute -bottom-32 -right-32 w-[600px] h-[600px] rounded-full opacity-60"
+          style={{
+            background: 'radial-gradient(circle, rgba(239, 68, 68, 0.25) 0%, rgba(239, 68, 68, 0.08) 40%, transparent 70%)',
+            animation: 'float 10s ease-in-out infinite reverse',
+          }}
+        />
+        {/* 辅助光晕 - 中上 */}
+        <div 
+          className="absolute top-20 left-1/2 -translate-x-1/2 w-[400px] h-[400px] rounded-full opacity-40"
+          style={{
+            background: 'radial-gradient(circle, rgba(251, 191, 36, 0.2) 0%, transparent 60%)',
+            animation: 'float 12s ease-in-out infinite',
+            animationDelay: '-2s',
+          }}
+        />
+        {/* 液态玻璃光斑 */}
+        <div 
+          className="absolute top-1/4 right-1/4 w-[300px] h-[300px] rounded-full blur-3xl opacity-30"
+          style={{
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(251, 146, 60, 0.3) 50%, rgba(239, 68, 68, 0.2) 100%)',
+            animation: 'morph 15s ease-in-out infinite',
+          }}
+        />
+        <div 
+          className="absolute bottom-1/4 left-1/4 w-[350px] h-[350px] rounded-full blur-3xl opacity-25"
+          style={{
+            background: 'linear-gradient(225deg, rgba(255, 255, 255, 0.6) 0%, rgba(239, 68, 68, 0.2) 50%, rgba(251, 146, 60, 0.2) 100%)',
+            animation: 'morph 18s ease-in-out infinite reverse',
+          }}
+        />
       </div>
       
       <div className="glass-modal p-8 rounded-2xl w-full max-w-md relative z-10">

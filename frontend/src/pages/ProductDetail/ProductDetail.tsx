@@ -199,8 +199,27 @@ export const ProductDetail: React.FC = () => {
               {/* 描述 */}
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{product.description}</p>
 
-              {/* 价格区域 */}
-              <div className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-lg p-5 mb-5">
+              {/* 价格区域 - 液态玻璃效果 */}
+              <div className="relative overflow-hidden rounded-xl p-5 mb-5"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(254, 215, 170, 0.4) 0%, rgba(254, 202, 202, 0.4) 100%)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
+                }}
+              >
+                {/* 流动边框 */}
+                <div className="absolute inset-0 rounded-xl p-[1px]"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.5) 0%, rgba(239, 68, 68, 0.3) 50%, rgba(251, 146, 60, 0.5) 100%)',
+                    backgroundSize: '200% 200%',
+                    animation: 'borderFlow 4s ease infinite',
+                    WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                    WebkitMaskComposite: 'xor',
+                    maskComposite: 'exclude',
+                    pointerEvents: 'none',
+                  }}
+                />
+                <div className="relative z-10">
                 <div className="flex items-baseline gap-3 mb-2">
                   <span className="text-sm text-gray-600 dark:text-gray-400">促销价</span>
                   <span className="text-sm text-red-600 dark:text-red-400 font-medium">¥</span>
@@ -219,17 +238,18 @@ export const ProductDetail: React.FC = () => {
                   )}
                 </div>
 
-                {/* 促销标签 */}
-                <div className="flex items-center gap-2 mt-3">
-                  <span className="bg-red-600 text-white text-xs px-2 py-1 rounded">
-                    限时特惠
-                  </span>
-                  <span className="bg-orange-600 text-white text-xs px-2 py-1 rounded">
-                    包邮
-                  </span>
-                  <span className="text-xs text-gray-600 dark:text-gray-400">
-                    销量 {product.sales}+ 已售
-                  </span>
+                  {/* 促销标签 */}
+                  <div className="flex items-center gap-2 mt-3">
+                    <span className="bg-red-600 text-white text-xs px-2 py-1 rounded">
+                      限时特惠
+                    </span>
+                    <span className="bg-orange-600 text-white text-xs px-2 py-1 rounded">
+                      包邮
+                    </span>
+                    <span className="text-xs text-gray-600 dark:text-gray-400">
+                      销量 {product.sales}+ 已售
+                    </span>
+                  </div>
                 </div>
               </div>
 

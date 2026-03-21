@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import type { Product } from '../../types/product';
 
@@ -7,9 +7,34 @@ interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  }, []);
+
   return (
     <Link to={`/products/${product.id}`} className="group block">
-      <div className="glass-card rounded-xl overflow-hidden hover:shadow-2xl hover:scale-[1.02] transition-all duration-300">
+      <div 
+        className="glass-card rounded-xl overflow-hidden hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 relative"
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {/* 鼠标跟随光效 */}
+        <div 
+          className="pointer-events-none absolute inset-0 z-10 transition-opacity duration-300"
+          style={{
+            opacity: isHovered ? 1 : 0,
+            background: `radial-gradient(200px circle at ${mousePos.x}px ${mousePos.y}px, rgba(251, 146, 60, 0.08), transparent 50%)`,
+          }}
+        />
+        
         {/* 商品图片 */}
         <div className="aspect-square overflow-hidden relative bg-gray-50 dark:bg-gray-900">
           <img 
