@@ -33,142 +33,176 @@ export const Header: React.FC = () => {
       {/* 颜色汇聚动画层 - 优化分布的色块群 */}
       {isSearchFocused && (
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-          {/* 左侧色块群 - 均匀分布在左侧 */}
-          <div 
+          {/* 左侧色块群 - 流体形态 */}
+          <div
             className="absolute top-[5%] left-0 w-[30%] h-[22%]"
             style={{
               background: 'linear-gradient(90deg, rgba(249, 115, 22, 0.55) 0%, transparent 100%)',
+              borderRadius: '40% 60% 55% 45% / 50% 45% 55% 50%',
+              filter: 'blur(8px)',
               animation: 'shrink-left 0.7s ease-out forwards',
             }}
           />
-          <div 
+          <div
             className="absolute top-[32%] left-[3%] w-[28%] h-[20%]"
             style={{
               background: 'linear-gradient(90deg, rgba(239, 68, 68, 0.5) 0%, transparent 100%)',
+              borderRadius: '55% 45% 60% 40% / 45% 55% 45% 55%',
+              filter: 'blur(10px)',
               animation: 'shrink-left 0.8s ease-out forwards',
               animationDelay: '0.05s',
             }}
           />
-          <div 
+          <div
             className="absolute top-[58%] left-0 w-[32%] h-[18%]"
             style={{
               background: 'linear-gradient(90deg, rgba(251, 146, 60, 0.45) 0%, transparent 100%)',
+              borderRadius: '45% 55% 50% 50% / 60% 40% 60% 40%',
+              filter: 'blur(12px)',
               animation: 'shrink-left 0.9s ease-out forwards',
               animationDelay: '0.1s',
             }}
           />
-          <div 
+          <div
             className="absolute top-[80%] left-[5%] w-[26%] h-[16%]"
             style={{
               background: 'linear-gradient(90deg, rgba(249, 115, 22, 0.4) 0%, transparent 100%)',
+              borderRadius: '60% 40% 45% 55% / 50% 50% 50% 50%',
+              filter: 'blur(9px)',
               animation: 'shrink-left 0.75s ease-out forwards',
               animationDelay: '0.08s',
             }}
           />
-          <div 
+          <div
             className="absolute top-[15%] left-[18%] w-[18%] h-[28%]"
             style={{
               background: 'linear-gradient(90deg, rgba(239, 68, 68, 0.35) 0%, transparent 100%)',
+              borderRadius: '50% 50% 40% 60% / 55% 45% 55% 45%',
+              filter: 'blur(11px)',
               animation: 'shrink-left 0.85s ease-out forwards',
               animationDelay: '0.12s',
             }}
           />
-          <div 
+          <div
             className="absolute top-[55%] left-[15%] w-[20%] h-[30%]"
             style={{
               background: 'linear-gradient(90deg, rgba(251, 146, 60, 0.3) 0%, transparent 100%)',
+              borderRadius: '35% 65% 55% 45% / 45% 55% 45% 55%',
+              filter: 'blur(13px)',
               animation: 'shrink-left 0.95s ease-out forwards',
               animationDelay: '0.15s',
             }}
           />
           
-          {/* 右侧色块群 - 均匀分布在右侧 */}
-          <div 
+          {/* 右侧色块群 - 流体形态 */}
+          <div
             className="absolute top-[8%] right-0 w-[28%] h-[25%]"
             style={{
               background: 'linear-gradient(270deg, rgba(239, 68, 68, 0.55) 0%, transparent 100%)',
+              borderRadius: '55% 45% 50% 50% / 50% 50% 50% 50%',
+              filter: 'blur(10px)',
               animation: 'shrink-right 0.75s ease-out forwards',
               animationDelay: '0.03s',
             }}
           />
-          <div 
+          <div
             className="absolute top-[38%] right-[4%] w-[30%] h-[22%]"
             style={{
               background: 'linear-gradient(270deg, rgba(249, 115, 22, 0.5) 0%, transparent 100%)',
+              borderRadius: '45% 55% 60% 40% / 55% 45% 55% 45%',
+              filter: 'blur(12px)',
               animation: 'shrink-right 0.85s ease-out forwards',
               animationDelay: '0.08s',
             }}
           />
-          <div 
+          <div
             className="absolute top-[65%] right-0 w-[26%] h-[20%]"
             style={{
               background: 'linear-gradient(270deg, rgba(251, 146, 60, 0.45) 0%, transparent 100%)',
+              borderRadius: '50% 50% 45% 55% / 45% 55% 45% 55%',
+              filter: 'blur(9px)',
               animation: 'shrink-right 0.7s ease-out forwards',
               animationDelay: '0.12s',
             }}
           />
-          <div 
+          <div
             className="absolute top-[88%] right-[6%] w-[24%] h-[14%]"
             style={{
               background: 'linear-gradient(270deg, rgba(239, 68, 68, 0.38) 0%, transparent 100%)',
+              borderRadius: '60% 40% 55% 45% / 50% 50% 50% 50%',
+              filter: 'blur(8px)',
               animation: 'shrink-right 0.8s ease-out forwards',
               animationDelay: '0.06s',
             }}
           />
-          <div 
+          <div
             className="absolute top-[12%] right-[14%] w-[16%] h-[35%]"
             style={{
               background: 'linear-gradient(270deg, rgba(249, 115, 22, 0.32) 0%, transparent 100%)',
+              borderRadius: '40% 60% 50% 50% / 60% 40% 60% 40%',
+              filter: 'blur(11px)',
               animation: 'shrink-right 0.9s ease-out forwards',
               animationDelay: '0.1s',
             }}
           />
-          <div 
+          <div
             className="absolute top-[48%] right-[12%] w-[18%] h-[32%]"
             style={{
               background: 'linear-gradient(270deg, rgba(251, 146, 60, 0.28) 0%, transparent 100%)',
+              borderRadius: '55% 45% 45% 55% / 45% 55% 45% 55%',
+              filter: 'blur(14px)',
               animation: 'shrink-right 0.95s ease-out forwards',
               animationDelay: '0.14s',
             }}
           />
           
-          {/* 中间色块群 - 错落分布 */}
-          <div 
+          {/* 中间色块群 - 流体形态 */}
+          <div
             className="absolute top-[20%] left-[38%] w-[24%] h-[20%]"
             style={{
-              background: 'radial-gradient(circle, rgba(249, 115, 22, 0.38) 0%, transparent 70%)',
+              background: 'radial-gradient(ellipse at 40% 50%, rgba(249, 115, 22, 0.38) 0%, transparent 70%)',
+              borderRadius: '50% 50% 45% 55% / 55% 45% 55% 45%',
+              filter: 'blur(10px)',
               animation: 'shrink-center 0.8s ease-out forwards',
               animationDelay: '0.1s',
             }}
           />
-          <div 
+          <div
             className="absolute top-[50%] left-[35%] w-[30%] h-[25%]"
             style={{
-              background: 'radial-gradient(circle, rgba(239, 68, 68, 0.32) 0%, transparent 70%)',
+              background: 'radial-gradient(ellipse at 60% 40%, rgba(239, 68, 68, 0.32) 0%, transparent 70%)',
+              borderRadius: '45% 55% 50% 50% / 50% 50% 50% 50%',
+              filter: 'blur(12px)',
               animation: 'shrink-center 0.85s ease-out forwards',
               animationDelay: '0.15s',
             }}
           />
-          <div 
+          <div
             className="absolute top-[78%] left-[42%] w-[16%] h-[18%]"
             style={{
-              background: 'radial-gradient(circle, rgba(251, 146, 60, 0.28) 0%, transparent 70%)',
+              background: 'radial-gradient(ellipse at 50% 60%, rgba(251, 146, 60, 0.28) 0%, transparent 70%)',
+              borderRadius: '55% 45% 55% 45% / 45% 55% 45% 55%',
+              filter: 'blur(8px)',
               animation: 'shrink-center 0.75s ease-out forwards',
               animationDelay: '0.18s',
             }}
           />
-          <div 
+          <div
             className="absolute top-[35%] left-[45%] w-[10%] h-[25%]"
             style={{
-              background: 'radial-gradient(circle, rgba(249, 115, 22, 0.25) 0%, transparent 70%)',
+              background: 'radial-gradient(ellipse at 50% 50%, rgba(249, 115, 22, 0.25) 0%, transparent 70%)',
+              borderRadius: '50% 50% 40% 60% / 60% 40% 60% 40%',
+              filter: 'blur(9px)',
               animation: 'shrink-center 0.9s ease-out forwards',
               animationDelay: '0.12s',
             }}
           />
-          <div 
+          <div
             className="absolute top-[8%] left-[48%] w-[4%] h-[30%]"
             style={{
-              background: 'radial-gradient(circle, rgba(239, 68, 68, 0.22) 0%, transparent 70%)',
+              background: 'radial-gradient(ellipse at 50% 50%, rgba(239, 68, 68, 0.22) 0%, transparent 70%)',
+              borderRadius: '45% 55% 45% 55% / 55% 45% 55% 45%',
+              filter: 'blur(11px)',
               animation: 'shrink-center 0.7s ease-out forwards',
               animationDelay: '0.2s',
             }}
