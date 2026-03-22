@@ -1,16 +1,32 @@
 // Toast 提示工具
 type ToastType = 'success' | 'error' | 'info' | 'warning';
 
-// 防抖控制
+// Toast 队列项
+interface ToastItem {
+  message: string;
+  type: ToastType;
+}
+
+// 队列控制
 let currentToast: HTMLDivElement | null = null;
 let toastTimer: ReturnType<typeof setTimeout> | null = null;
-let isShowing = false; // 防抖标记
+let isShowing = false; // 是否正在显示
+let toastQueue: ToastItem[] = []; // Toast 队列
 
-export const showToast = (message: string, type: ToastType = 'success') => {
-  // 如果正在显示 Toast，忽略新的调用（防抖）
-  if (isShowing) {
-    return;
+// 处理队列中的下一个 Toast
+const processQueue = () => {
+  // 如果队列不为空且当前没有正在显示的 Toast
+  if (toastQueue.length > 0 && !isShowing) {
+    const nextToast = toastQueue.shift();
+    if (nextToast) {
+      displayToast(nextToast.message, nextToast.type);
+    }
   }
+};
+
+// 实际显示 Toast 的函数
+const displayToast = (message: string, type: ToastType) => {
+  isShowing = true;
   
   // 如果已有 Toast，先移除
   if (currentToast) {
@@ -25,9 +41,6 @@ export const showToast = (message: string, type: ToastType = 'success') => {
     clearTimeout(toastTimer);
     toastTimer = null;
   }
-  
-  // 标记为正在显示
-  isShowing = true;
   
   const toast = document.createElement('div');
   
@@ -82,10 +95,20 @@ export const showToast = (message: string, type: ToastType = 'success') => {
       if (currentToast === toast) {
         currentToast = null;
       }
-      // 重置防抖标记
+      // 重置显示标记
       isShowing = false;
+      // 处理队列中的下一个 Toast
+      processQueue();
     }, 300);
   }, 3000);
+};
+
+// 导出的 showToast 函数 - 将 Toast 加入队列
+export const showToast = (message: string, type: ToastType = 'success') => {
+  // 将新的 Toast 加入队列
+  toastQueue.push({ message, type });
+  // 尝试处理队列
+  processQueue();
 };
 
 // 复制到剪贴板
