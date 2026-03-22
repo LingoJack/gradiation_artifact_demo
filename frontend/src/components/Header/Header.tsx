@@ -26,18 +26,30 @@ export const Header: React.FC = () => {
     <header 
       className={`backdrop-blur-2xl shadow-lg sticky top-0 z-50 border-b transition-all duration-700 relative ${
         isSearchFocused 
-          ? 'bg-white/95 border-gray-200' 
+          ? 'bg-white/95 dark:bg-gray-900/95 border-gray-200 dark:border-gray-700' 
           : 'bg-gradient-to-r from-orange-500/75 to-red-500/75 border-white/20'
       }`}
     >
+      {/* 颜色汇聚动画层 */}
+      {isSearchFocused && (
+        <div 
+          className="absolute inset-0 pointer-events-none z-0"
+          style={{
+            background: 'linear-gradient(90deg, transparent 0%, rgba(249, 115, 22, 0.5) 45%, rgba(239, 68, 68, 0.6) 50%, rgba(249, 115, 22, 0.5) 55%, transparent 100%)',
+            animation: 'converge 1.2s ease-out forwards',
+            backgroundSize: '200% 100%',
+          }}
+        />
+      )}
+      
       <div className="container">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center group">
+          <Link to="/" className="flex items-center group relative z-10">
             <div className={`rounded-lg px-4 py-1.5 shadow-sm transition-all duration-700 ${
               isSearchFocused 
                 ? 'bg-gradient-to-r from-orange-500 to-red-500' 
-                : 'bg-white'
+                : 'bg-white dark:bg-gray-800'
             }`}>
               <span className={`text-2xl font-bold transition-all duration-700 ${
                 isSearchFocused 
@@ -52,6 +64,70 @@ export const Header: React.FC = () => {
           {/* Search Bar */}
           <form onSubmit={handleSearch} className="flex-1 max-w-2xl mx-8">
             <div className="relative flex items-center">
+              {/* 颜色汇聚轨道 - 柔和的渐变光流 */}
+              {isSearchFocused && (
+                <div className="absolute inset-0 pointer-events-none overflow-visible">
+                  {/* 左侧汇聚光流 - 柔和渐变 */}
+                  <div
+                    className="absolute"
+                    style={{
+                      left: '-150px',
+                      right: '50%',
+                      top: '50%',
+                      height: '3px',
+                      transform: 'translateY(-50%)',
+                      background: 'linear-gradient(to right, transparent, rgba(249, 115, 22, 0.6) 20%, rgba(239, 68, 68, 0.8) 50%, rgba(251, 146, 60, 0.9) 80%, transparent)',
+                      filter: 'blur(1px)',
+                      animation: 'stream-left 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards',
+                    }}
+                  />
+                  
+                  {/* 右侧汇聚光流 - 柔和渐变 */}
+                  <div
+                    className="absolute"
+                    style={{
+                      left: '50%',
+                      right: '-150px',
+                      top: '50%',
+                      height: '3px',
+                      transform: 'translateY(-50%)',
+                      background: 'linear-gradient(to left, transparent, rgba(249, 115, 22, 0.6) 20%, rgba(239, 68, 68, 0.8) 50%, rgba(251, 146, 60, 0.9) 80%, transparent)',
+                      filter: 'blur(1px)',
+                      animation: 'stream-right 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards',
+                    }}
+                  />
+                  
+                  {/* 辅助光流 - 上层更细的光线 */}
+                  <div
+                    className="absolute"
+                    style={{
+                      left: '-120px',
+                      right: '50%',
+                      top: '50%',
+                      height: '1px',
+                      transform: 'translateY(-50%)',
+                      background: 'linear-gradient(to right, transparent, rgba(255, 255, 255, 0.8) 30%, rgba(255, 255, 255, 0.9) 70%, transparent)',
+                      animation: 'stream-left 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards',
+                      animationDelay: '0.1s',
+                    }}
+                  />
+                  
+                  <div
+                    className="absolute"
+                    style={{
+                      left: '50%',
+                      right: '-120px',
+                      top: '50%',
+                      height: '1px',
+                      transform: 'translateY(-50%)',
+                      background: 'linear-gradient(to left, transparent, rgba(255, 255, 255, 0.8) 30%, rgba(255, 255, 255, 0.9) 70%, transparent)',
+                      animation: 'stream-right 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards',
+                      animationDelay: '0.1s',
+                    }}
+                  />
+                </div>
+              )}
+              
               {/* 灵动的光效 - 多个独立光斑 */}
               {isSearchFocused && (
                 <>
@@ -123,7 +199,7 @@ export const Header: React.FC = () => {
               
               {/* 白色背景层 */}
               <div 
-                className="absolute inset-0 bg-white/98 backdrop-blur-xl rounded-full"
+                className="absolute inset-0 bg-white/98 dark:bg-gray-800/98 backdrop-blur-xl rounded-full"
                 style={{ zIndex: -1 }}
               />
               
@@ -140,7 +216,7 @@ export const Header: React.FC = () => {
                 onFocus={() => setIsSearchFocused(true)}
                 onBlur={() => setIsSearchFocused(false)}
                 placeholder="搜索商品、店铺..."
-                className="relative w-full h-10 pl-12 pr-24 bg-white border-0 rounded-full focus:outline-none text-gray-700 transition-all duration-300"
+                className="relative w-full h-10 pl-12 pr-24 bg-white dark:bg-gray-800 border-0 rounded-full focus:outline-none text-gray-700 dark:text-gray-200 transition-all duration-300"
                 style={{
                   boxShadow: isSearchFocused 
                     ? '0 4px 24px rgba(249, 115, 22, 0.12), 0 8px 48px rgba(249, 115, 22, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.8)' 
@@ -163,6 +239,68 @@ export const Header: React.FC = () => {
             @keyframes gradient-flow {
               0% { background-position: 0% 50%; }
               100% { background-position: 200% 50%; }
+            }
+            
+            @keyframes converge {
+              0% {
+                opacity: 1;
+                transform: scaleX(1);
+              }
+              50% {
+                opacity: 0.8;
+              }
+              100% {
+                opacity: 0;
+                transform: scaleX(0.6);
+              }
+            }
+            
+            @keyframes stream-left {
+              0% {
+                opacity: 0;
+                transform: translateY(-50%) scaleX(0) translateX(-20px);
+                transformOrigin: 'left center';
+              }
+              15% {
+                opacity: 0;
+                transform: translateY(-50%) scaleX(0) translateX(-20px);
+              }
+              30% {
+                opacity: 1;
+                transform: translateY(-50%) scaleX(0.3) translateX(-10px);
+              }
+              60% {
+                opacity: 0.9;
+                transform: translateY(-50%) scaleX(0.8) translateX(0px);
+              }
+              100% {
+                opacity: 0;
+                transform: translateY(-50%) scaleX(1) translateX(0px);
+              }
+            }
+            
+            @keyframes stream-right {
+              0% {
+                opacity: 0;
+                transform: translateY(-50%) scaleX(0) translateX(20px);
+                transformOrigin: 'right center';
+              }
+              15% {
+                opacity: 0;
+                transform: translateY(-50%) scaleX(0) translateX(20px);
+              }
+              30% {
+                opacity: 1;
+                transform: translateY(-50%) scaleX(0.3) translateX(10px);
+              }
+              60% {
+                opacity: 0.9;
+                transform: translateY(-50%) scaleX(0.8) translateX(0px);
+              }
+              100% {
+                opacity: 0;
+                transform: translateY(-50%) scaleX(1) translateX(0px);
+              }
             }
             
             @keyframes float-1 {
@@ -249,14 +387,14 @@ export const Header: React.FC = () => {
           <div className="flex items-center space-x-5">
             {/* Theme Toggle */}
             <div 
-              className="relative"
+              className="relative z-10"
               onMouseEnter={() => setShowThemeMenu(true)}
               onMouseLeave={() => setShowThemeMenu(false)}
             >
               <button
                 className={`transition p-1.5 rounded-lg ${
                   isSearchFocused 
-                    ? 'text-gray-600 hover:text-orange-500 hover:bg-gray-100' 
+                    ? 'text-gray-600 dark:text-gray-300 hover:text-orange-500 hover:bg-gray-100 dark:hover:bg-gray-700' 
                     : 'text-white hover:text-orange-100 hover:bg-white/10'
                 }`}
                 title="切换主题"
@@ -313,24 +451,24 @@ export const Header: React.FC = () => {
             
             {isAuthenticated ? (
               <>
-                <Link to="/user" className={`flex items-center space-x-2 transition ${
+                <Link to="/user" className={`relative z-10 flex items-center space-x-2 transition ${
                   isSearchFocused 
-                    ? 'text-gray-700 hover:text-orange-500' 
+                    ? 'text-gray-700 dark:text-gray-200 hover:text-orange-500' 
                     : 'text-white hover:text-orange-100'
                 }`}>
                   <User className="w-5 h-5" />
                   <span className="text-sm font-medium">Hi, {user?.username}</span>
                 </Link>
-                <Link to="/orders" className={`transition text-sm font-medium ${
+                <Link to="/orders" className={`relative z-10 transition text-sm font-medium ${
                   isSearchFocused 
-                    ? 'text-gray-700 hover:text-orange-500' 
+                    ? 'text-gray-700 dark:text-gray-200 hover:text-orange-500' 
                     : 'text-white hover:text-orange-100'
                 }`}>
                   我的订单
                 </Link>
-                <Link to="/cart" className={`relative transition ${
+                <Link to="/cart" className={`relative z-10 transition ${
                   isSearchFocused 
-                    ? 'text-gray-700 hover:text-orange-500' 
+                    ? 'text-gray-700 dark:text-gray-200 hover:text-orange-500' 
                     : 'text-white hover:text-orange-100'
                 }`}>
                   <ShoppingBag className="w-5 h-5" />
@@ -340,9 +478,9 @@ export const Header: React.FC = () => {
                     </span>
                   )}
                 </Link>
-                <Link to="/user" className={`transition ${
+                <Link to="/user" className={`relative z-10 transition ${
                   isSearchFocused 
-                    ? 'text-gray-700 hover:text-orange-500' 
+                    ? 'text-gray-700 dark:text-gray-200 hover:text-orange-500' 
                     : 'text-white hover:text-orange-100'
                 }`}>
                   <Heart className="w-5 h-5" />
@@ -350,14 +488,14 @@ export const Header: React.FC = () => {
               </>
             ) : (
               <>
-                <Link to="/login" className={`transition text-sm font-medium ${
+                <Link to="/login" className={`relative z-10 transition text-sm font-medium ${
                   isSearchFocused 
-                    ? 'text-gray-700 hover:text-orange-500' 
+                    ? 'text-gray-700 dark:text-gray-200 hover:text-orange-500' 
                     : 'text-white hover:text-orange-100'
                 }`}>
                   登录
                 </Link>
-                <Link to="/register" className={`px-4 py-1.5 rounded-full text-sm font-medium transition ${
+                <Link to="/register" className={`relative z-10 px-4 py-1.5 rounded-full text-sm font-medium transition ${
                   isSearchFocused 
                     ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600' 
                     : 'bg-white text-orange-500 hover:bg-orange-50'
