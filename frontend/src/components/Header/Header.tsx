@@ -30,16 +30,71 @@ export const Header: React.FC = () => {
           : 'bg-gradient-to-r from-orange-500/75 to-red-500/75 border-white/20'
       }`}
     >
-      {/* 颜色汇聚动画层 */}
+      {/* 颜色汇聚动画层 - 多个不规则色块 */}
       {isSearchFocused && (
-        <div 
-          className="absolute inset-0 pointer-events-none z-0"
-          style={{
-            background: 'linear-gradient(90deg, transparent 0%, rgba(249, 115, 22, 0.5) 45%, rgba(239, 68, 68, 0.6) 50%, rgba(249, 115, 22, 0.5) 55%, transparent 100%)',
-            animation: 'converge 1.2s ease-out forwards',
-            backgroundSize: '200% 100%',
-          }}
-        />
+        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+          {/* 左侧色块群 */}
+          <div 
+            className="absolute top-0 left-0 w-1/3 h-full"
+            style={{
+              background: 'linear-gradient(90deg, rgba(249, 115, 22, 0.6) 0%, transparent 100%)',
+              animation: 'shrink-left 1s ease-out forwards',
+            }}
+          />
+          <div 
+            className="absolute top-1/4 left-0 w-1/4 h-1/2"
+            style={{
+              background: 'linear-gradient(90deg, rgba(239, 68, 68, 0.5) 0%, transparent 100%)',
+              animation: 'shrink-left 1.2s ease-out forwards',
+              animationDelay: '0.1s',
+            }}
+          />
+          <div 
+            className="absolute bottom-0 left-1/6 w-1/5 h-1/3"
+            style={{
+              background: 'linear-gradient(90deg, rgba(251, 146, 60, 0.4) 0%, transparent 100%)',
+              animation: 'shrink-left 1.4s ease-out forwards',
+              animationDelay: '0.15s',
+            }}
+          />
+          
+          {/* 右侧色块群 */}
+          <div 
+            className="absolute top-0 right-0 w-1/3 h-full"
+            style={{
+              background: 'linear-gradient(270deg, rgba(239, 68, 68, 0.6) 0%, transparent 100%)',
+              animation: 'shrink-right 1.1s ease-out forwards',
+              animationDelay: '0.05s',
+            }}
+          />
+          <div 
+            className="absolute top-1/3 right-0 w-1/4 h-1/2"
+            style={{
+              background: 'linear-gradient(270deg, rgba(249, 115, 22, 0.5) 0%, transparent 100%)',
+              animation: 'shrink-right 1.3s ease-out forwards',
+              animationDelay: '0.12s',
+            }}
+          />
+          <div 
+            className="absolute top-0 right-1/5 w-1/6 h-2/3"
+            style={{
+              background: 'linear-gradient(270deg, rgba(251, 146, 60, 0.35) 0%, transparent 100%)',
+              animation: 'shrink-right 1.5s ease-out forwards',
+              animationDelay: '0.18s',
+            }}
+          />
+          
+          {/* 中间色块 */}
+          <div 
+            className="absolute top-1/2 left-1/2 w-1/4 h-1/3"
+            style={{
+              background: 'radial-gradient(circle, rgba(249, 115, 22, 0.4) 0%, transparent 70%)',
+              animation: 'shrink-center 1s ease-out forwards',
+              animationDelay: '0.2s',
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+        </div>
       )}
       
       <div className="container">
@@ -241,17 +296,45 @@ export const Header: React.FC = () => {
               100% { background-position: 200% 50%; }
             }
             
-            @keyframes converge {
+            @keyframes shrink-left {
               0% {
                 opacity: 1;
-                transform: scaleX(1);
+                transform: translateX(0) scaleX(1);
               }
-              50% {
+              40% {
                 opacity: 0.8;
               }
               100% {
                 opacity: 0;
-                transform: scaleX(0.6);
+                transform: translateX(80%) scaleX(0.2);
+              }
+            }
+            
+            @keyframes shrink-right {
+              0% {
+                opacity: 1;
+                transform: translateX(0) scaleX(1);
+              }
+              40% {
+                opacity: 0.8;
+              }
+              100% {
+                opacity: 0;
+                transform: translateX(-80%) scaleX(0.2);
+              }
+            }
+            
+            @keyframes shrink-center {
+              0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+              }
+              50% {
+                opacity: 0.6;
+              }
+              100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3);
               }
             }
             
