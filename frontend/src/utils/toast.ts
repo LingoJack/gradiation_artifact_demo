@@ -4,8 +4,14 @@ type ToastType = 'success' | 'error' | 'info' | 'warning';
 // 防抖控制
 let currentToast: HTMLDivElement | null = null;
 let toastTimer: ReturnType<typeof setTimeout> | null = null;
+let isShowing = false; // 防抖标记
 
 export const showToast = (message: string, type: ToastType = 'success') => {
+  // 如果正在显示 Toast，忽略新的调用（防抖）
+  if (isShowing) {
+    return;
+  }
+  
   // 如果已有 Toast，先移除
   if (currentToast) {
     currentToast.style.opacity = '0';
@@ -19,6 +25,9 @@ export const showToast = (message: string, type: ToastType = 'success') => {
     clearTimeout(toastTimer);
     toastTimer = null;
   }
+  
+  // 标记为正在显示
+  isShowing = true;
   
   const toast = document.createElement('div');
   
@@ -73,6 +82,8 @@ export const showToast = (message: string, type: ToastType = 'success') => {
       if (currentToast === toast) {
         currentToast = null;
       }
+      // 重置防抖标记
+      isShowing = false;
     }, 300);
   }, 3000);
 };
