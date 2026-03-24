@@ -8,31 +8,24 @@ struct ProductDetailView: View {
     @State private var selectedSpec: ProductSpec?
     @State private var showSpecSheet: Bool = false
     @State private var showCartToast: Bool = false
+    @State private var showBuyNowSheet: Bool = false
+    @State private var showAllReviews: Bool = false
+    @State private var likedReviews: Set<String> = []
     
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var cartStore = CartStore.shared
+    @StateObject private var coordinator = NavigationCoordinator.shared
     
     private let dataService = MockDataService.shared
     
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                // Image Gallery
                 imageGallery
-                
-                // Product Info
                 productInfoSection
-                
-                // Specs
                 specsSection
-                
-                // Reviews
                 reviewsSection
-                
-                // Shop Info
                 shopInfoSection
-                
-                // Details
                 detailsSection
             }
             .padding(.bottom, 60)
@@ -44,13 +37,20 @@ struct ProductDetailView: View {
             bottomBar
         }
         .sheet(isPresented: $showSpecSheet) {
-            specSelectionSheet
+            specSelectionSheet(mode: .addToCart)
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
+        }
+        .sheet(isPresented: $showBuyNowSheet) {
+            specSelectionSheet(mode: .buyNow)
                 .presentationDetents([.medium])
                 .presentationDragIndicator(.visible)
         }
         .alert("已加入购物车", isPresented: $showCartToast) {
             Button("继续购物", role: .cancel) { }
-            Button("去购物车") { /* Navigate to cart */ }
+            Button("去购物车") {
+                coordinator.switchToCart()
+            }
         }
     }
     
@@ -85,7 +85,6 @@ struct ProductDetailView: View {
     // MARK: - Product Info Section
     private var productInfoSection: some View {
         VStack(alignment: .leading, spacing: .tbSpacing12) {
-            // Price
             HStack(alignment: .bottom, spacing: .tbSpacing8) {
                 Text("¥")
                     .font(.tbTitle3)
@@ -106,13 +105,11 @@ struct ProductDetailView: View {
                 }
             }
             
-            // Title
             Text(product.name)
                 .font(.tbBody)
                 .foregroundColor(.tbTextPrimary)
                 .lineLimit(3)
             
-            // Subtitle
             HStack(spacing: .tbSpacing16) {
                 Text("销量 \(product.sales)")
                     .font(.tbCaption)
@@ -167,7 +164,7 @@ struct ProductDetailView: View {
                 
                 Spacer()
                 
-                Button(action: {}) {
+                Button(action: { showAllReviews = true }) {
                     HStack(spacing: 4) {
                         Text("查看全部")
                             .font(.tbCaption)
@@ -223,7 +220,7 @@ struct ProductDetailView: View {
             
             Spacer()
             
-            Button(action: {}) {
+            NavigationLink(value: ShopDestination(shopId: product.shopId ?? "")) {
                 Text("进店")
                     .font(.tbCaption)
                     .foregroundColor(.tbOrange)
@@ -273,8 +270,18 @@ struct ProductDetailView: View {
     // MARK: - Bottom Bar
     private var bottomBar: some View {
         HStack(spacing: .tbSpacing12) {
-            // Cart Button
-            Button(action: {}) {
+            Button(action: { coordinator.switchToHome() }) {
+                VStack(spacing: 2) {
+                    Image(systemName: "house")
+                        .font(.title3)
+                    Text("首页")
+                        .font(.system(size: 10))
+                }
+                .foregroundColor(.tbTextSecondary)
+            }
+            .frame(width: 44)
+            
+            Button(action: { coordinator.switchToCart() }) {
                 VStack(spacing: 2) {
                     ZStack(alignment: .topTrailing) {
                         Image(systemName: "cart")
@@ -297,10 +304,7 @@ struct ProductDetailView: View {
             }
             .frame(width: 50)
             
-            // Add to Cart Button
-            Button(action: {
-                showSpecSheet = true
-            }) {
+            Button(action: { showSpecSheet = true }) {
                 Text("加入购物车")
                     .font(.tbBodyBold)
                     .foregroundColor(.tbOrange)
@@ -310,10 +314,7 @@ struct ProductDetailView: View {
                     .cornerRadius(.tbRadius8)
             }
             
-            // Buy Now Button
-            Button(action: {
-                // Handle buy now
-            }) {
+            Button(action: { showBuyNowSheet = true }) {
                 Text("立即购买")
                     .font(.tbBodyBold)
                     .foregroundColor(.white)
@@ -330,9 +331,13 @@ struct ProductDetailView: View {
     }
     
     // MARK: - Spec Selection Sheet
-    private var specSelectionSheet: some View {
+    enum SheetMode {
+        case addToCart
+        case buyNow
+    }
+    
+    private func specSelectionSheet(mode: SheetMode) -> some View {
         VStack(alignment: .leading, spacing: .tbSpacing16) {
-            // Product Summary
             HStack(spacing: .tbSpacing12) {
                 AsyncImage(url: URL(string: product.mainImage)) { phase in
                     switch phase {
@@ -364,7 +369,6 @@ struct ProductDetailView: View {
                 Spacer()
             }
             
-            // Specs
             if !product.specs.isEmpty {
                 VStack(alignment: .leading, spacing: .tbSpacing8) {
                     Text(product.specs[0].name)
@@ -373,9 +377,7 @@ struct ProductDetailView: View {
                     
                     FlowLayout(spacing: .tbSpacing8) {
                         ForEach(product.specs) { spec in
-                            Button(action: {
-                                selectedSpec = spec
-                            }) {
+                            Button(action: { selectedSpec = spec }) {
                                 Text(spec.value)
                                     .font(.tbBody)
                                     .foregroundColor(selectedSpec?.id == spec.id ? .white : .tbTextPrimary)
@@ -393,7 +395,6 @@ struct ProductDetailView: View {
                 }
             }
             
-            // Quantity
             HStack {
                 Text("数量")
                     .font(.tbBodyBold)
@@ -406,14 +407,32 @@ struct ProductDetailView: View {
             
             Spacer()
             
-            // Action Buttons
             HStack(spacing: .tbSpacing12) {
                 Button(action: {
                     cartStore.addItem(product, spec: selectedSpec, quantity: quantity)
-                    showSpecSheet = false
-                    showCartToast = true
+                    
+                    if mode == .addToCart {
+                        showSpecSheet = false
+                        showCartToast = true
+                    } else {
+                        showBuyNowSheet = false
+                        let item = CartItem(
+                            id: UUID().uuidString,
+                            userId: "user1",
+                            productId: product.id,
+                            productName: product.name,
+                            productImage: product.mainImage,
+                            price: product.price,
+                            originalPrice: product.originalPrice,
+                            specId: selectedSpec?.id,
+                            specName: selectedSpec?.name,
+                            specValue: selectedSpec?.value,
+                            quantity: quantity
+                        )
+                        coordinator.pushToCheckout(items: [item])
+                    }
                 }) {
-                    Text("加入购物车")
+                    Text(mode == .addToCart ? "加入购物车" : "加入购物车")
                         .font(.tbBodyBold)
                         .foregroundColor(.tbOrange)
                         .frame(maxWidth: .infinity)
@@ -423,8 +442,26 @@ struct ProductDetailView: View {
                 }
                 
                 Button(action: {
-                    // Handle buy now
-                    showSpecSheet = false
+                    if mode == .buyNow {
+                        showBuyNowSheet = false
+                        let item = CartItem(
+                            id: UUID().uuidString,
+                            userId: "user1",
+                            productId: product.id,
+                            productName: product.name,
+                            productImage: product.mainImage,
+                            price: product.price,
+                            originalPrice: product.originalPrice,
+                            specId: selectedSpec?.id,
+                            specName: selectedSpec?.name,
+                            specValue: selectedSpec?.value,
+                            quantity: quantity
+                        )
+                        coordinator.pushToCheckout(items: [item])
+                    } else {
+                        showSpecSheet = false
+                        showBuyNowSheet = true
+                    }
                 }) {
                     Text("立即购买")
                         .font(.tbBodyBold)
@@ -440,139 +477,11 @@ struct ProductDetailView: View {
     }
 }
 
-// MARK: - Review Item View
-struct ReviewItemView: View {
-    let review: Review
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: .tbSpacing8) {
-            HStack(spacing: .tbSpacing8) {
-                AsyncImage(url: URL(string: review.avatar ?? "")) { phase in
-                    switch phase {
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    default:
-                        Image(systemName: "person.circle.fill")
-                            .resizable()
-                            .foregroundColor(.tbTextTertiary)
-                    }
-                }
-                .frame(width: 32, height: 32)
-                .clipShape(Circle())
-                
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack(spacing: .tbSpacing4) {
-                        Text(review.userName)
-                            .font(.tbCaption)
-                            .foregroundColor(.tbTextPrimary)
-                        
-                        if let badge = review.badge {
-                            Text(badge)
-                                .font(.system(size: 8))
-                                .foregroundColor(.tbOrange)
-                                .padding(.horizontal, 4)
-                                .padding(.vertical, 2)
-                                .background(Color.tbTagBackground)
-                                .cornerRadius(2)
-                        }
-                    }
-                    
-                    HStack(spacing: 2) {
-                        ForEach(0..<5, id: \.self) { index in
-                            Image(systemName: index < review.rating ? "star.fill" : "star")
-                                .font(.system(size: 10))
-                                .foregroundColor(index < review.rating ? .yellow : .tbTextTertiary)
-                        }
-                    }
-                }
-                
-                Spacer()
-                
-                Text(review.time ?? "")
-                    .font(.tbCaption2)
-                    .foregroundColor(.tbTextTertiary)
-            }
-            
-            Text(review.content)
-                .font(.tbCaption)
-                .foregroundColor(.tbTextSecondary)
-                .lineLimit(3)
-            
-            HStack(spacing: .tbSpacing16) {
-                if let specs = review.specs {
-                    Text(specs)
-                        .font(.tbCaption2)
-                        .foregroundColor(.tbTextTertiary)
-                }
-                
-                Spacer()
-                
-                Button(action: {}) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "hand.thumbsup")
-                            .font(.tbCaption2)
-                        Text("\(review.likes)")
-                            .font(.tbCaption2)
-                    }
-                    .foregroundColor(.tbTextTertiary)
-                }
-            }
-        }
-        .padding(.tbSpacing12)
-        .background(Color.tbBackground)
-        .cornerRadius(.tbRadius8)
-    }
+// MARK: - Shop Destination
+struct ShopDestination: Hashable {
+    let shopId: String
 }
 
-// MARK: - Flow Layout
-struct FlowLayout: Layout {
-    var spacing: CGFloat = 8
-    
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-        let result = FlowResult(in: proposal.width ?? 0, subviews: subviews, spacing: spacing)
-        return result.size
-    }
-    
-    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-        let result = FlowResult(in: bounds.width, subviews: subviews, spacing: spacing)
-        for (index, subview) in subviews.enumerated() {
-            subview.place(at: CGPoint(x: bounds.minX + result.positions[index].x,
-                                      y: bounds.minY + result.positions[index].y),
-                         proposal: .unspecified)
-        }
-    }
-    
-    struct FlowResult {
-        var size: CGSize = .zero
-        var positions: [CGPoint] = []
-        
-        init(in maxWidth: CGFloat, subviews: Subviews, spacing: CGFloat) {
-            var x: CGFloat = 0
-            var y: CGFloat = 0
-            var rowHeight: CGFloat = 0
-            
-            for subview in subviews {
-                let size = subview.sizeThatFits(.unspecified)
-                
-                if x + size.width > maxWidth, x > 0 {
-                    x = 0
-                    y += rowHeight + spacing
-                    rowHeight = 0
-                }
-                
-                positions.append(CGPoint(x: x, y: y))
-                rowHeight = max(rowHeight, size.height)
-                x += size.width + spacing
-            }
-            
-            self.size = CGSize(width: maxWidth, height: y + rowHeight)
-        }
-    }
-}
-
-// MARK: - Preview
 #Preview {
     NavigationStack {
         ProductDetailView(product: MockDataService.shared.products[0])

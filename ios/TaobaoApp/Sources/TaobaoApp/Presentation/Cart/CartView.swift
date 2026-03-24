@@ -2,64 +2,64 @@ import SwiftUI
 
 struct CartView: View {
     @ObservedObject private var cartStore = CartStore.shared
+    @StateObject private var coordinator = NavigationCoordinator.shared
     @State private var showDeleteConfirmation: Bool = false
     
     var body: some View {
-        NavigationStack {
-            Group {
-                if cartStore.items.isEmpty {
-                    EmptyStateView(
-                        icon: "cart",
-                        title: "购物车是空的",
-                        subtitle: "快去挑选心仪的商品吧",
-                        actionTitle: "去逛逛",
-                        action: { /* Navigate to home */ }
-                    )
-                } else {
-                    VStack(spacing: 0) {
-                        // Cart Items
-                        ScrollView {
-                            LazyVStack(spacing: .tbSpacing12) {
-                                ForEach(Array(cartStore.items.enumerated()), id: \.element.id) { index, item in
-                                    CartItemRow(
-                                        item: item,
-                                        isEditing: cartStore.isEditing,
-                                        onToggleSelection: { cartStore.toggleSelection(at: index) },
-                                        onQuantityChange: { quantity in
-                                            cartStore.updateQuantity(at: index, quantity: quantity)
-                                        },
-                                        onDelete: { cartStore.removeItem(at: index) }
-                                    )
-                                }
+        Group {
+            if cartStore.items.isEmpty {
+                EmptyStateView(
+                    icon: "cart",
+                    title: "购物车是空的",
+                    subtitle: "快去挑选心仪的商品吧",
+                    actionTitle: "去逛逛",
+                    action: { coordinator.switchToHome() }
+                )
+            } else {
+                VStack(spacing: 0) {
+                    // Cart Items
+                    ScrollView {
+                        LazyVStack(spacing: .tbSpacing12) {
+                            ForEach(Array(cartStore.items.enumerated()), id: \.element.id) { index, item in
+                                CartItemRow(
+                                    item: item,
+                                    isEditing: cartStore.isEditing,
+                                    onToggleSelection: { cartStore.toggleSelection(at: index) },
+                                    onQuantityChange: { quantity in
+                                        cartStore.updateQuantity(at: index, quantity: quantity)
+                                    },
+                                    onDelete: { cartStore.removeItem(at: index) },
+                                    onProductTap: { coordinator.pushToProduct(productId: item.productId) }
+                                )
                             }
-                            .padding(.tbSpacing12)
                         }
-                        .background(Color.tbBackground)
-                        
-                        // Bottom Bar
-                        cartBottomBar
+                        .padding(.tbSpacing12)
                     }
+                    .background(Color.tbBackground)
+                    
+                    // Bottom Bar
+                    cartBottomBar
                 }
             }
-            .navigationTitle("购物车")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { cartStore.isEditing.toggle() }) {
-                        Text(cartStore.isEditing ? "完成" : "编辑")
-                            .font(.tbBody)
-                            .foregroundColor(.tbTextPrimary)
-                    }
+        }
+        .navigationTitle("购物车")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: { cartStore.isEditing.toggle() }) {
+                    Text(cartStore.isEditing ? "完成" : "编辑")
+                        .font(.tbBody)
+                        .foregroundColor(.tbTextPrimary)
                 }
             }
-            .alert("确认删除", isPresented: $showDeleteConfirmation) {
-                Button("取消", role: .cancel) { }
-                Button("删除", role: .destructive) {
-                    cartStore.removeSelectedItems()
-                }
-            } message: {
-                Text("确定要删除选中的商品吗？")
+        }
+        .alert("确认删除", isPresented: $showDeleteConfirmation) {
+            Button("取消", role: .cancel) { }
+            Button("删除", role: .destructive) {
+                cartStore.removeSelectedItems()
             }
+        } message: {
+            Text("确定要删除选中的商品吗？")
         }
     }
     
@@ -115,7 +115,9 @@ struct CartView: View {
                 }
                 
                 Button(action: {
-                    // Checkout action
+                    if !cartStore.selectedItems.isEmpty {
+                        coordinator.pushToCheckout(items: cartStore.selectedItems)
+                    }
                 }) {
                     Text("结算")
                         .font(.tbBodyBold)
@@ -142,6 +144,7 @@ struct CartItemRow: View {
     let onToggleSelection: () -> Void
     let onQuantityChange: (Int) -> Void
     let onDelete: () -> Void
+    let onProductTap: () -> Void
     
     @State private var quantity: Int
     
@@ -150,13 +153,15 @@ struct CartItemRow: View {
         isEditing: Bool,
         onToggleSelection: @escaping () -> Void,
         onQuantityChange: @escaping (Int) -> Void,
-        onDelete: @escaping () -> Void
+        onDelete: @escaping () -> Void,
+        onProductTap: @escaping () -> Void = {}
     ) {
         self.item = item
         self.isEditing = isEditing
         self.onToggleSelection = onToggleSelection
         self.onQuantityChange = onQuantityChange
         self.onDelete = onDelete
+        self.onProductTap = onProductTap
         self._quantity = State(initialValue: item.quantity)
     }
     
@@ -188,6 +193,9 @@ struct CartItemRow: View {
             }
             .frame(width: 90, height: 90)
             .cornerRadius(.tbRadius8)
+            .onTapGesture {
+                onProductTap()
+            }
             
             // Product Info
             VStack(alignment: .leading, spacing: .tbSpacing8) {
@@ -249,5 +257,7 @@ struct CartItemRow: View {
 
 // MARK: - Preview
 #Preview {
-    CartView()
+    NavigationStack {
+        CartView()
+    }
 }

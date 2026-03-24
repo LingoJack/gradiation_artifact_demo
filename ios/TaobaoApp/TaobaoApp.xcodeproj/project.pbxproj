@@ -1,0 +1,698 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		138FBD228E5E74E0393DD953 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A780D174E106FBFFFAD67 /* LoginView.swift */; };
+		15E2CF11A2F1F15CE2FCFF02 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0682B741BAB7045F84B6981B /* MessageView.swift */; };
+		1644DD057427B99E5B523323 /* CartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2794605B0D933EF269C3F9 /* CartView.swift */; };
+		26D235DD07C18B31607F8798 /* ShopStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE67832DF9856583E4F469B /* ShopStore.swift */; };
+		37475E1034C2CEBBC1E96915 /* CouponsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5333D7FEB351179597E9E663 /* CouponsView.swift */; };
+		3D457B50B7AAADFA2D1E38A3 /* TaobaoAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2990D7CBC91AC8410B9F50F1 /* TaobaoAppApp.swift */; };
+		3DFCECAC858A69F1C5B8E048 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D95A5A7315EDA86556CD96A /* MainTabView.swift */; };
+		4215AE8F4497E3F1694A26EA /* ShopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5A0DA1CB447F692CC4A7A /* ShopView.swift */; };
+		463D253C75F5735EF00ABB96 /* ProfileViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4ADAEF663356D6C6C000B2 /* ProfileViews.swift */; };
+		465B4652871C70CBAD008A23 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C655E3E47B0BECF3BAA31 /* HomeView.swift */; };
+		49E3995F5F67F17A77879C34 /* ReviewItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F9CE11BFB6D3C78DB4C7B0 /* ReviewItemView.swift */; };
+		553C5E20E9386FC6D9D3C663 /* ProductListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE99EF4BE6645638B9AD1431 /* ProductListView.swift */; };
+		55DE7C0F5BB1C30B2E67500D /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA878B10CA75754F75A8935A /* Components.swift */; };
+		5D31F732208738BB0A6D812A /* AddressStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6D7B95E96732972B2965F4 /* AddressStore.swift */; };
+		5EA6EA956FE31A5408C29034 /* CheckoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199DF5E316E3816721AD76C9 /* CheckoutView.swift */; };
+		6125032A1B8EA29F29279C8A /* OrderListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE39CFF7B48DC10A3961FEA /* OrderListView.swift */; };
+		64D11F921A46121BC4D7AD4B /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAE1999BDCE35A08903A2BD /* Services.swift */; };
+		65E27BA0797ECACC5F4B9695 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3C24F624ED5CD5646FB25E /* Order.swift */; };
+		77F0035C50EAF22D9D6C1422 /* ProductDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA83562BC87107D046B2B309 /* ProductDetailView.swift */; };
+		792DBAA2D251C3BF59C4BCA3 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98561B8447BCF6DBE01FB4FB /* CategoryView.swift */; };
+		7C2398797D701C1D7427DDBC /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E268664D20971E3358AE963 /* Colors.swift */; };
+		7F0F57F05D207D882B968524 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D86D334A748CF1776B92DA /* Product.swift */; };
+		87AB640368CB9B74498BAAA5 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260FBE3DC5DA4902C14BA32C /* FavoritesView.swift */; };
+		88583CFB3A9E8DBA888E5FAD /* AddressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED591DD386777329842C9E5 /* AddressView.swift */; };
+		8ACE9E0B4D79312783C02068 /* FavoriteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A9B8EC76E37BA43DA5F6B9 /* FavoriteStore.swift */; };
+		9F1D73B8E3F87CBE300A3F21 /* UserStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE0BB199C41A5FF3D58C32D /* UserStore.swift */; };
+		A52DA1ABAD6866FB0EB40E12 /* UserOrderModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9545810532268B46AD2B0825 /* UserOrderModels.swift */; };
+		A75413E1E793A23009FF8CCC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5428F8EBC5C12E8925A4679A /* User.swift */; };
+		B06253AE2FA1C6BB07F2F0C3 /* Spacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291B5D9C5C6E348E203B3311 /* Spacing.swift */; };
+		B50FBC46285DD072CAE25432 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA445BC3193DACBA6447B50 /* Typography.swift */; };
+		B51A925D876A370229B4C5FA /* CouponStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5DC93A7C3B95AF9F202146 /* CouponStore.swift */; };
+		E650FBE2C245CEAF22E9DCC0 /* OrderStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1058EEECA1EB4E84167306 /* OrderStore.swift */; };
+		E7F7AECD87BBDFD3EE04C647 /* NavigationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CAA808ABEB9E3EDA6710161 /* NavigationCoordinator.swift */; };
+		F904AE31B3F44EB81725B144 /* CartStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCAF4D8B89CB82CC0FEC75D /* CartStore.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		346E46603C8F9533060AD921 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A13EF40D9807A6BA255A619 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49365FBFC91F1B5382D606AD;
+			remoteInfo = TaobaoApp;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0682B741BAB7045F84B6981B /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
+		083A780D174E106FBFFFAD67 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		0A147BB25CACC07F3ABF8774 /* TaobaoApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TaobaoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		126C655E3E47B0BECF3BAA31 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		199DF5E316E3816721AD76C9 /* CheckoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutView.swift; sourceTree = "<group>"; };
+		260FBE3DC5DA4902C14BA32C /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
+		291B5D9C5C6E348E203B3311 /* Spacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacing.swift; sourceTree = "<group>"; };
+		292EB3B2A285D41E4168E53A /* TaobaoAppTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TaobaoAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2990D7CBC91AC8410B9F50F1 /* TaobaoAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaobaoAppApp.swift; sourceTree = "<group>"; };
+		2D3C24F624ED5CD5646FB25E /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
+		2DE67832DF9856583E4F469B /* ShopStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopStore.swift; sourceTree = "<group>"; };
+		36A9B8EC76E37BA43DA5F6B9 /* FavoriteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteStore.swift; sourceTree = "<group>"; };
+		3AAE1999BDCE35A08903A2BD /* Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
+		3CAA808ABEB9E3EDA6710161 /* NavigationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCoordinator.swift; sourceTree = "<group>"; };
+		4D95A5A7315EDA86556CD96A /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		4FE0BB199C41A5FF3D58C32D /* UserStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStore.swift; sourceTree = "<group>"; };
+		5333D7FEB351179597E9E663 /* CouponsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CouponsView.swift; sourceTree = "<group>"; };
+		5428F8EBC5C12E8925A4679A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		5BA445BC3193DACBA6447B50 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
+		5E268664D20971E3358AE963 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		5F1058EEECA1EB4E84167306 /* OrderStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderStore.swift; sourceTree = "<group>"; };
+		65F9CE11BFB6D3C78DB4C7B0 /* ReviewItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewItemView.swift; sourceTree = "<group>"; };
+		6DCAF4D8B89CB82CC0FEC75D /* CartStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartStore.swift; sourceTree = "<group>"; };
+		7A4ADAEF663356D6C6C000B2 /* ProfileViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViews.swift; sourceTree = "<group>"; };
+		9545810532268B46AD2B0825 /* UserOrderModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOrderModels.swift; sourceTree = "<group>"; };
+		98561B8447BCF6DBE01FB4FB /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
+		9ED591DD386777329842C9E5 /* AddressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressView.swift; sourceTree = "<group>"; };
+		AE99EF4BE6645638B9AD1431 /* ProductListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListView.swift; sourceTree = "<group>"; };
+		BA878B10CA75754F75A8935A /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		C7E5A0DA1CB447F692CC4A7A /* ShopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopView.swift; sourceTree = "<group>"; };
+		DEE39CFF7B48DC10A3961FEA /* OrderListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderListView.swift; sourceTree = "<group>"; };
+		DF5DC93A7C3B95AF9F202146 /* CouponStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CouponStore.swift; sourceTree = "<group>"; };
+		DF6D7B95E96732972B2965F4 /* AddressStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressStore.swift; sourceTree = "<group>"; };
+		ED2794605B0D933EF269C3F9 /* CartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartView.swift; sourceTree = "<group>"; };
+		F0D86D334A748CF1776B92DA /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
+		FA83562BC87107D046B2B309 /* ProductDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0264B959754C67F8615FBE92 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				98561B8447BCF6DBE01FB4FB /* CategoryView.swift */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
+		05F67C5CBB380DFF34E28160 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				4D95A5A7315EDA86556CD96A /* MainTabView.swift */,
+				3CAA808ABEB9E3EDA6710161 /* NavigationCoordinator.swift */,
+				2990D7CBC91AC8410B9F50F1 /* TaobaoAppApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		0B4DCDEA4C140C431F7CC715 /* Order */ = {
+			isa = PBXGroup;
+			children = (
+				199DF5E316E3816721AD76C9 /* CheckoutView.swift */,
+				DEE39CFF7B48DC10A3961FEA /* OrderListView.swift */,
+			);
+			path = Order;
+			sourceTree = "<group>";
+		};
+		0C3F688321D65AC0454AFB3A /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				126C655E3E47B0BECF3BAA31 /* HomeView.swift */,
+				CAE5E9D3C2B3B702D22FF2B2 /* Components */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		155B91875EEA5BC3083F4BE5 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				5E268664D20971E3358AE963 /* Colors.swift */,
+				291B5D9C5C6E348E203B3311 /* Spacing.swift */,
+				5BA445BC3193DACBA6447B50 /* Typography.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		1C7798AADDD86CEE92356FB5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2D3C24F624ED5CD5646FB25E /* Order.swift */,
+				F0D86D334A748CF1776B92DA /* Product.swift */,
+				5428F8EBC5C12E8925A4679A /* User.swift */,
+				9545810532268B46AD2B0825 /* UserOrderModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		3BA47AE708F2B36AB954B322 /* TaobaoApp */ = {
+			isa = PBXGroup;
+			children = (
+				05F67C5CBB380DFF34E28160 /* App */,
+				B13F57AE71BE4423763D65AB /* Components */,
+				D6FAE83FB27BFD303BB5F069 /* Core */,
+				4BFAFB813338A0705E15554C /* Data */,
+				B026A4109F2E26AED406D4A8 /* Domain */,
+				5A4917563239A25F160ECF7D /* Presentation */,
+				BC42870D51F9935F04E5395F /* Resources */,
+			);
+			name = TaobaoApp;
+			path = Sources/TaobaoApp;
+			sourceTree = "<group>";
+		};
+		44FCADA60A123800D81EB918 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		4BFAFB813338A0705E15554C /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				1C7798AADDD86CEE92356FB5 /* Models */,
+				532DE0F0EC30C505939720A1 /* Services */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		532DE0F0EC30C505939720A1 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				3AAE1999BDCE35A08903A2BD /* Services.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		54840764A99E311342CBA5D3 /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				0682B741BAB7045F84B6981B /* MessageView.swift */,
+			);
+			path = Message;
+			sourceTree = "<group>";
+		};
+		55291307823D5E740190F0ED /* Stores */ = {
+			isa = PBXGroup;
+			children = (
+				DF6D7B95E96732972B2965F4 /* AddressStore.swift */,
+				6DCAF4D8B89CB82CC0FEC75D /* CartStore.swift */,
+				DF5DC93A7C3B95AF9F202146 /* CouponStore.swift */,
+				36A9B8EC76E37BA43DA5F6B9 /* FavoriteStore.swift */,
+				5F1058EEECA1EB4E84167306 /* OrderStore.swift */,
+				2DE67832DF9856583E4F469B /* ShopStore.swift */,
+				4FE0BB199C41A5FF3D58C32D /* UserStore.swift */,
+			);
+			path = Stores;
+			sourceTree = "<group>";
+		};
+		5A4917563239A25F160ECF7D /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				F9768999DEC2DB7BEE68814C /* Auth */,
+				9209977A7ED112FE0667E920 /* Cart */,
+				0264B959754C67F8615FBE92 /* Category */,
+				0C3F688321D65AC0454AFB3A /* Home */,
+				54840764A99E311342CBA5D3 /* Message */,
+				0B4DCDEA4C140C431F7CC715 /* Order */,
+				7DEEA65FF3F760DA29A07D89 /* Product */,
+				6E967093B359D48F22D30F5D /* Profile */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		6E967093B359D48F22D30F5D /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				9ED591DD386777329842C9E5 /* AddressView.swift */,
+				5333D7FEB351179597E9E663 /* CouponsView.swift */,
+				260FBE3DC5DA4902C14BA32C /* FavoritesView.swift */,
+				7A4ADAEF663356D6C6C000B2 /* ProfileViews.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		7DEEA65FF3F760DA29A07D89 /* Product */ = {
+			isa = PBXGroup;
+			children = (
+				FA83562BC87107D046B2B309 /* ProductDetailView.swift */,
+				AE99EF4BE6645638B9AD1431 /* ProductListView.swift */,
+				C7E5A0DA1CB447F692CC4A7A /* ShopView.swift */,
+				BC73A6B5D7A2E472C4D6C7BD /* Components */,
+			);
+			path = Product;
+			sourceTree = "<group>";
+		};
+		9209977A7ED112FE0667E920 /* Cart */ = {
+			isa = PBXGroup;
+			children = (
+				ED2794605B0D933EF269C3F9 /* CartView.swift */,
+			);
+			path = Cart;
+			sourceTree = "<group>";
+		};
+		99CBCCA97B76E66552B5F618 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0A147BB25CACC07F3ABF8774 /* TaobaoApp.app */,
+				292EB3B2A285D41E4168E53A /* TaobaoAppTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B026A4109F2E26AED406D4A8 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				55291307823D5E740190F0ED /* Stores */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		B13F57AE71BE4423763D65AB /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				BA878B10CA75754F75A8935A /* Components.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		B9C05356007FA3092B478425 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		BC42870D51F9935F04E5395F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		BC73A6B5D7A2E472C4D6C7BD /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				65F9CE11BFB6D3C78DB4C7B0 /* ReviewItemView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		CAE5E9D3C2B3B702D22FF2B2 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		D6FAE83FB27BFD303BB5F069 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				44FCADA60A123800D81EB918 /* Extensions */,
+				155B91875EEA5BC3083F4BE5 /* Theme */,
+				B9C05356007FA3092B478425 /* Utils */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		F49898587EAC4E1F9E08093C = {
+			isa = PBXGroup;
+			children = (
+				3BA47AE708F2B36AB954B322 /* TaobaoApp */,
+				99CBCCA97B76E66552B5F618 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F9768999DEC2DB7BEE68814C /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				083A780D174E106FBFFFAD67 /* LoginView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		49365FBFC91F1B5382D606AD /* TaobaoApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BDD9D66E803DCD8F3C6D8783 /* Build configuration list for PBXNativeTarget "TaobaoApp" */;
+			buildPhases = (
+				CAB35548398F863170840859 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TaobaoApp;
+			packageProductDependencies = (
+			);
+			productName = TaobaoApp;
+			productReference = 0A147BB25CACC07F3ABF8774 /* TaobaoApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6BEA2B139E0C83EC6584C4B2 /* TaobaoAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BDEE011719016913A6FFD66F /* Build configuration list for PBXNativeTarget "TaobaoAppTests" */;
+			buildPhases = (
+				8013AE15D438EEB2D9FBB701 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				985AB797B2AC942352AFE530 /* PBXTargetDependency */,
+			);
+			name = TaobaoAppTests;
+			packageProductDependencies = (
+			);
+			productName = TaobaoAppTests;
+			productReference = 292EB3B2A285D41E4168E53A /* TaobaoAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2A13EF40D9807A6BA255A619 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					49365FBFC91F1B5382D606AD = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = F0740C675C3D81A5889584B4 /* Build configuration list for PBXProject "TaobaoApp" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = F49898587EAC4E1F9E08093C;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 99CBCCA97B76E66552B5F618 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				49365FBFC91F1B5382D606AD /* TaobaoApp */,
+				6BEA2B139E0C83EC6584C4B2 /* TaobaoAppTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8013AE15D438EEB2D9FBB701 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CAB35548398F863170840859 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5D31F732208738BB0A6D812A /* AddressStore.swift in Sources */,
+				88583CFB3A9E8DBA888E5FAD /* AddressView.swift in Sources */,
+				F904AE31B3F44EB81725B144 /* CartStore.swift in Sources */,
+				1644DD057427B99E5B523323 /* CartView.swift in Sources */,
+				792DBAA2D251C3BF59C4BCA3 /* CategoryView.swift in Sources */,
+				5EA6EA956FE31A5408C29034 /* CheckoutView.swift in Sources */,
+				7C2398797D701C1D7427DDBC /* Colors.swift in Sources */,
+				55DE7C0F5BB1C30B2E67500D /* Components.swift in Sources */,
+				B51A925D876A370229B4C5FA /* CouponStore.swift in Sources */,
+				37475E1034C2CEBBC1E96915 /* CouponsView.swift in Sources */,
+				8ACE9E0B4D79312783C02068 /* FavoriteStore.swift in Sources */,
+				87AB640368CB9B74498BAAA5 /* FavoritesView.swift in Sources */,
+				465B4652871C70CBAD008A23 /* HomeView.swift in Sources */,
+				138FBD228E5E74E0393DD953 /* LoginView.swift in Sources */,
+				3DFCECAC858A69F1C5B8E048 /* MainTabView.swift in Sources */,
+				15E2CF11A2F1F15CE2FCFF02 /* MessageView.swift in Sources */,
+				E7F7AECD87BBDFD3EE04C647 /* NavigationCoordinator.swift in Sources */,
+				65E27BA0797ECACC5F4B9695 /* Order.swift in Sources */,
+				6125032A1B8EA29F29279C8A /* OrderListView.swift in Sources */,
+				E650FBE2C245CEAF22E9DCC0 /* OrderStore.swift in Sources */,
+				7F0F57F05D207D882B968524 /* Product.swift in Sources */,
+				77F0035C50EAF22D9D6C1422 /* ProductDetailView.swift in Sources */,
+				553C5E20E9386FC6D9D3C663 /* ProductListView.swift in Sources */,
+				463D253C75F5735EF00ABB96 /* ProfileViews.swift in Sources */,
+				49E3995F5F67F17A77879C34 /* ReviewItemView.swift in Sources */,
+				64D11F921A46121BC4D7AD4B /* Services.swift in Sources */,
+				26D235DD07C18B31607F8798 /* ShopStore.swift in Sources */,
+				4215AE8F4497E3F1694A26EA /* ShopView.swift in Sources */,
+				B06253AE2FA1C6BB07F2F0C3 /* Spacing.swift in Sources */,
+				3D457B50B7AAADFA2D1E38A3 /* TaobaoAppApp.swift in Sources */,
+				B50FBC46285DD072CAE25432 /* Typography.swift in Sources */,
+				A75413E1E793A23009FF8CCC /* User.swift in Sources */,
+				A52DA1ABAD6866FB0EB40E12 /* UserOrderModels.swift in Sources */,
+				9F1D73B8E3F87CBE300A3F21 /* UserStore.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		985AB797B2AC942352AFE530 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49365FBFC91F1B5382D606AD /* TaobaoApp */;
+			targetProxy = 346E46603C8F9533060AD921 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1BDD9ECEC515D37271400524 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.taobao.app.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TaobaoApp.app/TaobaoApp";
+			};
+			name = Debug;
+		};
+		23058AD76F96F0C46AEB3D14 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "淘宝";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		285ED3F88F35E165DB800C09 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.taobao.app.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TaobaoApp.app/TaobaoApp";
+			};
+			name = Release;
+		};
+		829F7CBF639C30B7E55D7FAF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.taobao.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C23B46515D8D35B0B2E47D7C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.taobao.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FA43CCA4064A4D5DB3807741 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "淘宝";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BDD9D66E803DCD8F3C6D8783 /* Build configuration list for PBXNativeTarget "TaobaoApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C23B46515D8D35B0B2E47D7C /* Debug */,
+				829F7CBF639C30B7E55D7FAF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BDEE011719016913A6FFD66F /* Build configuration list for PBXNativeTarget "TaobaoAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1BDD9ECEC515D37271400524 /* Debug */,
+				285ED3F88F35E165DB800C09 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F0740C675C3D81A5889584B4 /* Build configuration list for PBXProject "TaobaoApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FA43CCA4064A4D5DB3807741 /* Debug */,
+				23058AD76F96F0C46AEB3D14 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2A13EF40D9807A6BA255A619 /* Project object */;
+}

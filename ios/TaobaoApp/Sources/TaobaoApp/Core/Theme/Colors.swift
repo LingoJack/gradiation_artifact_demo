@@ -19,6 +19,11 @@ extension Color {
     // 价格颜色
     static let tbPrice = Color(hex: "FF2D2D")
     
+    // 状态颜色
+    static let tbGreen = Color(hex: "00C853")
+    static let tbRed = Color(hex: "FF2D2D")
+    static let tbBlue = Color(hex: "1976D2")
+    
     // 分割线
     static let tbDivider = Color(hex: "EEEEEE")
     
@@ -49,38 +54,4 @@ extension Color {
             opacity: Double(a) / 255
         )
     }
-}
-
-// MARK: - Font Theme
-extension Font {
-    static let tbLargeTitle = Font.system(size: 28, weight: .bold)
-    static let tbTitle = Font.system(size: 20, weight: .semibold)
-    static let tbTitle2 = Font.system(size: 18, weight: .semibold)
-    static let tbTitle3 = Font.system(size: 16, weight: .medium)
-    static let tbBody = Font.system(size: 14, weight: .regular)
-    static let tbBodyBold = Font.system(size: 14, weight: .semibold)
-    static let tbCaption = Font.system(size: 12, weight: .regular)
-    static let tbCaption2 = Font.system(size: 10, weight: .regular)
-    
-    static let tbPriceLarge = Font.system(size: 24, weight: .bold)
-    static let tbPrice = Font.system(size: 16, weight: .bold)
-    static let tbPriceSmall = Font.system(size: 14, weight: .semibold)
-}
-
-// MARK: - Spacing
-extension CGFloat {
-    static let tbSpacing4: CGFloat = 4
-    static let tbSpacing8: CGFloat = 8
-    static let tbSpacing12: CGFloat = 12
-    static let tbSpacing16: CGFloat = 16
-    static let tbSpacing20: CGFloat = 20
-    static let tbSpacing24: CGFloat = 24
-}
-
-// MARK: - Corner Radius
-extension CGFloat {
-    static let tbRadius4: CGFloat = 4
-    static let tbRadius8: CGFloat = 8
-    static let tbRadius12: CGFloat = 12
-    static let tbRadius16: CGFloat = 16
 }

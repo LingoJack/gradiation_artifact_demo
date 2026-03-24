@@ -16,6 +16,7 @@ struct Product: Identifiable, Codable, Hashable {
     let status: ProductStatus
     let createdAt: String
     let shopName: String?
+    let shopId: String?
     
     var discount: String? {
         guard let original = originalPrice, original > price else { return nil }
@@ -43,7 +44,8 @@ enum ProductStatus: String, Codable, Hashable {
     case inactive
 }
 
-struct Category: Identifiable, Codable {
+// MARK: - Category Model
+struct Category: Identifiable, Codable, Hashable {
     let id: String
     let name: String
     let parentId: String?
@@ -51,6 +53,7 @@ struct Category: Identifiable, Codable {
     let sortOrder: Int
 }
 
+// MARK: - Review Model
 struct Review: Identifiable, Codable {
     let id: String
     let userId: String
@@ -69,9 +72,27 @@ struct Review: Identifiable, Codable {
     let time: String?
 }
 
+// MARK: - Banner Model
 struct Banner: Identifiable {
     let id: String
     let image: String
     let link: String
     let title: String
+}
+
+// MARK: - Shop Model
+struct Shop: Identifiable, Codable {
+    let id: String
+    let name: String
+    let avatar: String?
+    let description: String?
+    let rating: Double
+    let productCount: Int
+    let followerCount: Int
+    let salesCount: Int
+    let createdAt: String
+    let categories: [String]
+    let tags: [String]
+    
+    var ratingText: String { String(format: "%.1f", rating) }
 }

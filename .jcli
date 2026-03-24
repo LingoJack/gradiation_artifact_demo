@@ -27,5 +27,16 @@ permissions:
   - Bash(find /Users/jacklingo/dev_custom/playground/taobao/frontend:*)
   - Bash(find /Users/jacklingo/dev_custom/playground/taobao/frontend/src:*)
   - Bash(find /Users/jacklingo/dev_custom/playground/taobao/frontend/src/pages:*)
+  - Bash(xcodebuild -workspace:*)
+  - Bash(cd /Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/Sources/TaobaoApp:*)
+  - Bash(for f:*)
+  - Bash(tree -L:*)
+  - Bash(find /Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/Sources/TaobaoApp:*)
+  - Bash(pwd:*)
+  - Bash(find ios/TaobaoApp/Sources/TaobaoApp:*)
+  - Bash(cd ios/TaobaoApp:*)
+  - Bash(grep -l:*)
+  - Bash(grep -rn:*)
+  - Bash(which xcodegen:*)
   deny: []
 hooks: {}
