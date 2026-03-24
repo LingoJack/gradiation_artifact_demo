@@ -1,0 +1,82 @@
+{
+  "": {
+    "swift-dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/master.swiftdeps"
+  },
+  "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/Sources/TaobaoApp/CartView.swift": {
+    "dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/CartView.d",
+    "object": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/CartView.swift.o",
+    "swiftmodule": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/CartView~partial.swiftmodule",
+    "swift-dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/CartView.swiftdeps",
+    "diagnostics": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/CartView.dia"
+  },
+  "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/Sources/TaobaoApp/Components.swift": {
+    "dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Components.d",
+    "object": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Components.swift.o",
+    "swiftmodule": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Components~partial.swiftmodule",
+    "swift-dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Components.swiftdeps",
+    "diagnostics": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Components.dia"
+  },
+  "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/Sources/TaobaoApp/HomeView.swift": {
+    "dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/HomeView.d",
+    "object": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/HomeView.swift.o",
+    "swiftmodule": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/HomeView~partial.swiftmodule",
+    "swift-dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/HomeView.swiftdeps",
+    "diagnostics": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/HomeView.dia"
+  },
+  "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/Sources/TaobaoApp/Models.swift": {
+    "dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Models.d",
+    "object": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Models.swift.o",
+    "swiftmodule": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Models~partial.swiftmodule",
+    "swift-dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Models.swiftdeps",
+    "diagnostics": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Models.dia"
+  },
+  "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/Sources/TaobaoApp/OrderProfileViews.swift": {
+    "dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/OrderProfileViews.d",
+    "object": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/OrderProfileViews.swift.o",
+    "swiftmodule": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/OrderProfileViews~partial.swiftmodule",
+    "swift-dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/OrderProfileViews.swiftdeps",
+    "diagnostics": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/OrderProfileViews.dia"
+  },
+  "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/Sources/TaobaoApp/ProductDetailView.swift": {
+    "dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/ProductDetailView.d",
+    "object": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/ProductDetailView.swift.o",
+    "swiftmodule": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/ProductDetailView~partial.swiftmodule",
+    "swift-dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/ProductDetailView.swiftdeps",
+    "diagnostics": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/ProductDetailView.dia"
+  },
+  "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/Sources/TaobaoApp/ProductListView.swift": {
+    "dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/ProductListView.d",
+    "object": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/ProductListView.swift.o",
+    "swiftmodule": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/ProductListView~partial.swiftmodule",
+    "swift-dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/ProductListView.swiftdeps",
+    "diagnostics": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/ProductListView.dia"
+  },
+  "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/Sources/TaobaoApp/Services.swift": {
+    "dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Services.d",
+    "object": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Services.swift.o",
+    "swiftmodule": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Services~partial.swiftmodule",
+    "swift-dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Services.swiftdeps",
+    "diagnostics": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Services.dia"
+  },
+  "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/Sources/TaobaoApp/TaobaoAppApp.swift": {
+    "dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/TaobaoAppApp.d",
+    "object": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/TaobaoAppApp.swift.o",
+    "swiftmodule": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/TaobaoAppApp~partial.swiftmodule",
+    "swift-dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/TaobaoAppApp.swiftdeps",
+    "diagnostics": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/TaobaoAppApp.dia"
+  },
+  "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/Sources/TaobaoApp/Theme.swift": {
+    "dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Theme.d",
+    "object": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Theme.swift.o",
+    "swiftmodule": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Theme~partial.swiftmodule",
+    "swift-dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Theme.swiftdeps",
+    "diagnostics": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/Theme.dia"
+  },
+  "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/Sources/TaobaoApp/UserOrderModels.swift": {
+    "dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/UserOrderModels.d",
+    "object": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/UserOrderModels.swift.o",
+    "swiftmodule": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/UserOrderModels~partial.swiftmodule",
+    "swift-dependencies": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/UserOrderModels.swiftdeps",
+    "diagnostics": "/Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp/.build/arm64-apple-macosx/debug/TaobaoApp.build/UserOrderModels.dia"
+  }
+}

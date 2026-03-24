@@ -22,4 +22,8 @@ permissions:
   - Bash(wc -l:*)
   - Bash(cd /Users/jacklingo/dev_custom/playground/example/frontend/src/utils:*)
   - Bash(find /Users/jacklingo/dev_custom/playground/example/frontend/src:*)
+  - Bash(find ios:*)
+  - Bash(cd /Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp:*)
+  - Bash(find /Users/jacklingo/dev_custom/playground/taobao/frontend:*)
   deny: []
+hooks: {}
