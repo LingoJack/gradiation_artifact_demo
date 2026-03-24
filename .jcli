@@ -25,5 +25,7 @@ permissions:
   - Bash(find ios:*)
   - Bash(cd /Users/jacklingo/dev_custom/playground/taobao/ios/TaobaoApp:*)
   - Bash(find /Users/jacklingo/dev_custom/playground/taobao/frontend:*)
+  - Bash(find /Users/jacklingo/dev_custom/playground/taobao/frontend/src:*)
+  - Bash(find /Users/jacklingo/dev_custom/playground/taobao/frontend/src/pages:*)
   deny: []
 hooks: {}
