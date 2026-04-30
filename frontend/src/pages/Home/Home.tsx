@@ -1,46 +1,82 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ProductCard } from '../../components/ProductCard/ProductCard';
-import { mockCategories, mockProducts } from '../../utils/mockData';
-import type { Product } from '../../types/product';
+import { productApi } from '../../api';
+import type { Product, Category } from '../../types/product';
 import { useSpotlight } from '../../hooks/useSpotlight';
 import { useUserStore } from '../../store/useUserStore';
 
-// 轮播图数据
-const carouselItems = [
-  {
-    id: 1,
-    image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1200&h=420&fit=crop',
-    title: '双11大促',
-    subtitle: '全场商品5折起 | 限时特惠',
-    buttonText: '立即抢购',
-    gradient: 'from-orange-600/80 via-red-500/70 to-transparent',
-  },
-  {
-    id: 2,
-    image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&h=420&fit=crop',
-    title: '时尚女装',
-    subtitle: '春季新品上市 | 限时8折',
-    buttonText: '立即选购',
-    gradient: 'from-pink-600/80 via-purple-500/70 to-transparent',
-  },
-  {
-    id: 3,
-    image: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=1200&h=420&fit=crop',
-    title: '数码产品',
-    subtitle: '新品首发 | 最高立减1000元',
-    buttonText: '查看详情',
-    gradient: 'from-blue-600/80 via-indigo-500/70 to-transparent',
-  },
-  {
-    id: 4,
-    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&h=420&fit=crop',
-    title: '家居生活',
-    subtitle: '品质生活 | 全场满减优惠',
-    buttonText: '立即体验',
-    gradient: 'from-teal-600/80 via-cyan-500/70 to-transparent',
-  },
+// 后端返回的原始商品数据格式
+interface RawProduct {
+  id: number;
+  category_id: number;
+  name: string;
+  description: string;
+  main_image: string;
+  images: string;
+  price: number;
+  original_price: number | null;
+  stock: number;
+  sales: number;
+  status: number;
+  sort_order: number | null;
+  created_at: string;
+  updated_at: string;
+  coverImage?: string;
+}
+
+// 后端返回的原始轮播图数据格式
+interface RawBanner {
+  id: number;
+  title: string;
+  image_url: string;
+  link_url: string;
+  sort_order: number;
+  status: number;
+}
+
+// 将后端商品数据映射为前端 Product 类型
+function mapProduct(raw: RawProduct): Product {
+  let images: string[] = [];
+  try {
+    if (raw.images) {
+      const parsed = JSON.parse(raw.images);
+      if (Array.isArray(parsed)) {
+        images = parsed;
+      }
+    }
+  } catch {
+    images = [];
+  }
+
+  return {
+    id: String(raw.id),
+    categoryId: String(raw.category_id),
+    name: raw.name,
+    description: raw.description || '',
+    price: raw.price,
+    stock: raw.stock,
+    sales: raw.sales,
+    mainImage: raw.main_image,
+    image: raw.main_image,
+    images,
+    specs: [],
+    status: raw.status === 1 ? 'active' : 'inactive',
+    createdAt: raw.created_at,
+  };
+}
+
+// 默认轮播图样式配置（与 API 数据合并使用）
+const defaultCarouselGradients = [
+  'from-orange-600/80 via-red-500/70 to-transparent',
+  'from-pink-600/80 via-purple-500/70 to-transparent',
+  'from-blue-600/80 via-indigo-500/70 to-transparent',
+  'from-teal-600/80 via-cyan-500/70 to-transparent',
+  'from-purple-600/80 via-fuchsia-500/70 to-transparent',
+  'from-green-600/80 via-emerald-500/70 to-transparent',
 ];
+
+const defaultCarouselButtons = ['立即抢购', '立即选购', '查看详情', '立即体验', '去看看', '了解更多'];
 
 // 新闻数据
 const newsData = [
@@ -78,11 +114,85 @@ export const Home: React.FC = () => {
   const { user, isAuthenticated } = useUserStore();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedNews, setSelectedNews] = useState<typeof newsData[0] | null>(null);
+  
+  // API 数据状态
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [banners, setBanners] = useState<Array<{
+    id: number;
+    image: string;
+    title: string;
+    subtitle: string;
+    buttonText: string;
+    gradient: string;
+    link: string;
+  }>>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // 液态玻璃鼠标光效 hooks
   const userCardSpotlight = useSpotlight();
   const newsSpotlight = useSpotlight();
   const modalSpotlight = useSpotlight();
+
+  // 获取数据
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // 并行请求所有数据
+      const [categoriesRes, productsRes, bannersRes] = await Promise.all([
+        productApi.getCategories(),
+        productApi.getProducts({ pageSize: 10 }),
+        productApi.getBanners(),
+      ]);
+      
+      // 映射分类数据（后端字段: id, name, parent_id, icon, sort_order, status）
+      const mappedCategories: Category[] = (categoriesRes as Array<{
+        id: number;
+        name: string;
+        parent_id: number;
+        icon: string;
+        sort_order: number;
+        status: number;
+      }>).map((cat) => ({
+        id: String(cat.id),
+        name: cat.name,
+        parentId: String(cat.parent_id),
+        icon: cat.icon,
+        sortOrder: cat.sort_order,
+      }));
+      
+      // 映射商品数据
+      const mappedProducts: Product[] = (productsRes.products as RawProduct[]).map(mapProduct);
+      
+      // 映射轮播图数据
+      const mappedBanners = (bannersRes as RawBanner[]).map((banner, index) => ({
+        id: banner.id,
+        image: banner.image_url,
+        title: banner.title,
+        subtitle: '限时优惠 | 点击查看',
+        buttonText: defaultCarouselButtons[index % defaultCarouselButtons.length],
+        gradient: defaultCarouselGradients[index % defaultCarouselGradients.length],
+        link: banner.link_url,
+      }));
+      
+      setCategories(mappedCategories);
+      setProducts(mappedProducts);
+      setBanners(mappedBanners);
+    } catch (err) {
+      console.error('Failed to fetch home data:', err);
+      setError('加载失败，请稍后重试');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // 初始化数据
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   // 点击分类跳转
   const handleCategoryClick = (categoryId: string) => {
@@ -91,12 +201,13 @@ export const Home: React.FC = () => {
 
   // 自动轮播
   useEffect(() => {
+    if (banners.length === 0) return;
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
+      setCurrentSlide((prev) => (prev + 1) % banners.length);
     }, 4000); // 每4秒切换一次
 
     return () => clearInterval(timer);
-  }, []);
+  }, [banners.length]);
 
   // 手动切换轮播
   const goToSlide = (index: number) => {
@@ -105,16 +216,47 @@ export const Home: React.FC = () => {
 
   // 上一张
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
+    setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length);
   };
 
   // 下一张
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
+    setCurrentSlide((prev) => (prev + 1) % banners.length);
   };
 
   return (
     <div>
+      {/* Loading 状态 */}
+      {loading && (
+        <div className="flex items-center justify-center py-40">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">加载中...</p>
+          </div>
+        </div>
+      )}
+
+      {/* Error 状态 */}
+      {error && !loading && (
+        <div className="flex items-center justify-center py-40">
+          <div className="flex flex-col items-center gap-4">
+            <svg className="w-16 h-16 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <p className="text-red-500 dark:text-red-400 text-sm">{error}</p>
+            <button
+              onClick={fetchData}
+              className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              重新加载
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 主内容 */}
+      {!loading && !error && (
+      <>
       {/* 轮播图区域 - 重新设计 */}
       <div className="bg-white dark:bg-gray-900">
         <div className="container py-5">
@@ -127,7 +269,7 @@ export const Home: React.FC = () => {
                 </h3>
               </div>
               <ul className="py-2">
-                {mockCategories.map((cat, index) => {
+                {categories.map((cat, index) => {
                   const colors = [
                     'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400',
                     'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
@@ -190,7 +332,7 @@ export const Home: React.FC = () => {
             <div className="flex-1 rounded-xl overflow-hidden shadow-lg relative group">
               {/* 轮播图片容器 */}
               <div className="relative w-full h-full">
-                {carouselItems.map((item, index) => (
+                {banners.map((item, index) => (
                   <div
                     key={item.id}
                     className={`absolute inset-0 transition-opacity duration-500 ${
@@ -239,7 +381,7 @@ export const Home: React.FC = () => {
 
               {/* 轮播指示器 */}
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
-                {carouselItems.map((_, index) => (
+                {banners.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => goToSlide(index)}
@@ -445,7 +587,7 @@ export const Home: React.FC = () => {
           </Link>
         </div>
         <div className="grid grid-cols-4 gap-5">
-          {mockProducts.slice(0, 4).map((product) => (
+          {products.slice(0, 4).map((product) => (
             <ProductCard key={product.id} product={product as Product} />
           ))}
         </div>
@@ -467,7 +609,7 @@ export const Home: React.FC = () => {
           </Link>
         </div>
         <div className="grid grid-cols-5 gap-5">
-          {mockProducts.slice(4, 9).map((product) => (
+          {products.slice(4, 9).map((product) => (
             <ProductCard key={product.id} product={product as Product} />
           ))}
         </div>
@@ -540,6 +682,8 @@ export const Home: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+      </>
       )}
     </div>
   );

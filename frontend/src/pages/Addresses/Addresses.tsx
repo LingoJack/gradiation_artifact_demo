@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Plus, Edit2, Trash2, MapPin, Check } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Plus, Edit2, Trash2, MapPin, Check, Loader2 } from 'lucide-react';
+import { userApi } from '../../api';
 import { useSpotlight } from '../../hooks/useSpotlight';
 
 interface Address {
@@ -13,29 +14,19 @@ interface Address {
   isDefault: boolean;
 }
 
-// Mock 数据
-const mockAddresses: Address[] = [
-  {
-    id: '1',
-    receiver: '张三',
-    phone: '13800138000',
-    province: '北京市',
-    city: '北京市',
-    district: '朝阳区',
-    detail: '某某街道某某小区1号楼101室',
-    isDefault: true,
-  },
-  {
-    id: '2',
-    receiver: '李四',
-    phone: '13900139000',
-    province: '上海市',
-    city: '上海市',
-    district: '浦东新区',
-    detail: '某某路某某大厦A座2001室',
-    isDefault: false,
-  },
-];
+// 映射后端数据到前端格式
+function mapAddress(raw: any): Address {
+  return {
+    id: String(raw.id),
+    receiver: raw.receiver_name || raw.receiver || '',
+    phone: raw.receiver_phone || raw.phone || '',
+    province: raw.province || '',
+    city: raw.city || '',
+    district: raw.district || '',
+    detail: raw.detail_address || raw.detail || '',
+    isDefault: raw.is_default === 1 || raw.isDefault === true,
+  };
+}
 
 // 独立的卡片组件，每个实例有自己的 spotlight
 const AddressCard: React.FC<{
@@ -43,7 +34,8 @@ const AddressCard: React.FC<{
   onSetDefault: (id: string) => void;
   onEdit: (address: Address) => void;
   onDelete: (id: string) => void;
-}> = ({ address, onSetDefault, onEdit, onDelete }) => {
+  operating?: boolean;
+}> = ({ address, onSetDefault, onEdit, onDelete, operating }) => {
   const cardSpotlight = useSpotlight();
 
   return (
@@ -72,7 +64,8 @@ const AddressCard: React.FC<{
           {!address.isDefault && (
             <button
               onClick={() => onSetDefault(address.id)}
-              className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary"
+              disabled={operating}
+              className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary disabled:opacity-50"
             >
               <Check className="w-4 h-4" />
               <span className="text-sm">设为默认</span>
@@ -80,14 +73,16 @@ const AddressCard: React.FC<{
           )}
           <button
             onClick={() => onEdit(address)}
-            className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary"
+            disabled={operating}
+            className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary disabled:opacity-50"
           >
             <Edit2 className="w-4 h-4" />
             <span className="text-sm">编辑</span>
           </button>
           <button
             onClick={() => onDelete(address.id)}
-            className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-error"
+            disabled={operating}
+            className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-error disabled:opacity-50"
           >
             <Trash2 className="w-4 h-4" />
             <span className="text-sm">删除</span>
@@ -99,35 +94,131 @@ const AddressCard: React.FC<{
 };
 
 export const Addresses: React.FC = () => {
-  const [addresses, setAddresses] = useState<Address[]>(mockAddresses);
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [operating, setOperating] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
+  const [formData, setFormData] = useState({
+    receiver: '',
+    phone: '',
+    province: '',
+    city: '',
+    district: '',
+    detail: '',
+    isDefault: false,
+  });
   const modalSpotlight = useSpotlight();
 
-  const handleSetDefault = (id: string) => {
-    setAddresses(
-      addresses.map((addr) => ({
-        ...addr,
-        isDefault: addr.id === id,
-      }))
-    );
+  // 获取地址列表
+  useEffect(() => {
+    fetchAddresses();
+  }, []);
+
+  const fetchAddresses = async () => {
+    try {
+      setLoading(true);
+      const data = await userApi.getAddresses() as any[];
+      setAddresses(data.map(mapAddress));
+    } catch (err) {
+      console.error('Failed to fetch addresses:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDelete = (id: string) => {
-    if (window.confirm('确定要删除这个地址吗？')) {
-      setAddresses(addresses.filter((addr) => addr.id !== id));
+  const handleSetDefault = async (id: string) => {
+    try {
+      setOperating(id);
+      await userApi.setDefaultAddress(Number(id));
+      await fetchAddresses();
+    } catch (err) {
+      console.error('Failed to set default:', err);
+      alert('设置默认地址失败');
+    } finally {
+      setOperating(null);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('确定要删除这个地址吗？')) return;
+    try {
+      setOperating(id);
+      await userApi.deleteAddress(Number(id));
+      await fetchAddresses();
+    } catch (err) {
+      console.error('Failed to delete:', err);
+      alert('删除地址失败');
+    } finally {
+      setOperating(null);
     }
   };
 
   const handleEdit = (address: Address) => {
     setEditingAddress(address);
+    setFormData({
+      receiver: address.receiver,
+      phone: address.phone,
+      province: address.province,
+      city: address.city,
+      district: address.district,
+      detail: address.detail,
+      isDefault: address.isDefault,
+    });
     setShowModal(true);
   };
 
   const handleAdd = () => {
     setEditingAddress(null);
+    setFormData({
+      receiver: '',
+      phone: '',
+      province: '',
+      city: '',
+      district: '',
+      detail: '',
+      isDefault: false,
+    });
     setShowModal(true);
   };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setOperating('form');
+      const data = {
+        receiver: formData.receiver,
+        phone: formData.phone,
+        province: formData.province,
+        city: formData.city,
+        district: formData.district,
+        detail: formData.detail,
+        isDefault: formData.isDefault ? 1 : 0,
+      };
+
+      if (editingAddress) {
+        await userApi.updateAddress(Number(editingAddress.id), data);
+      } else {
+        await userApi.createAddress(data);
+      }
+
+      setShowModal(false);
+      await fetchAddresses();
+    } catch (err) {
+      console.error('Failed to save address:', err);
+      alert('保存地址失败');
+    } finally {
+      setOperating(null);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-40">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="container py-8">
@@ -162,6 +253,7 @@ export const Addresses: React.FC = () => {
               onSetDefault={handleSetDefault}
               onEdit={handleEdit}
               onDelete={handleDelete}
+              operating={operating === address.id}
             />
           ))
         )}
@@ -183,7 +275,7 @@ export const Addresses: React.FC = () => {
             <h2 className="text-xl font-bold mb-6 dark:text-white">
               {editingAddress ? '编辑地址' : '新增地址'}
             </h2>
-            <form className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">
@@ -191,9 +283,11 @@ export const Addresses: React.FC = () => {
                   </label>
                   <input
                     type="text"
-                    defaultValue={editingAddress?.receiver}
+                    value={formData.receiver}
+                    onChange={(e) => setFormData({ ...formData, receiver: e.target.value })}
                     className="glass-input w-full px-3 py-2 rounded-lg dark:text-white"
                     placeholder="请输入收货人姓名"
+                    required
                   />
                 </div>
                 <div>
@@ -202,9 +296,11 @@ export const Addresses: React.FC = () => {
                   </label>
                   <input
                     type="text"
-                    defaultValue={editingAddress?.phone}
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     className="glass-input w-full px-3 py-2 rounded-lg dark:text-white"
                     placeholder="请输入手机号"
+                    required
                   />
                 </div>
               </div>
@@ -213,15 +309,30 @@ export const Addresses: React.FC = () => {
                   所在地区
                 </label>
                 <div className="grid grid-cols-3 gap-2">
-                  <select className="glass-input px-3 py-2 rounded-lg dark:text-white">
-                    <option>{editingAddress?.province || '请选择省份'}</option>
-                  </select>
-                  <select className="glass-input px-3 py-2 rounded-lg dark:text-white">
-                    <option>{editingAddress?.city || '请选择城市'}</option>
-                  </select>
-                  <select className="glass-input px-3 py-2 rounded-lg dark:text-white">
-                    <option>{editingAddress?.district || '请选择区县'}</option>
-                  </select>
+                  <input
+                    type="text"
+                    value={formData.province}
+                    onChange={(e) => setFormData({ ...formData, province: e.target.value })}
+                    className="glass-input px-3 py-2 rounded-lg dark:text-white"
+                    placeholder="省份"
+                    required
+                  />
+                  <input
+                    type="text"
+                    value={formData.city}
+                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                    className="glass-input px-3 py-2 rounded-lg dark:text-white"
+                    placeholder="城市"
+                    required
+                  />
+                  <input
+                    type="text"
+                    value={formData.district}
+                    onChange={(e) => setFormData({ ...formData, district: e.target.value })}
+                    className="glass-input px-3 py-2 rounded-lg dark:text-white"
+                    placeholder="区县"
+                    required
+                  />
                 </div>
               </div>
               <div>
@@ -229,14 +340,22 @@ export const Addresses: React.FC = () => {
                   详细地址
                 </label>
                 <textarea
-                  defaultValue={editingAddress?.detail}
+                  value={formData.detail}
+                  onChange={(e) => setFormData({ ...formData, detail: e.target.value })}
                   className="glass-input w-full px-3 py-2 rounded-lg dark:text-white"
                   rows={3}
                   placeholder="请输入详细地址"
+                  required
                 />
               </div>
               <div className="flex items-center space-x-2">
-                <input type="checkbox" id="setDefault" className="w-4 h-4" />
+                <input 
+                  type="checkbox" 
+                  id="setDefault" 
+                  className="w-4 h-4"
+                  checked={formData.isDefault}
+                  onChange={(e) => setFormData({ ...formData, isDefault: e.target.checked })}
+                />
                 <label htmlFor="setDefault" className="text-sm dark:text-gray-300">
                   设为默认地址
                 </label>
@@ -251,8 +370,10 @@ export const Addresses: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover"
+                  disabled={operating === 'form'}
+                  className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover disabled:opacity-50 flex items-center gap-2"
                 >
+                  {operating === 'form' && <Loader2 className="w-4 h-4 animate-spin" />}
                   保存
                 </button>
               </div>

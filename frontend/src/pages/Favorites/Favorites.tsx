@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Trash2, ShoppingCart } from 'lucide-react';
+import { Heart, Trash2, ShoppingCart, Loader2 } from 'lucide-react';
 import { useSpotlight } from '../../hooks/useSpotlight';
 import { useCartStore } from '../../store/useCartStore';
+import { favoriteApi } from '../../api/favorite';
+import { cartApi } from '../../api/cart';
+import { showToast } from '../../utils/toast';
 
 interface FavoriteItem {
   id: string;
@@ -10,73 +13,124 @@ interface FavoriteItem {
   name: string;
   image: string;
   price: number;
-  originalPrice?: number;
-  stock: number;
+  sales: number;
 }
 
-// Mock 数据
-const mockFavorites: FavoriteItem[] = [
-  {
-    id: '1',
-    productId: '1',
-    name: '时尚休闲连帽卫衣 男士秋季新款纯棉舒适',
-    image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=200&h=200&fit=crop',
-    price: 129,
-    originalPrice: 199,
-    stock: 100,
-  },
-  {
-    id: '2',
-    productId: '2',
-    name: 'Apple iPhone 15 Pro Max 256GB 原色钛金属',
-    image: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=200&h=200&fit=crop',
-    price: 9999,
-    stock: 50,
-  },
-  {
-    id: '3',
-    productId: '3',
-    name: '北欧简约落地灯 客厅卧室书房装饰台灯',
-    image: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=200&h=200&fit=crop',
-    price: 299,
-    originalPrice: 399,
-    stock: 30,
-  },
-];
+interface BackendFavoriteProduct {
+  id: number;
+  name: string;
+  price: number;
+  main_image: string;
+  sales: number;
+}
+
+interface BackendFavorite {
+  id: number;
+  user_id: number;
+  product_id: number;
+  created_at: string;
+  product: BackendFavoriteProduct;
+}
+
+// 映射后端数据到前端格式
+const mapFavoriteFromBackend = (item: BackendFavorite): FavoriteItem => ({
+  id: String(item.id),
+  productId: String(item.product_id),
+  name: item.product.name,
+  image: item.product.main_image,
+  price: item.product.price,
+  sales: item.product.sales,
+});
 
 export const Favorites: React.FC = () => {
-  const [favorites, setFavorites] = useState<FavoriteItem[]>(mockFavorites);
+  const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [removingId, setRemovingId] = useState<string | null>(null);
   const cardSpotlight = useSpotlight();
   const addItem = useCartStore((state) => state.addItem);
 
-  const handleRemove = (id: string) => {
-    setFavorites(favorites.filter((item) => item.id !== id));
+  // 获取收藏列表
+  const fetchFavorites = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await favoriteApi.getFavorites({ page: 1, pageSize: 20 });
+      if (response.code === 0 && response.data?.favorites) {
+        setFavorites(response.data.favorites.map(mapFavoriteFromBackend));
+      }
+    } catch (error) {
+      console.error('获取收藏列表失败:', error);
+      showToast('获取收藏列表失败', 'error');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchFavorites();
+  }, [fetchFavorites]);
+
+  // 取消收藏
+  const handleRemove = async (id: string, productId: string) => {
+    try {
+      setRemovingId(id);
+      const response = await favoriteApi.removeFavorite(Number(productId));
+      if (response.code === 0) {
+        showToast('已取消收藏', 'success');
+        await fetchFavorites();
+      } else {
+        showToast(response.message || '取消收藏失败', 'error');
+      }
+    } catch (error) {
+      console.error('取消收藏失败:', error);
+      showToast('取消收藏失败', 'error');
+    } finally {
+      setRemovingId(null);
+    }
   };
 
-  const handleAddToCart = (item: FavoriteItem) => {
-    // 模拟后端返回的购物车项 ID
-    const cartItemId = `cart-${item.productId}-${Date.now().toString(36)}`;
-    addItem({
-      id: cartItemId,
-      userId: 'user-1',
-      productId: item.productId,
-      product: {
-        id: item.productId,
-        name: item.name,
-        mainImage: item.image,
-        price: item.price,
-        stock: item.stock,
-      },
-      quantity: 1,
-      selected: true,
-    });
+  // 加入购物车
+  const handleAddToCart = async (item: FavoriteItem) => {
+    try {
+      const response = await cartApi.addItem({
+        productId: Number(item.productId),
+        quantity: 1,
+      });
+      if (response.code === 0) {
+        // 同步更新本地 cart store
+        addItem({
+          id: `cart-${item.productId}-${Date.now().toString(36)}`,
+          userId: 'user-1',
+          productId: item.productId,
+          product: {
+            id: item.productId,
+            name: item.name,
+            mainImage: item.image,
+            price: item.price,
+            stock: 999,
+          },
+          quantity: 1,
+          selected: true,
+        });
+        showToast('已加入购物车', 'success');
+      } else {
+        showToast(response.message || '加入购物车失败', 'error');
+      }
+    } catch (error) {
+      console.error('加入购物车失败:', error);
+      showToast('加入购物车失败', 'error');
+    }
   };
 
   return (
     <div className="container py-8">
       <h1 className="text-2xl font-bold mb-6 dark:text-white">我的收藏</h1>
 
-      {favorites.length === 0 ? (
+      {loading ? (
+        <div className="glass-card rounded-xl p-12 text-center">
+          <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto mb-4" />
+          <p className="text-gray-500 dark:text-gray-400">加载中...</p>
+        </div>
+      ) : favorites.length === 0 ? (
         <div className="glass-card rounded-xl p-12 text-center">
           <Heart className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
           <p className="text-gray-500 dark:text-gray-400">暂无收藏商品</p>
@@ -114,9 +168,9 @@ export const Favorites: React.FC = () => {
                 </Link>
                 <div className="flex items-baseline space-x-2 mt-2">
                   <span className="text-lg font-bold text-primary">¥{item.price}</span>
-                  {item.originalPrice && (
-                    <span className="text-sm text-gray-400 line-through">
-                      ¥{item.originalPrice}
+                  {item.sales > 0 && (
+                    <span className="text-sm text-gray-400">
+                      已售 {item.sales}
                     </span>
                   )}
                 </div>
@@ -129,10 +183,15 @@ export const Favorites: React.FC = () => {
                     <span>加入购物车</span>
                   </button>
                   <button
-                    onClick={() => handleRemove(item.id)}
-                    className="p-2 text-gray-400 hover:text-error rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                    onClick={() => handleRemove(item.id, item.productId)}
+                    disabled={removingId === item.id}
+                    className="p-2 text-gray-400 hover:text-error rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Trash2 className="w-5 h-5" />
+                    {removingId === item.id ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <Trash2 className="w-5 h-5" />
+                    )}
                   </button>
                 </div>
               </div>

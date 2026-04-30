@@ -1,28 +1,181 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Trash2 } from 'lucide-react';
-import { useCartStore } from '../../store/useCartStore';
+import { Trash2, Loader2 } from 'lucide-react';
+import { cartApi } from '../../api/cart';
 import { useSpotlight } from '../../hooks/useSpotlight';
+
+// 后端返回的原始购物车项
+interface BackendCartItem {
+  id: number;
+  user_id: number;
+  product_id: number;
+  sku_id: number;
+  quantity: number;
+  selected: number;
+  product: {
+    id: number;
+    name: string;
+    price: number;
+    main_image: string;
+    stock: number;
+  };
+  sku: {
+    id: number;
+    price: number;
+    stock: number;
+    spec_values: string;
+    image: string;
+  } | null;
+}
+
+// 前端使用的标准化购物车项
+interface CartItem {
+  id: number;
+  productId: number;
+  quantity: number;
+  selected: boolean;
+  product: {
+    id: number;
+    name: string;
+    price: number;
+    mainImage: string;
+    stock: number;
+  };
+  spec: {
+    name: string;
+    value: string;
+  } | null;
+}
+
+function mapCartItem(raw: BackendCartItem): CartItem {
+  let spec: CartItem['spec'] = null;
+  if (raw.sku && raw.sku.spec_values) {
+    const parts = raw.sku.spec_values.split(':');
+    spec = {
+      name: parts[0] || '规格',
+      value: parts.slice(1).join(':') || raw.sku.spec_values,
+    };
+  }
+  return {
+    id: raw.id,
+    productId: raw.product_id,
+    quantity: raw.quantity,
+    selected: raw.selected === 1,
+    product: {
+      id: raw.product.id,
+      name: raw.product.name,
+      price: raw.sku ? raw.sku.price : raw.product.price,
+      mainImage: raw.product.main_image,
+      stock: raw.sku ? raw.sku.stock : raw.product.stock,
+    },
+    spec,
+  };
+}
 
 export const Cart: React.FC = () => {
   const navigate = useNavigate();
-  const { items, total, removeItem, updateQuantity, toggleSelect, toggleSelectAll } =
-    useCartStore();
+  const [items, setItems] = useState<CartItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [operating, setOperating] = useState<number | null>(null);
   const cartSpotlight = useSpotlight();
   const emptySpotlight = useSpotlight();
 
+  const fetchCart = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await cartApi.getCart();
+      const mapped = (data as BackendCartItem[]).map(mapCartItem);
+      setItems(mapped);
+    } catch (err) {
+      console.error('获取购物车失败:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCart();
+  }, [fetchCart]);
+
   const allSelected = items.length > 0 && items.every((i) => i.selected);
+
+  const selectedTotal = items
+    .filter((i) => i.selected)
+    .reduce((sum, i) => sum + i.product.price * i.quantity, 0);
+
+  const handleRemoveItem = async (id: number) => {
+    try {
+      setOperating(id);
+      await cartApi.removeItem(id);
+      setItems((prev) => prev.filter((i) => i.id !== id));
+    } catch (err) {
+      console.error('删除失败:', err);
+    } finally {
+      setOperating(null);
+    }
+  };
+
+  const handleUpdateQuantity = async (id: number, quantity: number) => {
+    if (quantity < 1) return;
+    try {
+      setOperating(id);
+      await cartApi.updateQuantity(id, { quantity });
+      setItems((prev) =>
+        prev.map((i) => (i.id === id ? { ...i, quantity } : i))
+      );
+    } catch (err) {
+      console.error('更新数量失败:', err);
+    } finally {
+      setOperating(null);
+    }
+  };
+
+  const handleToggleSelect = async (id: number) => {
+    const item = items.find((i) => i.id === id);
+    if (!item) return;
+    const newSelected = !item.selected;
+    try {
+      await cartApi.updateSelected({ itemIds: [id], selected: newSelected });
+      setItems((prev) =>
+        prev.map((i) => (i.id === id ? { ...i, selected: newSelected } : i))
+      );
+    } catch (err) {
+      console.error('更新选中状态失败:', err);
+    }
+  };
+
+  const handleToggleSelectAll = async () => {
+    const newSelected = !allSelected;
+    try {
+      await cartApi.selectAll({ selected: newSelected });
+      setItems((prev) => prev.map((i) => ({ ...i, selected: newSelected })));
+    } catch (err) {
+      console.error('全选操作失败:', err);
+    }
+  };
 
   const handleCheckout = () => {
     navigate('/checkout');
   };
+
+  if (loading) {
+    return (
+      <div className="container py-8">
+        <h1 className="text-2xl font-bold mb-6 dark:text-white">购物车</h1>
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          <span className="ml-3 text-gray-500 dark:text-gray-400">加载中...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container py-8">
       <h1 className="text-2xl font-bold mb-6 dark:text-white">购物车</h1>
 
       {items.length === 0 ? (
-        <div 
+        <div
           ref={emptySpotlight.ref as React.RefObject<HTMLDivElement>}
           className="glass-liquid rounded-2xl p-12 text-center overflow-hidden relative"
           style={emptySpotlight.spotlightStyle}
@@ -34,7 +187,7 @@ export const Cart: React.FC = () => {
           </Link>
         </div>
       ) : (
-        <div 
+        <div
           ref={cartSpotlight.ref as React.RefObject<HTMLDivElement>}
           className="glass-cart rounded-2xl overflow-hidden relative"
           style={cartSpotlight.spotlightStyle}
@@ -46,7 +199,7 @@ export const Cart: React.FC = () => {
               <input
                 type="checkbox"
                 checked={allSelected}
-                onChange={toggleSelectAll}
+                onChange={handleToggleSelectAll}
                 className="w-4 h-4"
               />
             </div>
@@ -64,8 +217,9 @@ export const Cart: React.FC = () => {
                 <input
                   type="checkbox"
                   checked={item.selected}
-                  onChange={() => toggleSelect(item.id)}
+                  onChange={() => handleToggleSelect(item.id)}
                   className="w-4 h-4"
+                  disabled={operating === item.id}
                 />
               </div>
               <div className="col-span-5 flex space-x-4">
@@ -96,21 +250,23 @@ export const Cart: React.FC = () => {
               <div className="col-span-2 flex items-center justify-center space-x-2">
                 <button
                   onClick={() =>
-                    updateQuantity(item.id, Math.max(1, item.quantity - 1))
+                    handleUpdateQuantity(item.id, Math.max(1, item.quantity - 1))
                   }
-                  className="w-6 h-6 border border-gray-300 dark:border-gray-600 rounded flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300"
+                  disabled={operating === item.id}
+                  className="w-6 h-6 border border-gray-300 dark:border-gray-600 rounded flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300 disabled:opacity-50"
                 >
                   -
                 </button>
                 <span className="w-8 text-center dark:text-gray-300">{item.quantity}</span>
                 <button
                   onClick={() =>
-                    updateQuantity(
+                    handleUpdateQuantity(
                       item.id,
                       Math.min(item.product.stock, item.quantity + 1)
                     )
                   }
-                  className="w-6 h-6 border border-gray-300 dark:border-gray-600 rounded flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300"
+                  disabled={operating === item.id}
+                  className="w-6 h-6 border border-gray-300 dark:border-gray-600 rounded flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300 disabled:opacity-50"
                 >
                   +
                 </button>
@@ -120,10 +276,15 @@ export const Cart: React.FC = () => {
               </div>
               <div className="col-span-1 text-center">
                 <button
-                  onClick={() => removeItem(item.id)}
-                  className="text-gray-400 hover:text-error"
+                  onClick={() => handleRemoveItem(item.id)}
+                  disabled={operating === item.id}
+                  className="text-gray-400 hover:text-error disabled:opacity-50"
                 >
-                  <Trash2 className="w-5 h-5" />
+                  {operating === item.id ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <Trash2 className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>
@@ -135,7 +296,7 @@ export const Cart: React.FC = () => {
               <input
                 type="checkbox"
                 checked={allSelected}
-                onChange={toggleSelectAll}
+                onChange={handleToggleSelectAll}
                 className="w-4 h-4"
               />
               <span className="text-sm dark:text-gray-300">全选</span>
@@ -151,7 +312,7 @@ export const Cart: React.FC = () => {
               <div className="text-sm dark:text-gray-300">
                 合计：
                 <span className="text-2xl font-bold text-primary">
-                  ¥{total.toFixed(2)}
+                  ¥{selectedTotal.toFixed(2)}
                 </span>
               </div>
               <button

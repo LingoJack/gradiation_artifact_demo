@@ -1,13 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ORDER_STATUS_TEXT, type OrderStatus } from '../../types/order';
-import { useOrderStore } from '../../store/useOrderStore';
+import { ORDER_STATUS_TEXT, type Order, type OrderStatus } from '../../types/order';
+import { orderApi } from '../../api/order';
 import { showToast } from '../../utils/toast';
+import { Loader2 } from 'lucide-react';
+
+interface BackendOrderItem {
+  id: number;
+  product_id: number;
+  product_name: string;
+  product_image: string;
+  sku_spec_values: string;
+  price: number;
+  quantity: number;
+  total_amount: number;
+}
+
+interface BackendOrder {
+  id: number;
+  order_no: string;
+  user_id: number;
+  total_amount: number;
+  pay_amount: number;
+  status: string;
+  receiver_name: string;
+  receiver_phone: string;
+  receiver_address: string;
+  remark: string;
+  created_at: string;
+  items: BackendOrderItem[];
+}
+
+// 映射后端数据到前端格式
+const mapOrderFromBackend = (backendOrder: BackendOrder): Order => ({
+  id: String(backendOrder.id),
+  userId: String(backendOrder.user_id),
+  orderNo: backendOrder.order_no,
+  totalAmount: backendOrder.total_amount,
+  payAmount: backendOrder.pay_amount,
+  status: backendOrder.status as OrderStatus,
+  receiverName: backendOrder.receiver_name,
+  receiverPhone: backendOrder.receiver_phone,
+  receiverAddress: backendOrder.receiver_address,
+  items: backendOrder.items.map((item) => ({
+    id: String(item.id),
+    orderId: String(backendOrder.id),
+    productId: String(item.product_id),
+    productName: item.product_name,
+    productImage: item.product_image,
+    specName: item.sku_spec_values || undefined,
+    price: item.price,
+    quantity: item.quantity,
+  })),
+  createdAt: backendOrder.created_at,
+});
 
 export const OrderList: React.FC = () => {
   const navigate = useNavigate();
-  const { orders, cancelOrder, confirmReceive, payOrder } = useOrderStore();
+  const [orders, setOrders] = useState<Order[]>([]);
   const [activeTab, setActiveTab] = useState<OrderStatus | 'all'>('all');
+  const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState<number | null>(null);
 
   const tabs: Array<{ key: OrderStatus | 'all'; label: string }> = [
     { key: 'all', label: '全部订单' },
@@ -17,27 +70,82 @@ export const OrderList: React.FC = () => {
     { key: 'completed', label: '已完成' },
   ];
 
-  const filteredOrders =
-    activeTab === 'all'
-      ? orders
-      : orders.filter((o) => o.status === activeTab);
+  // 获取订单列表
+  const fetchOrders = useCallback(async () => {
+    try {
+      setLoading(true);
+      const params = activeTab === 'all' ? {} : { status: activeTab };
+      const response = await orderApi.getOrders(params);
+      if (response.code === 0 && response.data?.orders) {
+        setOrders(response.data.orders.map(mapOrderFromBackend));
+      }
+    } catch (error) {
+      console.error('获取订单失败:', error);
+      showToast('获取订单失败', 'error');
+    } finally {
+      setLoading(false);
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
 
   // 取消订单
-  const handleCancelOrder = (orderId: string) => {
-    cancelOrder(orderId);
-    showToast('订单已取消', 'success');
+  const handleCancelOrder = async (orderId: string) => {
+    try {
+      setActionLoading(Number(orderId));
+      const response = await orderApi.cancelOrder(Number(orderId));
+      if (response.code === 0) {
+        showToast('订单已取消', 'success');
+        await fetchOrders();
+      } else {
+        showToast(response.message || '取消订单失败', 'error');
+      }
+    } catch (error) {
+      console.error('取消订单失败:', error);
+      showToast('取消订单失败', 'error');
+    } finally {
+      setActionLoading(null);
+    }
   };
 
   // 立即支付
-  const handlePayOrder = (orderId: string) => {
-    payOrder(orderId);
-    showToast('支付成功！', 'success');
+  const handlePayOrder = async (orderId: string) => {
+    try {
+      setActionLoading(Number(orderId));
+      const response = await orderApi.payOrder(Number(orderId));
+      if (response.code === 0) {
+        showToast('支付成功！', 'success');
+        await fetchOrders();
+      } else {
+        showToast(response.message || '支付失败', 'error');
+      }
+    } catch (error) {
+      console.error('支付失败:', error);
+      showToast('支付失败', 'error');
+    } finally {
+      setActionLoading(null);
+    }
   };
 
   // 确认收货
-  const handleConfirmReceive = (orderId: string) => {
-    confirmReceive(orderId);
-    showToast('已确认收货！', 'success');
+  const handleConfirmReceive = async (orderId: string) => {
+    try {
+      setActionLoading(Number(orderId));
+      const response = await orderApi.confirmReceive(Number(orderId));
+      if (response.code === 0) {
+        showToast('已确认收货！', 'success');
+        await fetchOrders();
+      } else {
+        showToast(response.message || '确认收货失败', 'error');
+      }
+    } catch (error) {
+      console.error('确认收货失败:', error);
+      showToast('确认收货失败', 'error');
+    } finally {
+      setActionLoading(null);
+    }
   };
 
   // 评价订单
@@ -70,12 +178,17 @@ export const OrderList: React.FC = () => {
 
       {/* 订单列表 */}
       <div className="space-y-4">
-        {filteredOrders.length === 0 ? (
+        {loading ? (
+          <div className="glass-card rounded-xl p-12 text-center">
+            <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto mb-4" />
+            <p className="text-gray-500 dark:text-gray-400">加载中...</p>
+          </div>
+        ) : orders.length === 0 ? (
           <div className="glass-card rounded-xl p-12 text-center">
             <p className="text-gray-500 dark:text-gray-400">暂无订单</p>
           </div>
         ) : (
-          filteredOrders.map((order) => (
+          orders.map((order) => (
             <div key={order.id} className="glass-card rounded-xl overflow-hidden">
               {/* 订单头部 */}
               <div className="bg-gray-50 dark:bg-gray-800/50 px-6 py-3 flex items-center justify-between text-sm">
@@ -133,24 +246,27 @@ export const OrderList: React.FC = () => {
                       <>
                         <button 
                           onClick={() => handleCancelOrder(order.id)}
-                          className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-white transition-colors"
+                          disabled={actionLoading === Number(order.id)}
+                          className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          取消订单
+                          {actionLoading === Number(order.id) ? '处理中...' : '取消订单'}
                         </button>
                         <button 
                           onClick={() => handlePayOrder(order.id)}
-                          className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover"
+                          disabled={actionLoading === Number(order.id)}
+                          className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          立即支付
+                          {actionLoading === Number(order.id) ? '支付中...' : '立即支付'}
                         </button>
                       </>
                     )}
                     {order.status === 'shipped' && (
                       <button 
                         onClick={() => handleConfirmReceive(order.id)}
-                        className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover"
+                        disabled={actionLoading === Number(order.id)}
+                        className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        确认收货
+                        {actionLoading === Number(order.id) ? '处理中...' : '确认收货'}
                       </button>
                     )}
                     {order.status === 'completed' && (

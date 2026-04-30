@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Camera, User, Mail, Phone, Calendar, Edit3, Check, Crown, Star } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Camera, User, Mail, Phone, Calendar, Edit3, Check, Crown, Star, Loader2 } from 'lucide-react';
 import { useUserStore } from '../../store/useUserStore';
+import { userApi } from '../../api';
 import { useSpotlight } from '../../hooks/useSpotlight';
 import { CustomSelect } from '../../components/CustomSelect/CustomSelect';
 
@@ -17,22 +18,51 @@ const avatarOptions = [
 ];
 
 export const Profile: React.FC = () => {
-  const { user, updateProfile } = useUserStore();
+  const { updateProfile } = useUserStore();
   const cardSpotlight = useSpotlight();
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   const [formData, setFormData] = useState({
-    username: user?.username || '',
-    email: user?.email || '',
-    phone: user?.phone || '',
-    nickname: user?.username || '',
-    gender: user?.gender || 'male',
-    birthday: user?.birthday || '',
-    bio: user?.bio || '',
+    username: '',
+    email: '',
+    phone: '',
+    nickname: '',
+    gender: 'male',
+    birthday: '',
+    bio: '',
   });
 
-  const [selectedAvatar, setSelectedAvatar] = useState(user?.avatar || avatarOptions[0]);
+  const [selectedAvatar, setSelectedAvatar] = useState(avatarOptions[0]);
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+
+  // 获取用户信息
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+        const profile = await userApi.getProfile() as any;
+        if (profile) {
+          setFormData({
+            username: profile.username || '',
+            email: profile.email || '',
+            phone: profile.phone || '',
+            nickname: profile.nickname || profile.username || '',
+            gender: profile.gender === 1 ? 'male' : profile.gender === 2 ? 'female' : 'other',
+            birthday: profile.birthday || '',
+            bio: profile.bio || '',
+          });
+          setSelectedAvatar(profile.avatar || avatarOptions[0]);
+        }
+      } catch (err) {
+        console.error('Failed to fetch profile:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProfile();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -48,20 +78,46 @@ export const Profile: React.FC = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateProfile({
-      ...formData,
-      avatar: selectedAvatar,
-    });
-    setIsEditing(false);
-    // 显示成功提示
-    const toast = document.createElement('div');
-    toast.className = 'fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-full shadow-lg z-50 flex items-center space-x-2 animate-fade-in';
-    toast.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>保存成功！</span>';
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+    try {
+      setSaving(true);
+      await userApi.updateProfile({
+        nickname: formData.nickname,
+        avatar: selectedAvatar,
+        gender: formData.gender === 'male' ? 1 : formData.gender === 'female' ? 2 : 0,
+        birthday: formData.birthday,
+        bio: formData.bio,
+      });
+      
+      // 更新本地 store
+      updateProfile({
+        nickname: formData.nickname,
+        avatar: selectedAvatar,
+      });
+      
+      setIsEditing(false);
+      // 显示成功提示
+      const toast = document.createElement('div');
+      toast.className = 'fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-full shadow-lg z-50 flex items-center space-x-2 animate-fade-in';
+      toast.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>保存成功！</span>';
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    } catch (err) {
+      console.error('Failed to update profile:', err);
+      alert('保存失败，请重试');
+    } finally {
+      setSaving(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
@@ -113,15 +169,15 @@ export const Profile: React.FC = () => {
               {/* 统计数据 */}
               <div className="grid grid-cols-3 gap-2 pt-4 border-t border-gray-100 dark:border-gray-700">
                 <div className="text-center">
-                  <div className="text-xl font-bold text-gray-900 dark:text-white">128</div>
+                  <div className="text-xl font-bold text-gray-900 dark:text-white">0</div>
                   <div className="text-xs text-gray-500 dark:text-gray-400">订单</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-xl font-bold text-gray-900 dark:text-white">36</div>
+                  <div className="text-xl font-bold text-gray-900 dark:text-white">0</div>
                   <div className="text-xs text-gray-500 dark:text-gray-400">收藏</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-xl font-bold text-gray-900 dark:text-white">520</div>
+                  <div className="text-xl font-bold text-gray-900 dark:text-white">0</div>
                   <div className="text-xs text-gray-500 dark:text-gray-400">积分</div>
                 </div>
               </div>
@@ -192,13 +248,8 @@ export const Profile: React.FC = () => {
                       name="username"
                       value={formData.username}
                       onChange={handleChange}
-                      disabled={!isEditing}
-                      className={`w-full px-4 py-3 rounded-xl border-2 transition-all ${
-                        isEditing
-                          ? 'border-gray-200 dark:border-gray-600 focus:border-primary focus:ring-4 focus:ring-primary/10 bg-white dark:bg-gray-800'
-                          : 'border-transparent bg-gray-50 dark:bg-gray-800/50'
-                      } dark:text-white`}
-                      placeholder="请输入用户名"
+                      disabled={true}
+                      className="w-full px-4 py-3 rounded-xl border-2 border-transparent bg-gray-50 dark:bg-gray-800/50 dark:text-white"
                     />
                   </div>
 
@@ -234,13 +285,8 @@ export const Profile: React.FC = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      disabled={!isEditing}
-                      className={`w-full px-4 py-3 rounded-xl border-2 transition-all ${
-                        isEditing
-                          ? 'border-gray-200 dark:border-gray-600 focus:border-primary focus:ring-4 focus:ring-primary/10 bg-white dark:bg-gray-800'
-                          : 'border-transparent bg-gray-50 dark:bg-gray-800/50'
-                      } dark:text-white`}
-                      placeholder="请输入邮箱"
+                      disabled={true}
+                      className="w-full px-4 py-3 rounded-xl border-2 border-transparent bg-gray-50 dark:bg-gray-800/50 dark:text-white"
                     />
                   </div>
 
@@ -255,13 +301,8 @@ export const Profile: React.FC = () => {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      disabled={!isEditing}
-                      className={`w-full px-4 py-3 rounded-xl border-2 transition-all ${
-                        isEditing
-                          ? 'border-gray-200 dark:border-gray-600 focus:border-primary focus:ring-4 focus:ring-primary/10 bg-white dark:bg-gray-800'
-                          : 'border-transparent bg-gray-50 dark:bg-gray-800/50'
-                      } dark:text-white`}
-                      placeholder="请输入手机号"
+                      disabled={true}
+                      className="w-full px-4 py-3 rounded-xl border-2 border-transparent bg-gray-50 dark:bg-gray-800/50 dark:text-white"
                     />
                   </div>
 
@@ -338,10 +379,11 @@ export const Profile: React.FC = () => {
                     </button>
                     <button
                       type="submit"
-                      className="flex items-center space-x-2 px-8 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl hover:from-orange-600 hover:to-red-600 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                      disabled={saving}
+                      className="flex items-center space-x-2 px-8 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl hover:from-orange-600 hover:to-red-600 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50"
                     >
-                      <Check className="w-4 h-4" />
-                      <span>保存修改</span>
+                      {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+                      <span>{saving ? '保存中...' : '保存修改'}</span>
                     </button>
                   </div>
                 )}

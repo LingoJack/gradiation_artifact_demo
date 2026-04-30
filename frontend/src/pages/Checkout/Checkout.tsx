@@ -1,10 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check, Plus } from 'lucide-react';
-import { useCartStore } from '../../store/useCartStore';
+import { Check, Plus, Loader2 } from 'lucide-react';
+import { userApi } from '../../api/user';
+import { orderApi } from '../../api/order';
+import { cartApi } from '../../api/cart';
 
+// 后端返回的原始购物车项
+interface BackendCartItem {
+  id: number;
+  user_id: number;
+  product_id: number;
+  sku_id: number;
+  quantity: number;
+  selected: number;
+  product: {
+    id: number;
+    name: string;
+    price: number;
+    main_image: string;
+    stock: number;
+  };
+  sku: {
+    id: number;
+    price: number;
+    stock: number;
+    spec_values: string;
+    image: string;
+  } | null;
+}
+
+// 后端返回的原始地址
+interface BackendAddress {
+  id: number;
+  receiver_name: string;
+  receiver_phone: string;
+  province: string;
+  city: string;
+  district: string;
+  detail_address: string;
+  is_default: number;
+}
+
+// 前端使用的标准化地址
 interface Address {
-  id: string;
+  id: number;
   receiver: string;
   phone: string;
   province: string;
@@ -14,62 +53,153 @@ interface Address {
   isDefault: boolean;
 }
 
-// Mock 地址列表
-const mockAddresses: Address[] = [
-  {
-    id: '1',
-    receiver: '张三',
-    phone: '13800138000',
-    province: '北京市',
-    city: '北京市',
-    district: '朝阳区',
-    detail: '某某街道某某小区1号楼101室',
-    isDefault: true,
-  },
-  {
-    id: '2',
-    receiver: '李四',
-    phone: '13900139000',
-    province: '上海市',
-    city: '上海市',
-    district: '浦东新区',
-    detail: '某某路某某大厦A座2001室',
-    isDefault: false,
-  },
-  {
-    id: '3',
-    receiver: '王五',
-    phone: '13700137000',
-    province: '广东省',
-    city: '深圳市',
-    district: '南山区',
-    detail: '科技园某某大厦3楼',
-    isDefault: false,
-  },
-];
+// 前端使用的标准化购物车项
+interface CartItem {
+  id: number;
+  productId: number;
+  skuId: number | null;
+  quantity: number;
+  selected: boolean;
+  product: {
+    id: number;
+    name: string;
+    price: number;
+    mainImage: string;
+    stock: number;
+  };
+  spec: {
+    name: string;
+    value: string;
+  } | null;
+}
+
+function mapCartItem(raw: BackendCartItem): CartItem {
+  let spec: CartItem['spec'] = null;
+  if (raw.sku && raw.sku.spec_values) {
+    const parts = raw.sku.spec_values.split(':');
+    spec = {
+      name: parts[0] || '规格',
+      value: parts.slice(1).join(':') || raw.sku.spec_values,
+    };
+  }
+  return {
+    id: raw.id,
+    productId: raw.product_id,
+    skuId: raw.sku_id,
+    quantity: raw.quantity,
+    selected: raw.selected === 1,
+    product: {
+      id: raw.product.id,
+      name: raw.product.name,
+      price: raw.sku ? raw.sku.price : raw.product.price,
+      mainImage: raw.product.main_image,
+      stock: raw.sku ? raw.sku.stock : raw.product.stock,
+    },
+    spec,
+  };
+}
+
+function mapAddress(raw: BackendAddress): Address {
+  return {
+    id: raw.id,
+    receiver: raw.receiver_name,
+    phone: raw.receiver_phone,
+    province: raw.province,
+    city: raw.city,
+    district: raw.district,
+    detail: raw.detail_address,
+    isDefault: raw.is_default === 1,
+  };
+}
 
 export const Checkout: React.FC = () => {
   const navigate = useNavigate();
-  const { items, total, clearCart } = useCartStore();
-  const [addresses] = useState<Address[]>(mockAddresses);
-  const [selectedAddressId, setSelectedAddressId] = useState<string>(
-    mockAddresses.find((a) => a.isDefault)?.id || mockAddresses[0].id
-  );
+  const [items, setItems] = useState<CartItem[]>([]);
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
-  const selectedItems = items.filter((i) => i.selected);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        // 并行获取购物车和地址数据
+        const [cartData, addressData] = await Promise.all([
+          cartApi.getCart(),
+          userApi.getAddresses(),
+        ]);
+
+        const mappedItems = (cartData as BackendCartItem[]).map(mapCartItem);
+        const selectedItems = mappedItems.filter((i) => i.selected);
+
+        // 如果没有选中商品，跳转回购物车
+        if (selectedItems.length === 0) {
+          navigate('/cart');
+          return;
+        }
+
+        const mappedAddresses = (addressData as BackendAddress[]).map(mapAddress);
+        const defaultAddress = mappedAddresses.find((a) => a.isDefault);
+
+        setItems(selectedItems);
+        setAddresses(mappedAddresses);
+        setSelectedAddressId(defaultAddress?.id || mappedAddresses[0]?.id || null);
+      } catch (err) {
+        console.error('加载数据失败:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [navigate]);
+
+  const selectedTotal = items.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
   const selectedAddress = addresses.find((a) => a.id === selectedAddressId);
 
-  const handleSubmit = () => {
-    // Mock 创建订单 - 模拟后端返回的订单号
-    const mockOrderId = `ORD${new Date().toISOString().slice(0,10).replace(/-/g, '')}${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
-    alert(`订单创建成功！订单号：${mockOrderId}`);
-    clearCart();
-    navigate('/orders');
+  const handleSubmit = async () => {
+    if (!selectedAddressId) {
+      alert('请选择收货地址');
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      const orderData = {
+        addressId: selectedAddressId,
+        items: items.map((i) => ({
+          productId: i.productId,
+          skuId: i.skuId || undefined,
+          quantity: i.quantity,
+        })),
+      };
+
+      const result = await orderApi.createOrder(orderData) as { order_no: string };
+      
+      // 清空购物车
+      await cartApi.clearCart();
+      
+      alert(`订单创建成功！订单号：${result.order_no}`);
+      navigate('/orders');
+    } catch (err) {
+      console.error('创建订单失败:', err);
+      alert('创建订单失败，请重试');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  if (selectedItems.length === 0) {
-    navigate('/cart');
-    return null;
+  if (loading) {
+    return (
+      <div className="container py-8">
+        <h1 className="text-2xl font-bold mb-6 dark:text-white">确认订单</h1>
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          <span className="ml-3 text-gray-500 dark:text-gray-400">加载中...</span>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -81,56 +211,68 @@ export const Checkout: React.FC = () => {
           {/* 收货地址 */}
           <div className="glass-card rounded-xl p-6">
             <h2 className="text-lg font-bold mb-4 dark:text-white">收货地址</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {addresses.map((address) => (
-                <div
-                  key={address.id}
-                  onClick={() => setSelectedAddressId(address.id)}
-                  className={`relative p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                    selectedAddressId === address.id
-                      ? 'border-primary bg-primary/5'
-                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
-                  }`}
+            {addresses.length === 0 ? (
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                <p className="mb-2">暂无收货地址</p>
+                <button
+                  onClick={() => navigate('/addresses')}
+                  className="text-primary hover:underline"
                 >
-                  {selectedAddressId === address.id && (
-                    <div className="absolute top-2 right-2 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                      <Check className="w-3 h-3 text-white" />
+                  添加新地址
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {addresses.map((address) => (
+                  <div
+                    key={address.id}
+                    onClick={() => setSelectedAddressId(address.id)}
+                    className={`relative p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                      selectedAddressId === address.id
+                        ? 'border-primary bg-primary/5'
+                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                    }`}
+                  >
+                    {selectedAddressId === address.id && (
+                      <div className="absolute top-2 right-2 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                        <Check className="w-3 h-3 text-white" />
+                      </div>
+                    )}
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center space-x-2">
+                        <span className="font-medium dark:text-white">{address.receiver}</span>
+                        <span className="dark:text-gray-300">{address.phone}</span>
+                        {address.isDefault && (
+                          <span className="px-1.5 py-0.5 bg-primary/10 text-primary text-xs rounded">
+                            默认
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        {address.province} {address.city} {address.district} {address.detail}
+                      </p>
                     </div>
-                  )}
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center space-x-2">
-                      <span className="font-medium dark:text-white">{address.receiver}</span>
-                      <span className="dark:text-gray-300">{address.phone}</span>
-                      {address.isDefault && (
-                        <span className="px-1.5 py-0.5 bg-primary/10 text-primary text-xs rounded">
-                          默认
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      {address.province} {address.city} {address.district} {address.detail}
-                    </p>
+                  </div>
+                ))}
+                {/* 新增地址按钮 */}
+                <div
+                  onClick={() => navigate('/addresses')}
+                  className="p-4 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 cursor-pointer hover:border-primary dark:hover:border-primary transition-colors flex items-center justify-center"
+                >
+                  <div className="text-center text-gray-400 dark:text-gray-500">
+                    <Plus className="w-6 h-6 mx-auto mb-1" />
+                    <span className="text-sm">新增地址</span>
                   </div>
                 </div>
-              ))}
-              {/* 新增地址按钮 */}
-              <div
-                onClick={() => navigate('/addresses')}
-                className="p-4 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 cursor-pointer hover:border-primary dark:hover:border-primary transition-colors flex items-center justify-center"
-              >
-                <div className="text-center text-gray-400 dark:text-gray-500">
-                  <Plus className="w-6 h-6 mx-auto mb-1" />
-                  <span className="text-sm">新增地址</span>
-                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* 商品清单 */}
           <div className="glass-card rounded-xl p-6">
             <h2 className="text-lg font-bold mb-4 dark:text-white">商品清单</h2>
             <div className="space-y-4">
-              {selectedItems.map((item) => (
+              {items.map((item) => (
                 <div key={item.id} className="flex space-x-4">
                   <img
                     src={item.product.mainImage}
@@ -182,7 +324,7 @@ export const Checkout: React.FC = () => {
           <div className="space-y-3 text-sm dark:text-gray-300">
             <div className="flex justify-between">
               <span>商品总额：</span>
-              <span>¥{total.toFixed(2)}</span>
+              <span>¥{selectedTotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
               <span>运费：</span>
@@ -194,14 +336,22 @@ export const Checkout: React.FC = () => {
             </div>
             <div className="border-t border-gray-200 dark:border-gray-700 pt-3 flex justify-between font-bold text-base">
               <span>实付：</span>
-              <span className="text-primary text-xl">¥{total.toFixed(2)}</span>
+              <span className="text-primary text-xl">¥{selectedTotal.toFixed(2)}</span>
             </div>
           </div>
           <button
             onClick={handleSubmit}
-            className="w-full mt-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-hover"
+            disabled={submitting || !selectedAddressId}
+            className="w-full mt-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-hover disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed flex items-center justify-center"
           >
-            提交订单
+            {submitting ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                提交中...
+              </>
+            ) : (
+              '提交订单'
+            )}
           </button>
         </div>
       </div>

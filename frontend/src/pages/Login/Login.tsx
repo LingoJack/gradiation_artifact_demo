@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../store/useUserStore';
 import { useSpotlight } from '../../hooks/useSpotlight';
+import { authApi } from '../../api/auth';
 
 type LoginType = 'password' | 'sms';
 
@@ -16,6 +17,9 @@ export const Login: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [smsCode, setSmsCode] = useState('');
   const [countdown, setCountdown] = useState(0);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   // 发送验证码
   const sendSmsCode = () => {
@@ -37,33 +41,32 @@ export const Login: React.FC = () => {
     alert('验证码已发送（Mock: 123456）');
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    setError('');
+
     if (loginType === 'sms') {
       if (!/^1[3-9]\d{9}$/.test(phone)) {
-        alert('请输入正确的手机号');
+        setError('请输入正确的手机号');
         return;
       }
       if (smsCode !== '123456') {
-        alert('验证码错误（Mock: 123456）');
+        setError('验证码错误（Mock: 123456）');
         return;
       }
     }
 
-    // Mock 登录
-    login(
-      {
-        id: '1',
-        username: loginType === 'password' ? username : phone,
-        email: 'user@example.com',
-        phone: loginType === 'sms' ? phone : '13800138000',
-        createdAt: new Date().toISOString(),
-      },
-      'mock-token'
-    );
-    
-    navigate('/');
+    setLoading(true);
+    try {
+      const loginUsername = loginType === 'password' ? username : phone;
+      const data = await authApi.login({ username: loginUsername, password: loginType === 'sms' ? 'sms_login' : password });
+      login(data.user, data.token);
+      navigate('/');
+    } catch (err: any) {
+      setError(err.message || '登录失败，请稍后重试');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -201,11 +204,19 @@ export const Login: React.FC = () => {
             </a>
           </div>
 
+          {/* 错误提示 */}
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-600 dark:text-red-400 text-sm rounded-lg">
+              {error}
+            </div>
+          )}
+
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 rounded-lg hover:from-orange-600 hover:to-red-600 transition-all font-medium shadow-lg hover:shadow-xl"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 rounded-lg hover:from-orange-600 hover:to-red-600 transition-all font-medium shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            登录
+            {loading ? '登录中...' : '登录'}
           </button>
         </form>
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../store/useUserStore';
+import { authApi } from '../../api/auth';
 
 type RegisterType = 'phone' | 'email';
 
@@ -17,6 +18,9 @@ export const Register: React.FC = () => {
   const [smsCode, setSmsCode] = useState('');
   const [countdown, setCountdown] = useState(0);
   const [agreed, setAgreed] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   // 发送验证码
   const sendSmsCode = () => {
@@ -38,16 +42,17 @@ export const Register: React.FC = () => {
     alert('验证码已发送（Mock: 123456）');
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    setError('');
+
     if (!agreed) {
-      alert('请阅读并同意用户协议和隐私政策');
+      setError('请阅读并同意用户协议和隐私政策');
       return;
     }
 
     if (password !== confirmPassword) {
-      alert('两次输入的密码不一致');
+      setError('两次输入的密码不一致');
       return;
     }
 
@@ -58,33 +63,36 @@ export const Register: React.FC = () => {
 
     if (registerType === 'phone') {
       if (!/^1[3-9]\d{9}$/.test(phone)) {
-        alert('请输入正确的手机号');
+        setError('请输入正确的手机号');
         return;
       }
       if (smsCode !== '123456') {
-        alert('验证码错误（Mock: 123456）');
+        setError('验证码错误（Mock: 123456）');
         return;
       }
     } else {
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        alert('请输入正确的邮箱地址');
+        setError('请输入正确的邮箱地址');
         return;
       }
     }
 
-    // Mock 注册并登录
-    login(
-      {
-        id: '1',
-        username: username || (registerType === 'phone' ? phone : email),
-        email: registerType === 'email' ? email : 'user@example.com',
+    setLoading(true);
+    try {
+      const registerUsername = username || (registerType === 'phone' ? phone : email);
+      const data = await authApi.register({
+        username: registerUsername,
+        password,
         phone: registerType === 'phone' ? phone : '',
-        createdAt: new Date().toISOString(),
-      },
-      'mock-token'
-    );
-    
-    navigate('/');
+        email: registerType === 'email' ? email : undefined,
+      });
+      login(data.user, data.token);
+      navigate('/');
+    } catch (err: any) {
+      setError(err.message || '注册失败，请稍后重试');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -257,11 +265,19 @@ export const Register: React.FC = () => {
             </label>
           </div>
 
+          {/* 错误提示 */}
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-600 dark:text-red-400 text-sm rounded-lg">
+              {error}
+            </div>
+          )}
+
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 rounded-lg hover:from-orange-600 hover:to-red-600 transition-all font-medium shadow-lg hover:shadow-xl"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 rounded-lg hover:from-orange-600 hover:to-red-600 transition-all font-medium shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            注册
+            {loading ? '注册中...' : '注册'}
           </button>
         </form>
 
