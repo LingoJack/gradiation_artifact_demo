@@ -16,6 +16,7 @@ import { Profile } from './pages/Profile/Profile';
 import { Settings } from './pages/Settings/Settings';
 import { Coupons } from './pages/Coupons/Coupons';
 import { Shop } from './pages/Shop/Shop';
+import { BrowseHistory } from './pages/BrowseHistory/BrowseHistory';
 import { useUserStore } from './store/useUserStore';
 import { useTheme } from './hooks/useTheme';
 import './styles/index.css';
@@ -112,6 +113,7 @@ function App() {
             }
           />
           <Route path="shop/:id" element={<Shop />} />
+          <Route path="browse-history" element={<BrowseHistory />} />
         </Route>
       </Routes>
     </BrowserRouter>

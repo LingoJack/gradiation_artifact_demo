@@ -674,7 +674,7 @@ export const Header: React.FC = () => {
                     </span>
                   )}
                 </Link>
-                <Link to="/user" className={`relative z-10 transition ${
+                <Link to="/favorites" className={`relative z-10 transition ${
                   isSearchFocused 
                     ? 'text-gray-700 dark:text-gray-200 hover:text-orange-500' 
                     : 'text-white hover:text-orange-100'

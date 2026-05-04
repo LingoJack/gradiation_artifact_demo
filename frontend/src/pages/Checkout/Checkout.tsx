@@ -4,6 +4,7 @@ import { Check, Plus, Loader2 } from 'lucide-react';
 import { userApi } from '../../api/user';
 import { orderApi } from '../../api/order';
 import { cartApi } from '../../api/cart';
+import { showToast } from '../../utils/toast';
 
 // 后端返回的原始购物车项
 interface BackendCartItem {
@@ -160,7 +161,7 @@ export const Checkout: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!selectedAddressId) {
-      alert('请选择收货地址');
+      showToast('请选择收货地址', 'warning');
       return;
     }
 
@@ -180,11 +181,11 @@ export const Checkout: React.FC = () => {
       // 清空购物车
       await cartApi.clearCart();
       
-      alert(`订单创建成功！订单号：${result.order_no}`);
+      showToast(`订单创建成功！订单号：${result.order_no}`, 'success');
       navigate('/orders');
     } catch (err) {
       console.error('创建订单失败:', err);
-      alert('创建订单失败，请重试');
+      showToast('创建订单失败，请重试', 'error');
     } finally {
       setSubmitting(false);
     }

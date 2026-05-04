@@ -5,6 +5,7 @@ import { productApi } from '../../api';
 import type { Product, Category } from '../../types/product';
 import { useSpotlight } from '../../hooks/useSpotlight';
 import { useUserStore } from '../../store/useUserStore';
+import { useBrowseHistoryStore } from '../../store/useBrowseHistoryStore';
 
 // 后端返回的原始商品数据格式
 interface RawProduct {
@@ -112,6 +113,7 @@ const newsData = [
 export const Home: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useUserStore();
+  const browseHistoryItems = useBrowseHistoryStore((s) => s.getRecent(5));
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedNews, setSelectedNews] = useState<typeof newsData[0] | null>(null);
   
@@ -614,6 +616,53 @@ export const Home: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* 浏览历史 */}
+      {browseHistoryItems.length > 0 && (
+        <div className="container mt-12">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold flex items-center text-gray-900 dark:text-gray-100">
+              <div className="w-8 h-8 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-lg flex items-center justify-center mr-3">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              浏览历史
+            </h2>
+            <Link to="/browse-history" className="text-primary hover:underline text-sm font-medium">
+              查看更多 →
+            </Link>
+          </div>
+          <div className="grid grid-cols-5 gap-5">
+            {browseHistoryItems.map((item) => (
+              <Link
+                key={item.id}
+                to={`/products/${item.id}`}
+                className="glass-card rounded-xl overflow-hidden group"
+              >
+                <div className="aspect-square bg-gray-100 dark:bg-gray-700 overflow-hidden">
+                  <img
+                    src={item.mainImage}
+                    alt={item.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src =
+                        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23f3f4f6" width="200" height="200"/%3E%3Ctext fill="%239ca3af" x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-size="12"%3E暂无图片%3C/text%3E%3C/svg%3E';
+                    }}
+                  />
+                </div>
+                <div className="p-3">
+                  <p className="text-sm line-clamp-2 text-gray-800 dark:text-gray-200 group-hover:text-primary transition-colors">
+                    {item.name}
+                  </p>
+                  <p className="text-primary font-bold mt-1">¥{item.price}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* 新闻弹窗 - 液态玻璃效果 */}
       {selectedNews && (

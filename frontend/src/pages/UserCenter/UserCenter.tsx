@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { User, MapPin, Heart, Package, Settings, LogOut, Ticket, Loader2 } from 'lucide-react';
+import { User, MapPin, Heart, Package, Settings, LogOut, Ticket, Loader2, Clock } from 'lucide-react';
 import { useUserStore } from '../../store/useUserStore';
 import { authApi, userApi } from '../../api';
 import { useSpotlight } from '../../hooks/useSpotlight';
@@ -51,6 +51,7 @@ export const UserCenter: React.FC = () => {
     { icon: Package, label: '我的订单', path: '/orders' },
     { icon: Ticket, label: '我的优惠', path: '/coupons' },
     { icon: Heart, label: '我的收藏', path: '/favorites' },
+    { icon: Clock, label: '浏览历史', path: '/browse-history' },
     { icon: MapPin, label: '收货地址', path: '/addresses' },
     { icon: User, label: '个人信息', path: '/profile' },
     { icon: Settings, label: '账户设置', path: '/settings' },

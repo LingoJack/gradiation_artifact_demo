@@ -14,6 +14,7 @@ import {
 import { productApi, cartApi, favoriteApi } from '../../api';
 import { useCartStore } from '../../store/useCartStore';
 import { useFavoriteStore } from '../../store/useFavoriteStore';
+import { useBrowseHistoryStore } from '../../store/useBrowseHistoryStore';
 import { showToast, copyToClipboard } from '../../utils/toast';
 
 // 格式化数字
@@ -153,6 +154,7 @@ export const ProductDetail: React.FC = () => {
   const addItemToStore = useCartStore((s) => s.addItem);
   const addFavoriteToStore = useFavoriteStore((s) => s.addFavorite);
   const removeFavoriteFromStore = useFavoriteStore((s) => s.removeFavorite);
+  const addBrowseHistory = useBrowseHistoryStore((s) => s.addItem);
 
   const [product, setProduct] = useState<ProductData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -192,6 +194,14 @@ export const ProductDetail: React.FC = () => {
 
       setProduct(mappedProduct);
       setMainImage(mappedProduct.mainImage);
+
+      // 记录浏览历史
+      addBrowseHistory({
+        id: mappedProduct.id,
+        name: mappedProduct.name,
+        price: mappedProduct.price,
+        mainImage: mappedProduct.mainImage,
+      });
 
       // 检查收藏状态
       try {

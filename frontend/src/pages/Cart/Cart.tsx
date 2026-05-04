@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, Loader2 } from 'lucide-react';
 import { cartApi } from '../../api/cart';
 import { useSpotlight } from '../../hooks/useSpotlight';
+import { showToast } from '../../utils/toast';
 
 // 后端返回的原始购物车项
 interface BackendCartItem {
@@ -108,8 +109,10 @@ export const Cart: React.FC = () => {
       setOperating(id);
       await cartApi.removeItem(id);
       setItems((prev) => prev.filter((i) => i.id !== id));
+      showToast('已从购物车移除', 'success');
     } catch (err) {
       console.error('删除失败:', err);
+      showToast('删除失败，请重试', 'error');
     } finally {
       setOperating(null);
     }
