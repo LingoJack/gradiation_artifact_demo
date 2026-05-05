@@ -89,6 +89,7 @@ export const Cart: React.FC = () => {
       setItems(mapped);
     } catch (err) {
       console.error('获取购物车失败:', err);
+      showToast('加载购物车失败，请刷新重试', 'error');
     } finally {
       setLoading(false);
     }
@@ -105,6 +106,7 @@ export const Cart: React.FC = () => {
     .reduce((sum, i) => sum + i.product.price * i.quantity, 0);
 
   const handleRemoveItem = async (id: number) => {
+    if (!window.confirm('确定要从购物车中删除该商品吗？')) return;
     try {
       setOperating(id);
       await cartApi.removeItem(id);

@@ -148,6 +148,7 @@ export const Checkout: React.FC = () => {
         setSelectedAddressId(defaultAddress?.id || mappedAddresses[0]?.id || null);
       } catch (err) {
         console.error('加载数据失败:', err);
+        showToast('加载订单数据失败，请返回重试', 'error');
       } finally {
         setLoading(false);
       }

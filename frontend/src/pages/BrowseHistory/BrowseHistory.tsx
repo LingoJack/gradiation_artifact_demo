@@ -9,8 +9,10 @@ export const BrowseHistory: React.FC = () => {
   const { items, removeItem, clearAll } = useBrowseHistoryStore();
 
   const handleClearAll = () => {
-    clearAll();
-    showToast('浏览历史已清空', 'success');
+    if (window.confirm('确定清空所有浏览记录吗？此操作不可恢复。')) {
+      clearAll();
+      showToast('浏览历史已清空', 'success');
+    }
   };
 
   const handleRemove = (id: string, e: React.MouseEvent) => {

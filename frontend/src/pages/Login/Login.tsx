@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../store/useUserStore';
 import { useSpotlight } from '../../hooks/useSpotlight';
 import { authApi } from '../../api/auth';
+import { showToast } from '../../utils/toast';
 
 type LoginType = 'password' | 'sms';
 
@@ -24,7 +25,7 @@ export const Login: React.FC = () => {
   // 发送验证码
   const sendSmsCode = () => {
     if (!/^1[3-9]\d{9}$/.test(phone)) {
-      alert('请输入正确的手机号');
+      showToast('请输入正确的手机号', 'error');
       return;
     }
     // Mock 发送验证码
@@ -38,7 +39,7 @@ export const Login: React.FC = () => {
         return prev - 1;
       });
     }, 1000);
-    alert('验证码已发送（Mock: 123456）');
+    showToast('验证码已发送（Mock: 123456）', 'success');
   };
 
   const handleLogin = async (e: React.FormEvent) => {

@@ -84,6 +84,26 @@ interface ProductData {
   shopName?: string;
 }
 
+// API 返回的商品详情类型
+interface ApiProductDetail {
+  id: number;
+  name: string;
+  price: number | string;
+  main_image?: string;
+  mainImage?: string;
+  stock: number | string;
+  sales: number | string;
+  category_id?: number;
+  categoryId?: number;
+  status?: number;
+  description?: string;
+  images?: string[] | string;
+  skus?: ApiSku[];
+  reviews?: ApiReview[];
+  shop_name?: string;
+  shopName?: string;
+}
+
 // 解析 spec_values（可能是对象或 JSON 字符串）
 const parseSpecValues = (specValues: Record<string, string> | string): Record<string, string> => {
   if (typeof specValues === 'string') {
@@ -132,13 +152,13 @@ const extractSpecDimensions = (skus: ApiSku[]): { key: string; values: string[] 
 // 格式化评价数据
 const formatReviews = (reviews: ApiReview[]) => {
   return reviews.map((review) => ({
-    id: review.id || review.id || 0,
+    id: review.id ?? 0,
     username: review.username || review.user_name || '匿名用户',
     avatar: review.avatar || '',
     badge: review.badge || null,
     rating: review.rating || 5,
-    time: review.time || (review.created_at || review.created_at
-      ? new Date(review.created_at || review.created_at!).toLocaleDateString()
+    time: review.time || (review.created_at
+      ? new Date(review.created_at).toLocaleDateString()
       : '未知时间'),
     content: review.content || '',
     specs: review.specs || '',
@@ -162,6 +182,7 @@ export const ProductDetail: React.FC = () => {
   const [selectedSpecs, setSelectedSpecs] = useState<Record<string, string>>({});
   const [quantity, setQuantity] = useState(1);
   const [showAddedToCart, setShowAddedToCart] = useState(false);
+  const [addingToCart, setAddingToCart] = useState(false);
   const [mainImage, setMainImage] = useState<string>('');
   const [isFav, setIsFav] = useState(false);
 
@@ -171,7 +192,7 @@ export const ProductDetail: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const data: any = await productApi.getProductDetail(Number(id));
+      const data = await productApi.getProductDetail(Number(id)) as ApiProductDetail;
 
       const mappedProduct: ProductData = {
         id: String(data.id ?? data.id ?? ''),
@@ -184,7 +205,7 @@ export const ProductDetail: React.FC = () => {
         status: data.status ?? 1,
         description: data.description || '',
         images: parseImages(data.images || []),
-        skus: (data.skus || []).map((sku: any) => ({
+        skus: (data.skus || []).map((sku: ApiSku) => ({
           ...sku,
           spec_values: parseSpecValues(sku.spec_values),
         })),
@@ -262,9 +283,10 @@ export const ProductDetail: React.FC = () => {
 
   // 添加到购物车
   const handleAddToCart = async () => {
-    if (!product) return;
+    if (!product || addingToCart) return;
 
     try {
+      setAddingToCart(true);
       // 调用后端 API
       await cartApi.addItem({
         productId: Number(product.id),
@@ -309,13 +331,20 @@ export const ProductDetail: React.FC = () => {
       showToast('已添加到购物车', 'success');
     } catch (err: any) {
       showToast(err.message || '添加购物车失败', 'error');
+    } finally {
+      setAddingToCart(false);
     }
   };
 
   // 立即购买
   const handleBuyNow = async () => {
-    await handleAddToCart();
-    navigate('/cart');
+    try {
+      await handleAddToCart();
+      navigate('/cart');
+    } catch (err: any) {
+      // handleAddToCart 内部已 showToast，这里不再重复提示
+      console.error('立即购买失败:', err);
+    }
   };
 
   // 切换收藏
@@ -417,7 +446,7 @@ export const ProductDetail: React.FC = () => {
                 <div className="grid grid-cols-5 gap-2">
                   {product.images.map((img, index) => (
                     <div
-                      key={index}
+                      key={`${img}-${index}`}
                       onClick={() => setMainImage(img)}
                       className={`aspect-square bg-gray-100 dark:bg-gray-700 rounded overflow-hidden cursor-pointer border-2 transition-all ${
                         mainImage === img
@@ -561,7 +590,8 @@ export const ProductDetail: React.FC = () => {
                 <div className="flex items-center">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-8 h-8 border border-gray-300 dark:border-gray-600 rounded-l flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    disabled={currentStock === 0}
+                    className="w-8 h-8 border border-gray-300 dark:border-gray-600 rounded-l flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     -
                   </button>
@@ -570,20 +600,26 @@ export const ProductDetail: React.FC = () => {
                     value={quantity}
                     onChange={(e) => {
                       const value = parseInt(e.target.value) || 1;
-                      setQuantity(Math.max(1, Math.min(currentStock, value)));
+                      setQuantity(Math.max(1, Math.min(currentStock > 0 ? currentStock : 1, value)));
                     }}
-                    className="w-16 h-8 border-t border-b border-gray-300 dark:border-gray-600 text-center outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                    disabled={currentStock === 0}
+                    className="w-16 h-8 border-t border-b border-gray-300 dark:border-gray-600 text-center outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                   <button
                     onClick={() =>
-                      setQuantity(Math.min(currentStock, quantity + 1))
+                      setQuantity(Math.min(currentStock > 0 ? currentStock : 1, quantity + 1))
                     }
-                    className="w-8 h-8 border border-gray-300 dark:border-gray-600 rounded-r flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    disabled={currentStock === 0}
+                    className="w-8 h-8 border border-gray-300 dark:border-gray-600 rounded-r flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     +
                   </button>
                   <span className="ml-3 text-sm text-gray-500 dark:text-gray-400">
-                    库存 {currentStock} 件
+                    {currentStock === 0 ? (
+                      <span className="text-red-500 font-medium">已售罄</span>
+                    ) : (
+                      `库存 ${currentStock} 件`
+                    )}
                   </span>
                 </div>
               </div>
@@ -592,18 +628,18 @@ export const ProductDetail: React.FC = () => {
               <div className="flex gap-3 mb-6">
                 <button
                   onClick={handleAddToCart}
-                  disabled={!allSpecsSelected && specDimensions.length > 0}
+                  disabled={addingToCart || currentStock === 0 || (!allSpecsSelected && specDimensions.length > 0)}
                   className={`flex-1 h-12 border-2 border-orange-500 text-orange-600 dark:text-orange-400 rounded-lg hover:bg-orange-50 dark:hover:bg-orange-900/20 flex items-center justify-center gap-2 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                   <ShoppingCart className="w-5 h-5" />
-                  加入购物车
+                  {addingToCart ? '添加中...' : currentStock === 0 ? '已售罄' : '加入购物车'}
                 </button>
                 <button
                   onClick={handleBuyNow}
-                  disabled={!allSpecsSelected && specDimensions.length > 0}
+                  disabled={addingToCart || currentStock === 0 || (!allSpecsSelected && specDimensions.length > 0)}
                   className={`flex-1 h-12 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
-                  立即购买
+                  {currentStock === 0 ? '已售罄' : '立即购买'}
                 </button>
               </div>
 
@@ -693,7 +729,7 @@ export const ProductDetail: React.FC = () => {
               <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-4">商品展示</h3>
               <div className="space-y-4">
                 {product.images.map((img, index) => (
-                  <div key={index} className="w-full bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                  <div key={`${img}-${index}`} className="w-full bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
                     <img
                       src={img}
                       alt={`${product.name} 详情图 ${index + 1}`}
@@ -833,21 +869,6 @@ export const ProductDetail: React.FC = () => {
 
                     {/* 操作按钮 */}
                     <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
-                      <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={() => showToast('点赞成功！', 'success')}
-                          className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
-                        >
-                          <ThumbsUp className="w-4 h-4" />
-                          <span>{review.likes}</span>
-                        </button>
-                        <button
-                          onClick={() => showToast('回复功能开发中', 'info')}
-                          className="text-sm text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
-                        >
-                          回复
-                        </button>
-                      </div>
                       <div className="flex items-center gap-3">
                         <button
                           onClick={() => showToast('点赞成功！', 'success')}

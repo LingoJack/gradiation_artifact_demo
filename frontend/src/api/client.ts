@@ -1,6 +1,6 @@
 const BASE_URL = '/api/v1'
 
-interface ApiResponse<T = any> {
+interface ApiResponse<T = unknown> {
   code: number
   message: string
   data: T
@@ -37,7 +37,24 @@ async function request<T = any>(
     headers,
   })
 
-  const json: ApiResponse<T> = await res.json()
+  // 处理 HTTP 错误状态码
+  if (!res.ok) {
+    if (res.status === 401) {
+      // 401 未授权，清除登录状态并跳转登录页
+      localStorage.removeItem('user-storage')
+      window.location.href = '/login'
+      throw new Error('登录已过期，请重新登录')
+    }
+    throw new Error(`请求失败 (${res.status})，请稍后重试`)
+  }
+
+  // 安全解析 JSON，防止非 JSON 响应导致白屏
+  let json: ApiResponse<T>
+  try {
+    json = await res.json()
+  } catch {
+    throw new Error('服务器响应异常，请稍后重试')
+  }
 
   if (json.code !== 0) {
     throw new Error(json.message || '请求失败')

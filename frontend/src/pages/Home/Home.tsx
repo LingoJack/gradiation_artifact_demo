@@ -143,42 +143,56 @@ export const Home: React.FC = () => {
       setLoading(true);
       setError(null);
       
-      // 并行请求所有数据
-      const [categoriesRes, productsRes, bannersRes] = await Promise.all([
+      // 并行请求所有数据，使用 allSettled 防止单个失败影响全部
+      const results = await Promise.allSettled([
         productApi.getCategories(),
         productApi.getProducts({ pageSize: 10 }),
         productApi.getBanners(),
       ]);
       
-      // 映射分类数据（后端字段: id, name, parent_id, icon, sort_order, status）
-      const mappedCategories: Category[] = (categoriesRes as Array<{
-        id: number;
-        name: string;
-        parent_id: number;
-        icon: string;
-        sort_order: number;
-        status: number;
-      }>).map((cat) => ({
-        id: String(cat.id),
-        name: cat.name,
-        parentId: String(cat.parent_id),
-        icon: cat.icon,
-        sortOrder: cat.sort_order,
-      }));
+      // 处理分类数据
+      const categoriesRes = results[0].status === 'fulfilled' ? results[0].value : null;
+      const mappedCategories: Category[] = categoriesRes
+        ? (categoriesRes as Array<{
+            id: number;
+            name: string;
+            parent_id: number;
+            icon: string;
+            sort_order: number;
+            status: number;
+          }>).map((cat) => ({
+            id: String(cat.id),
+            name: cat.name,
+            parentId: String(cat.parent_id),
+            icon: cat.icon,
+            sortOrder: cat.sort_order,
+          }))
+        : [];
       
-      // 映射商品数据
-      const mappedProducts: Product[] = (productsRes.products as RawProduct[]).map(mapProduct);
+      // 处理商品数据
+      const productsRes = results[1].status === 'fulfilled' ? results[1].value : null;
+      const mappedProducts: Product[] = productsRes?.products
+        ? (productsRes.products as RawProduct[]).map(mapProduct)
+        : [];
       
-      // 映射轮播图数据
-      const mappedBanners = (bannersRes as RawBanner[]).map((banner, index) => ({
-        id: banner.id,
-        image: banner.image_url,
-        title: banner.title,
-        subtitle: '限时优惠 | 点击查看',
-        buttonText: defaultCarouselButtons[index % defaultCarouselButtons.length],
-        gradient: defaultCarouselGradients[index % defaultCarouselGradients.length],
-        link: banner.link_url,
-      }));
+      // 处理轮播图数据
+      const bannersRes = results[2].status === 'fulfilled' ? results[2].value : null;
+      const mappedBanners = bannersRes
+        ? (bannersRes as RawBanner[]).map((banner, index) => ({
+            id: banner.id,
+            image: banner.image_url,
+            title: banner.title,
+            subtitle: '限时优惠 | 点击查看',
+            buttonText: defaultCarouselButtons[index % defaultCarouselButtons.length],
+            gradient: defaultCarouselGradients[index % defaultCarouselGradients.length],
+            link: banner.link_url,
+          }))
+        : [];
+      
+      // 如果所有请求都失败，显示错误
+      if (!categoriesRes && !productsRes && !bannersRes) {
+        setError('加载失败，请稍后重试');
+      }
       
       setCategories(mappedCategories);
       setProducts(mappedProducts);
@@ -345,6 +359,11 @@ export const Home: React.FC = () => {
                       src={item.image} 
                       alt={item.title}
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/placeholder-banner.png';
+                        target.style.objectFit = 'contain';
+                      }}
                     />
                     <div className={`absolute inset-0 bg-gradient-to-r ${item.gradient}`}>
                       <div className="relative h-full flex items-center px-12">
