@@ -2,11 +2,18 @@ package service
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/lingojack/taobao_clone/model"
+	"github.com/lingojack/taobao_clone/model/query"
 	"github.com/lingojack/taobao_clone/repository"
 	"gorm.io/gorm"
+)
+
+var (
+	ErrNotFound  = errors.New("记录不存在")
+	ErrForbidden = errors.New("无权操作")
 )
 
 const (
@@ -35,7 +42,7 @@ type SearchHistoryItem struct {
 
 // GetList 获取用户搜索历史（最多20条，倒序）
 func (s *SearchHistoryService) GetList(ctx context.Context, userID uint64) ([]SearchHistoryItem, error) {
-	list, err := s.dao.SelectList(ctx, &repository.SearchHistoriesQuery{
+	list, err := s.dao.SelectList(ctx, &query.SearchHistoriesDto{
 		UserId:    userID,
 		OrderBy:   "created_at DESC",
 		PageSize:  20,
@@ -63,7 +70,7 @@ func (s *SearchHistoryService) Add(ctx context.Context, userID uint64, keyword s
 	now := time.Now()
 
 	// 查找是否已存在相同关键词
-	existingList, err := s.dao.SelectList(ctx, &repository.SearchHistoriesQuery{
+	existingList, err := s.dao.SelectList(ctx, &query.SearchHistoriesDto{
 		UserId:  userID,
 		Keyword: keyword,
 	})
@@ -108,7 +115,7 @@ func (s *SearchHistoryService) Add(ctx context.Context, userID uint64, keyword s
 // Delete 删除单条搜索历史（验证权限）
 func (s *SearchHistoryService) Delete(ctx context.Context, userID uint64, id uint64) error {
 	// 先查询记录
-	list, err := s.dao.SelectList(ctx, &repository.SearchHistoriesQuery{
+	list, err := s.dao.SelectList(ctx, &query.SearchHistoriesDto{
 		Id: &id,
 	})
 	if err != nil {
@@ -131,7 +138,7 @@ func (s *SearchHistoryService) Clear(ctx context.Context, userID uint64) error {
 
 // cleanupOldRecords 清理超出限制的旧记录
 func (s *SearchHistoryService) cleanupOldRecords(ctx context.Context, userID uint64) {
-	count, err := s.dao.SelectCount(ctx, &repository.SearchHistoriesQuery{
+	count, err := s.dao.SelectCount(ctx, &query.SearchHistoriesDto{
 		UserId: userID,
 	})
 	if err != nil {
@@ -143,7 +150,7 @@ func (s *SearchHistoryService) cleanupOldRecords(ctx context.Context, userID uin
 
 	// 查询需要删除的记录（按时间正序，取超出部分）
 	overflow := int(count - maxSearchHistoryCount)
-	list, err := s.dao.SelectList(ctx, &repository.SearchHistoriesQuery{
+	list, err := s.dao.SelectList(ctx, &query.SearchHistoriesDto{
 		UserId:     userID,
 		OrderBy:    "created_at ASC",
 		PageSize:   overflow,
