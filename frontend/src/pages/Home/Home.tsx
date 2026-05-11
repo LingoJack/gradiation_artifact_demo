@@ -113,7 +113,8 @@ const newsData = [
 export const Home: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useUserStore();
-  const browseHistoryItems = useBrowseHistoryStore((s) => s.getRecent(5));
+  const browseHistoryAll = useBrowseHistoryStore((s) => s.items);
+  const browseHistoryItems = browseHistoryAll.slice(0, 5);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedNews, setSelectedNews] = useState<typeof newsData[0] | null>(null);
   
