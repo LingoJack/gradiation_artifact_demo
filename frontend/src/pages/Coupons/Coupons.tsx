@@ -70,8 +70,8 @@ export const Coupons: React.FC = () => {
   const fetchAvailableCoupons = useCallback(async () => {
     try {
       const response = await couponApi.getAvailable();
-      if (response.code === 0 && Array.isArray(response.data)) {
-        setAvailableCoupons(response.data.map(mapCouponFromBackend));
+      if (Array.isArray(response)) {
+        setAvailableCoupons(response.map(mapCouponFromBackend));
       }
     } catch (error) {
       console.error('获取优惠券失败:', error);
@@ -82,8 +82,8 @@ export const Coupons: React.FC = () => {
   const fetchUserCoupons = useCallback(async () => {
     try {
       const response = await couponApi.getUserCoupons();
-      if (response.code === 0 && Array.isArray(response.data)) {
-        setUserCoupons(response.data.map(mapUserCouponFromBackend));
+      if (Array.isArray(response)) {
+        setUserCoupons(response.map(mapUserCouponFromBackend));
       }
     } catch (error) {
       console.error('获取我的优惠券失败:', error);
@@ -105,12 +105,12 @@ export const Coupons: React.FC = () => {
     try {
       setClaimingId(couponId);
       const response = await couponApi.claimCoupon(Number(couponId));
-      if (response.code === 0) {
+      if (response !== undefined) {
         showToast('领取成功！', 'success');
         // 刷新两个列表
         await Promise.all([fetchAvailableCoupons(), fetchUserCoupons()]);
       } else {
-        showToast(response.message || '领取失败', 'warning');
+        showToast('领取失败', 'warning');
       }
     } catch (error) {
       console.error('领取优惠券失败:', error);

@@ -76,8 +76,8 @@ export const OrderList: React.FC = () => {
       setLoading(true);
       const params = activeTab === 'all' ? {} : { status: activeTab };
       const response = await orderApi.getOrders(params);
-      if (response.code === 0 && response.data?.orders) {
-        setOrders(response.data.orders.map(mapOrderFromBackend));
+      if (response?.orders) {
+        setOrders(response.orders.map(mapOrderFromBackend));
       }
     } catch (error) {
       console.error('获取订单失败:', error);
@@ -96,11 +96,11 @@ export const OrderList: React.FC = () => {
     try {
       setActionLoading(Number(orderId));
       const response = await orderApi.cancelOrder(Number(orderId));
-      if (response.code === 0) {
+      if (response !== undefined) {
         showToast('订单已取消', 'success');
         await fetchOrders();
       } else {
-        showToast(response.message || '取消订单失败', 'error');
+        showToast('取消订单失败', 'error');
       }
     } catch (error) {
       console.error('取消订单失败:', error);
@@ -115,11 +115,11 @@ export const OrderList: React.FC = () => {
     try {
       setActionLoading(Number(orderId));
       const response = await orderApi.payOrder(Number(orderId));
-      if (response.code === 0) {
+      if (response !== undefined) {
         showToast('支付成功！', 'success');
         await fetchOrders();
       } else {
-        showToast(response.message || '支付失败', 'error');
+        showToast('支付失败', 'error');
       }
     } catch (error) {
       console.error('支付失败:', error);
@@ -134,11 +134,11 @@ export const OrderList: React.FC = () => {
     try {
       setActionLoading(Number(orderId));
       const response = await orderApi.confirmReceive(Number(orderId));
-      if (response.code === 0) {
+      if (response !== undefined) {
         showToast('已确认收货！', 'success');
         await fetchOrders();
       } else {
-        showToast(response.message || '确认收货失败', 'error');
+        showToast('确认收货失败', 'error');
       }
     } catch (error) {
       console.error('确认收货失败:', error);

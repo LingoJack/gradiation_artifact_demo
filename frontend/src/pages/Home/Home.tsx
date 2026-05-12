@@ -362,8 +362,8 @@ export const Home: React.FC = () => {
                       className="w-full h-full object-cover"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.src = '/placeholder-banner.png';
-                        target.style.objectFit = 'contain';
+                        target.src = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" fill="%23374151"><rect width="1200" height="400"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%239CA3AF" font-size="24">Banner</text></svg>');
+                        target.style.objectFit = 'cover';
                       }}
                     />
                     <div className={`absolute inset-0 bg-gradient-to-r ${item.gradient}`}>

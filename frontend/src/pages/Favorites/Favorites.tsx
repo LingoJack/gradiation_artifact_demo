@@ -54,8 +54,8 @@ export const Favorites: React.FC = () => {
     try {
       setLoading(true);
       const response = await favoriteApi.getFavorites({ page: 1, pageSize: 20 });
-      if (response.code === 0 && response.data?.favorites) {
-        setFavorites(response.data.favorites.map(mapFavoriteFromBackend));
+      if (response?.favorites) {
+        setFavorites(response.favorites.map(mapFavoriteFromBackend));
       }
     } catch (error) {
       console.error('获取收藏列表失败:', error);
@@ -74,11 +74,11 @@ export const Favorites: React.FC = () => {
     try {
       setRemovingId(id);
       const response = await favoriteApi.removeFavorite(Number(productId));
-      if (response.code === 0) {
+      if (response !== undefined) {
         showToast('已取消收藏', 'success');
         await fetchFavorites();
       } else {
-        showToast(response.message || '取消收藏失败', 'error');
+        showToast('取消收藏失败', 'error');
       }
     } catch (error) {
       console.error('取消收藏失败:', error);
@@ -95,7 +95,7 @@ export const Favorites: React.FC = () => {
         productId: Number(item.productId),
         quantity: 1,
       });
-      if (response.code === 0) {
+      if (response !== undefined) {
         // 同步更新本地 cart store
         addItem({
           id: `cart-${item.productId}-${Date.now().toString(36)}`,
@@ -113,7 +113,7 @@ export const Favorites: React.FC = () => {
         });
         showToast('已加入购物车', 'success');
       } else {
-        showToast(response.message || '加入购物车失败', 'error');
+        showToast('加入购物车失败', 'error');
       }
     } catch (error) {
       console.error('加入购物车失败:', error);

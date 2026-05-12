@@ -80,8 +80,8 @@ export const ProductList: React.FC = () => {
     const fetchCategories = async () => {
       try {
         const res: any = await productApi.getCategories();
-        if (res?.code === 0 && Array.isArray(res.data)) {
-          setCategories(res.data.map(mapApiCategory));
+        if (Array.isArray(res)) {
+          setCategories(res.map(mapApiCategory));
         }
       } catch (error) {
         console.error('获取分类失败:', error);
@@ -100,10 +100,9 @@ export const ProductList: React.FC = () => {
       if (sortBy !== 'default' && sortParamMap[sortBy]) params.sort = sortParamMap[sortBy];
 
       const res: any = await productApi.getProducts(params);
-      if (res?.code === 0 && res.data) {
-        const apiProducts = res.data.products || [];
-        setProducts(apiProducts.map(mapApiProduct));
-        setTotal(res.data.total || 0);
+      if (res && res.products) {
+        setProducts(res.products.map(mapApiProduct));
+        setTotal(res.total || 0);
       } else {
         setProducts([]);
         setTotal(0);
